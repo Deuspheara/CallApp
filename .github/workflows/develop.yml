@@ -1,0 +1,217 @@
+name: Android CI
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+
+      - name: Set up Gradle
+        run: |
+          mkdir -p $HOME/.gradle
+          echo "org.gradle.daemon=false" >> $HOME/.gradle/gradle.properties
+        env:
+          GRADLE_USER_HOME: ${{ github.workspace }}/.gradle
+
+      - name: Load properties
+        run: |
+          mkdir -p ./.signing/debug/
+          echo "${{ secrets.KEYSTORE_DEBUG_FILE_B64 }}" | base64 --decode >> ./.signing/debug/debug.p12
+          echo "${{ secrets.KEYSTORE_DEBUG_PROPERTIES_B64 }}" | base64 --decode >> ./.signing/debug/debug.properties
+
+      - name: Run lint
+        run: |
+          ./gradlew \
+             --gradle-user-home='${{ env.GRADLE_USER_HOME }}' \
+             --build-cache \
+             --no-daemon \
+             lint
+
+      - name: Save lint report
+        run: |
+          mv app/build/reports/lint-results-debug.xml ./lint-report.xml
+        continue-on-error: true
+
+      - name: Upload lint report
+        uses: actions/upload-artifact@v2
+        with:
+          name: lint-result
+          path: lint-report.xml
+
+    env:
+      KEYSTORE_DEBUG_FILE_B64: ${{ secrets.KEYSTORE_DEBUG_FILE_B64 }}
+      KEYSTORE_DEBUG_PROPERTIES_B64: ${{ secrets.KEYSTORE_DEBUG_PROPERTIES_B64 }}
+
+  test-with-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+
+      - name: Set up Gradle
+        run: |
+          mkdir -p $HOME/.gradle
+          echo "org.gradle.daemon=false" >> $HOME/.gradle/gradle.properties
+        env:
+          GRADLE_USER_HOME: ${{ github.workspace }}/.gradle
+
+      - name: Load properties
+        run: |
+          mkdir -p ./.signing/debug/
+          echo "${{ secrets.KEYSTORE_DEBUG_FILE_B64 }}" | base64 --decode >> ./.signing/debug/debug.p12
+          echo "${{ secrets.KEYSTORE_DEBUG_PROPERTIES_B64 }}" | base64 --decode >> ./.signing/debug/debug.properties
+
+      - name: Set up Google Credentials
+        run: |
+          cat "${{ secrets.GOOGLE_CREDENTIALS }}" >> "./google-credentials.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="./google-credentials.json"
+        continue-on-error: true
+
+      - name: Install Firebase CLI
+        run: |
+          curl -Lo ./firebase_bin https://firebase.tools/bin/macos/latest
+          chmod +x ./firebase_bin
+        continue-on-error: true
+
+      - name: Set up Firebase Emulators
+        run: |
+          ./firebase_bin setup:emulators:firestore
+          ./firebase_bin setup:emulators:storage
+        continue-on-error: true
+
+      - name: Run tests with coverage
+        run: |
+          ./firebase_bin emulators:exec --project callapp-c1cd7 --only auth,firestore,storage \
+            "./gradlew --gradle-user-home='${{ env.GRADLE_USER_HOME }}' --build-cache --no-daemon -Pbuild.coverage=true pixel5Api30DebugAndroidTestWithCoverage"
+        continue-on-error: true
+
+      - name: Save testing and coverage reports
+        run: |
+          mv app/build/reports/androidTests/managedDevice/debug/pixel5Api30/index.html ./testing-report.html
+          mv app/build/reports/jacoco/pixel5Api30DebugAndroidTestWithCoverage/html/index.html ./coverage-report.html
+        continue-on-error: true
+
+      - name: Upload testing and coverage reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-coverage-result
+          path: |
+            ./testing-report.html
+            ./coverage-report.html
+
+    env:
+      KEYSTORE_DEBUG_FILE_B64: ${{ secrets.KEYSTORE_DEBUG_FILE_B64 }}
+      KEYSTORE_DEBUG_PROPERTIES_B64: ${{ secrets.KEYSTORE_DEBUG_PROPERTIES_B64 }}
+      GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      GRADLE_USER_HOME: ${{ github.workspace }}/.gradle
+
+  build-bundle-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+
+      - name: Set up Gradle
+        run: |
+          mkdir -p $HOME/.gradle
+          echo "org.gradle.daemon=false" >> $HOME/.gradle/gradle.properties
+        env:
+          GRADLE_USER_HOME: ${{ github.workspace }}/.gradle
+
+      - name: Load properties
+        run: |
+          mkdir -p ./.signing/release/
+          echo "${{ secrets.KEYSTORE_RELEASE_FILE_B64 }}" | base64 --decode >> ./.signing/release/release.p12
+          echo "${{ secrets.KEYSTORE_RELEASE_PROPERTIES_B64 }}" | base64 --decode >> ./.signing/release/release.properties
+
+      - name: Build bundle release
+        run: |
+          ./gradlew \
+             --gradle-user-home='${{ env.GRADLE_USER_HOME }}' \
+             --build-cache \
+             --no-daemon \
+             bundleRelease
+
+      - name: Save bundle release
+        run: |
+          mv app/build/outputs/bundle/release/app-release.aab ./app-release.aab
+        continue-on-error: true
+
+      - name: Upload bundle release
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-bundle-release-result
+          path: app-release.aab
+
+    env:
+      KEYSTORE_RELEASE_FILE_B64: ${{ secrets.KEYSTORE_RELEASE_FILE_B64 }}
+      KEYSTORE_RELEASE_PROPERTIES_B64: ${{ secrets.KEYSTORE_RELEASE_PROPERTIES_B64 }}
+
+  build-apk-debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+
+      - name: Set up Gradle
+        run: |
+          mkdir -p $HOME/.gradle
+          echo "org.gradle.daemon=false" >> $HOME/.gradle/gradle.properties
+        env:
+          GRADLE_USER_HOME: ${{ github.workspace }}/.gradle
+
+      - name: Load properties
+        run: |
+          mkdir -p ./.signing/debug/
+          echo "${{ secrets.KEYSTORE_DEBUG_FILE_B64 }}" | base64 --decode >> ./.signing/debug/debug.p12
+          echo "${{ secrets.KEYSTORE_DEBUG_PROPERTIES_B64 }}" | base64 --decode >> ./.signing/debug/debug.properties
+
+      - name: Build APK debug
+        run: |
+          ./gradlew \
+             --gradle-user-home='${{ env.GRADLE_USER_HOME }}' \
+             --build-cache \
+             --no-daemon \
+             assembleDebug
+
+      - name: Save APK debug
+        run: |
+          mv app/build/outputs/apk/debug/app-debug.apk ./app-debug.apk
+        continue-on-error: true
+
+      - name: Upload APK debug
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-apk-debug-result
+          path: app-debug.apk
+
+    env:
+      KEYSTORE_DEBUG_FILE_B64: ${{ secrets.KEYSTORE_DEBUG_FILE_B64 }}
+      KEYSTORE_DEBUG_PROPERTIES_B64: ${{ secrets.KEYSTORE_DEBUG_PROPERTIES_B64 }}

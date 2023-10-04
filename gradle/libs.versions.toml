@@ -1,0 +1,102 @@
+[versions]
+
+android-gradle-plugin = "8.1.1"
+kotlin = "1.9.10"
+coroutine = "1.7.3"
+dagger-hilt = "2.47"
+dagger-hilt-navigation = "1.1.0-alpha01"
+google-services = "4.4.0"
+crashlytics-plugin = "2.9.9"
+androidx-core = "1.12.0"
+androidx-lifecycle = "2.6.2"
+androidx-splashscreen = "1.0.1"
+androidxTracing = "1.1.0"
+compose-compiler = "1.5.3"
+compose-ui-test = "1.5.1"
+compose-bom = "2023.09.01"
+compose-material3 = "1.1.2"
+coil = "2.4.0"
+robolectric = "4.9.2"
+room = "2.6.0-rc01"
+firebase-bom = "32.3.1"
+junit = "4.13.2"
+androidx-junit = "1.1.5"
+test-runner = "1.5.2"
+mockk-version="1.13.5"
+google-play-services = "20.7.0"
+recyclerview = "1.3.1"
+constraintlayout = "1.0.1"
+navigationCompose = "2.7.3"
+google-ksp = "1.9.10-1.0.13"
+[libraries]
+
+coroutine-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutine" }
+coroutine-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutine" }
+coroutine-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutine"}
+
+core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
+lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splashscreen" }
+
+androidx-tracing-ktx = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "androidxTracing" }
+compose-material = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
+compose-activity = { module = "androidx.activity:activity-compose" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose-ui-test" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+compose-coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+compose-constraintlayout = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayout" }
+
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger-hilt" }
+hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "dagger-hilt-navigation" }
+hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger-hilt" }
+
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
+
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-auth = { module = "com.google.firebase:firebase-auth-ktx" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore-ktx" }
+firebase-storage = { module = "com.google.firebase:firebase-storage-ktx" }
+
+google-play-services = {module = "com.google.android.gms:play-services-auth", version.ref = "google-play-services"}
+
+junit = { module = "junit:junit", version.ref = "junit" }
+
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-junit" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "test-runner" }
+
+mockk = { module = "io.mockk:mockk-android", version.ref = "mockk-version" }
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+
+
+[bundles]
+
+coroutine =  ["coroutine-android", "coroutine-play-services"]
+androidx = ["core", "lifecycle", "splashscreen","androidx-tracing-ktx"]
+compose = ["compose-material", "compose-ui-tooling-preview", "compose-activity", "compose-navigation", "compose-animation-graphics", "compose-coil", "compose-constraintlayout"]
+compose-debug = ["compose-ui-tooling", "compose-ui-test-manifest"]
+compose-test = ["compose-ui-test"]
+hilt = ["hilt-android", "hilt-compiler", "hilt-navigation"]
+firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-auth", "firebase-firestore", "firebase-storage", "google-play-services"]
+room = ["room-runtime", "room-ktx"]
+[plugins]
+
+android-application = { id = 'com.android.application', version.ref = "android-gradle-plugin" }
+android-library = { id = 'com.android.library', version.ref = "android-gradle-plugin" }
+kotlin-android = { id = 'org.jetbrains.kotlin.android', version.ref = "kotlin" }
+kotlin-kapt = { id = 'org.jetbrains.kotlin.kapt', version.ref = "kotlin" }
+google-ksp = { id = 'com.google.devtools.ksp', version.ref = "google-ksp" }
+dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
+crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics-plugin" }
