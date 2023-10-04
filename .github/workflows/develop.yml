@@ -6,17 +6,26 @@ on:
       - develop
       - main
 
+env:
+  KEYSTORE_DEBUG_FILE_B64: ${{ secrets.KEYSTORE_DEBUG_FILE_B64 }}
+  KEYSTORE_DEBUG_PROPERTIES_B64: ${{ secrets.KEYSTORE_DEBUG_PROPERTIES_B64 }}
+  KEYSTORE_RELEASE_FILE_B64: ${{ secrets.KEYSTORE_RELEASE_FILE_B64 }}
+  KEYSTORE_RELEASE_PROPERTIES_B64: ${{ secrets.KEYSTORE_RELEASE_PROPERTIES_B64 }}
+  GRADLE_USER_HOME: ${{ github.workspace }}/.gradle
+  GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
-          java-version: 11
+          distribution: 'temurin'
+          java-version: 17
 
       - name: Set up Gradle
         run: |
@@ -28,16 +37,16 @@ jobs:
       - name: Load properties
         run: |
           mkdir -p ./.signing/debug/
-          echo "${{ secrets.KEYSTORE_DEBUG_FILE_B64 }}" | base64 --decode >> ./.signing/debug/debug.p12
-          echo "${{ secrets.KEYSTORE_DEBUG_PROPERTIES_B64 }}" | base64 --decode >> ./.signing/debug/debug.properties
+          echo "${{ env.KEYSTORE_DEBUG_FILE_B64 }}" | base64 --decode >> ./.signing/debug/keystore-debug.p12
+          echo "${{ env.KEYSTORE_DEBUG_PROPERTIES_B64 }}" | base64 --decode >> ./.signing/debug/debug.properties
+          mkdir -p ./.signing/release/
+          echo "${{ env.KEYSTORE_RELEASE_FILE_B64 }}" | base64 --decode >> ./.signing/release/keystore-release.p12
+          echo "${{ env.KEYSTORE_RELEASE_PROPERTIES_B64 }}" | base64 --decode >> ./.signing/release/release.properties
+          echo -n "${{ secrets.GOOGLE_SERVICES }}" | base64 --decode > ./app/google-services.json
 
       - name: Run lint
         run: |
-          ./gradlew \
-             --gradle-user-home='${{ env.GRADLE_USER_HOME }}' \
-             --build-cache \
-             --no-daemon \
-             lint
+          ./gradlew --gradle-user-home='${{ env.GRADLE_USER_HOME }}' --build-cache --no-daemon lint
 
       - name: Save lint report
         run: |
@@ -45,25 +54,23 @@ jobs:
         continue-on-error: true
 
       - name: Upload lint report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: lint-result
           path: lint-report.xml
 
-    env:
-      KEYSTORE_DEBUG_FILE_B64: ${{ secrets.KEYSTORE_DEBUG_FILE_B64 }}
-      KEYSTORE_DEBUG_PROPERTIES_B64: ${{ secrets.KEYSTORE_DEBUG_PROPERTIES_B64 }}
 
   test-with-coverage:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
-          java-version: 11
+          distribution: 'temurin'
+          java-version: 17
 
       - name: Set up Gradle
         run: |
@@ -75,12 +82,15 @@ jobs:
       - name: Load properties
         run: |
           mkdir -p ./.signing/debug/
-          echo "${{ secrets.KEYSTORE_DEBUG_FILE_B64 }}" | base64 --decode >> ./.signing/debug/debug.p12
-          echo "${{ secrets.KEYSTORE_DEBUG_PROPERTIES_B64 }}" | base64 --decode >> ./.signing/debug/debug.properties
-
+          echo "${{ env.KEYSTORE_DEBUG_FILE_B64 }}" | base64 --decode >> ./.signing/debug/keystore-debug.p12
+          echo "${{ env.KEYSTORE_DEBUG_PROPERTIES_B64 }}" | base64 --decode >> ./.signing/debug/debug.properties
+          mkdir -p ./.signing/release/
+          echo "${{ env.KEYSTORE_RELEASE_FILE_B64 }}" | base64 --decode >> ./.signing/release/keystore-release.p12
+          echo "${{ env.KEYSTORE_RELEASE_PROPERTIES_B64 }}" | base64 --decode >> ./.signing/release/release.properties
+          echo -n "${{ secrets.GOOGLE_SERVICES }}" | base64 --decode > ./app/google-services.json
       - name: Set up Google Credentials
         run: |
-          cat "${{ secrets.GOOGLE_CREDENTIALS }}" >> "./google-credentials.json"
+          cat "${{ env.GOOGLE_CREDENTIALS }}" >> "./google-credentials.json"
           export GOOGLE_APPLICATION_CREDENTIALS="./google-credentials.json"
         continue-on-error: true
 
@@ -109,76 +119,24 @@ jobs:
         continue-on-error: true
 
       - name: Upload testing and coverage reports
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: test-coverage-result
           path: |
             ./testing-report.html
             ./coverage-report.html
 
-    env:
-      KEYSTORE_DEBUG_FILE_B64: ${{ secrets.KEYSTORE_DEBUG_FILE_B64 }}
-      KEYSTORE_DEBUG_PROPERTIES_B64: ${{ secrets.KEYSTORE_DEBUG_PROPERTIES_B64 }}
-      GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-      GRADLE_USER_HOME: ${{ github.workspace }}/.gradle
-
   build-bundle-release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
-          java-version: 11
-
-      - name: Set up Gradle
-        run: |
-          mkdir -p $HOME/.gradle
-          echo "org.gradle.daemon=false" >> $HOME/.gradle/gradle.properties
-        env:
-          GRADLE_USER_HOME: ${{ github.workspace }}/.gradle
-
-      - name: Load properties
-        run: |
-          mkdir -p ./.signing/release/
-          echo "${{ secrets.KEYSTORE_RELEASE_FILE_B64 }}" | base64 --decode >> ./.signing/release/release.p12
-          echo "${{ secrets.KEYSTORE_RELEASE_PROPERTIES_B64 }}" | base64 --decode >> ./.signing/release/release.properties
-
-      - name: Build bundle release
-        run: |
-          ./gradlew \
-             --gradle-user-home='${{ env.GRADLE_USER_HOME }}' \
-             --build-cache \
-             --no-daemon \
-             bundleRelease
-
-      - name: Save bundle release
-        run: |
-          mv app/build/outputs/bundle/release/app-release.aab ./app-release.aab
-        continue-on-error: true
-
-      - name: Upload bundle release
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-bundle-release-result
-          path: app-release.aab
-
-    env:
-      KEYSTORE_RELEASE_FILE_B64: ${{ secrets.KEYSTORE_RELEASE_FILE_B64 }}
-      KEYSTORE_RELEASE_PROPERTIES_B64: ${{ secrets.KEYSTORE_RELEASE_PROPERTIES_B64 }}
-
-  build-apk-debug:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          java-version: 11
+          distribution: 'temurin'
+          java-version: 17
 
       - name: Set up Gradle
         run: |
@@ -190,16 +148,58 @@ jobs:
       - name: Load properties
         run: |
           mkdir -p ./.signing/debug/
-          echo "${{ secrets.KEYSTORE_DEBUG_FILE_B64 }}" | base64 --decode >> ./.signing/debug/debug.p12
-          echo "${{ secrets.KEYSTORE_DEBUG_PROPERTIES_B64 }}" | base64 --decode >> ./.signing/debug/debug.properties
+          echo "${{ env.KEYSTORE_DEBUG_FILE_B64 }}" | base64 --decode >> ./.signing/debug/keystore-debug.p12
+          echo "${{ env.KEYSTORE_DEBUG_PROPERTIES_B64 }}" | base64 --decode >> ./.signing/debug/debug.properties
+          mkdir -p ./.signing/release/
+          echo "${{ env.KEYSTORE_RELEASE_FILE_B64 }}" | base64 --decode >> ./.signing/release/keystore-release.p12
+          echo "${{ env.KEYSTORE_RELEASE_PROPERTIES_B64 }}" | base64 --decode >> ./.signing/release/release.properties
+          echo -n "${{ secrets.GOOGLE_SERVICES }}" | base64 --decode > ./app/google-services.json
+      - name: Build bundle release
+        run: |
+          ./gradlew --gradle-user-home='${{ env.GRADLE_USER_HOME }}' --build-cache --no-daemon bundleRelease
 
+      - name: Save bundle release
+        run: |
+          mv app/build/outputs/bundle/release/app-release.aab ./app-release.aab
+        continue-on-error: true
+
+      - name: Upload bundle release
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-bundle-release-result
+          path: app-release.aab
+
+  build-apk-debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Set up Gradle
+        run: |
+          mkdir -p $HOME/.gradle
+          echo "org.gradle.daemon=false" >> $HOME/.gradle/gradle.properties
+        env:
+          GRADLE_USER_HOME: ${{ github.workspace }}/.gradle
+
+      - name: Load properties
+        run: |
+          mkdir -p ./.signing/debug/
+          echo "${{ env.KEYSTORE_DEBUG_FILE_B64 }}" | base64 --decode >> ./.signing/debug/keystore-debug.p12
+          echo "${{ env.KEYSTORE_DEBUG_PROPERTIES_B64 }}" | base64 --decode >> ./.signing/debug/debug.properties
+          mkdir -p ./.signing/release/
+          echo "${{ env.KEYSTORE_RELEASE_FILE_B64 }}" | base64 --decode >> ./.signing/release/keystore-release.p12
+          echo "${{ env.KEYSTORE_RELEASE_PROPERTIES_B64 }}" | base64 --decode >> ./.signing/release/release.properties
+          echo -n "${{ secrets.GOOGLE_SERVICES }}" | base64 --decode > ./app/google-services.json
       - name: Build APK debug
         run: |
-          ./gradlew \
-             --gradle-user-home='${{ env.GRADLE_USER_HOME }}' \
-             --build-cache \
-             --no-daemon \
-             assembleDebug
+          ./gradlew --gradle-user-home='${{ env.GRADLE_USER_HOME }}' --build-cache --no-daemon assembleDebug
 
       - name: Save APK debug
         run: |
@@ -207,11 +207,8 @@ jobs:
         continue-on-error: true
 
       - name: Upload APK debug
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build-apk-debug-result
           path: app-debug.apk
 
-    env:
-      KEYSTORE_DEBUG_FILE_B64: ${{ secrets.KEYSTORE_DEBUG_FILE_B64 }}
-      KEYSTORE_DEBUG_PROPERTIES_B64: ${{ secrets.KEYSTORE_DEBUG_PROPERTIES_B64 }}
