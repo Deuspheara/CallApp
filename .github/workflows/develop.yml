@@ -90,13 +90,13 @@ jobs:
           echo -n "${{ secrets.GOOGLE_SERVICES }}" | base64 --decode > ./app/google-services.json
       - name: Set up Google Credentials
         run: |
-          cat "${{ env.GOOGLE_CREDENTIALS }}" >> "./google-credentials.json"
+          echo "${{ env.GOOGLE_CREDENTIALS }}" >> "./google-credentials.json"
           export GOOGLE_APPLICATION_CREDENTIALS="./google-credentials.json"
         continue-on-error: true
 
       - name: Install Firebase CLI
         run: |
-          curl -Lo ./firebase_bin https://firebase.tools/bin/macos/latest
+          curl -Lo ./firebase_bin https://firebase.tools/bin/linux/latest
           chmod +x ./firebase_bin
         continue-on-error: true
 
