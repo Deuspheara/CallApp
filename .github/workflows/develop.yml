@@ -109,6 +109,9 @@ jobs:
       - name: Accept Android SDK licenses
         run: yes | /usr/local/lib/android/sdk/tools/bin/sdkmanager --licenses
 
+      - name: Install Android SDK tools
+        run: echo "y" | sdkmanager "tools" "platform-tools" "platforms;android-29"
+
       - name: Run tests with coverage
         run: |
           ./firebase_bin emulators:exec --project callapp-c1cd7 --only auth,firestore,storage \
