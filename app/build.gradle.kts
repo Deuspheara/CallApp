@@ -124,6 +124,7 @@ dependencies {
     //region Androidx
     implementation (libs.bundles.androidx)
     implementation (libs.bundles.coroutine)
+    implementation(libs.androidx.compose.materialWindow)
     //endregion
 
     //region Hilt

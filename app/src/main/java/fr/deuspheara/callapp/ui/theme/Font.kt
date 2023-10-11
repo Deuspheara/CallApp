@@ -6,7 +6,6 @@ import androidx.compose.ui.text.font.FontWeight
 import fr.deuspheara.callapp.R
 
 /**
- * _Orkester – Cagibi_
  *
  * fr.deuspheara.callapp.ui.theme.Font
  *
