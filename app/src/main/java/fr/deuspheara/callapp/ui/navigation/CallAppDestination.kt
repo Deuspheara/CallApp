@@ -45,7 +45,7 @@ sealed class CallAppDestination(
 
     companion object {
         val bottomBarItems: List<CallAppDestination>
-            get() = listOf(HomePage)
+            get() = listOf(Home)
 
         private fun getEnterTransition(transition: Transition): EnterTransition {
             return when (transition) {
@@ -81,7 +81,7 @@ sealed class CallAppDestination(
 
     }
 
-    object HomePage : CallAppDestination(
+    object Home : CallAppDestination(
         title = R.string.home,
         showTopAppBar = true,
         navigationIcon = R.drawable.ic_back,
@@ -92,6 +92,19 @@ sealed class CallAppDestination(
     ) {
         override val route: String
             get() = "home_page"
+    }
+
+    object SignIn : CallAppDestination(
+        title = R.string.login,
+        showTopAppBar = true,
+        navigationIcon = R.drawable.ic_back,
+        transitionConfig = TransitionConfig(
+            enter = Transition.SlideHorizontal,
+            exit = Transition.Fade
+        )
+    ) {
+        override val route: String
+            get() = "signin_page"
     }
 }
 

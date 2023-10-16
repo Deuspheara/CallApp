@@ -2,14 +2,12 @@ package fr.deuspheara.callapp.ui.navigation
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import fr.deuspheara.callapp.ui.home.HomeScreen
+import fr.deuspheara.callapp.ui.screens.home.HomeScreen
 import fr.deuspheara.callapp.ui.navigation.CallAppDestination.Companion.composable
-import org.openjdk.tools.javac.Main
 
 /**
  * _CallApp_
@@ -29,18 +27,17 @@ fun CallAppNavGraph(
     isExpandedScreen : Boolean,
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
-    startDestination: CallAppDestination = CallAppDestination.HomePage,
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    startDestination: CallAppDestination = CallAppDestination.Home,
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination.route,
         modifier = modifier
     ) {
-        composable(CallAppDestination.HomePage){
+        composable(CallAppDestination.Home){
             HomeScreen(
-                destination = CallAppDestination.HomePage,
-                snackbarHostState = snackbarHostState
+                destination = CallAppDestination.Home,
+                snackbarHostState = SnackbarHostState()
             )
         }
     }

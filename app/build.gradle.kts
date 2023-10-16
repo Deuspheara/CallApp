@@ -123,8 +123,10 @@ android {
 dependencies {
     //region Androidx
     implementation (libs.bundles.androidx)
+    implementation(libs.androidx.appcompat)
     implementation (libs.bundles.coroutine)
     implementation(libs.androidx.compose.materialWindow)
+    implementation(libs.google.android.material)
     //endregion
 
     //region Hilt

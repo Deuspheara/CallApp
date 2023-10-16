@@ -1,4 +1,4 @@
-package fr.deuspheara.callapp.ui.components
+package fr.deuspheara.callapp.ui.components.snackbar
 
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.widthIn
@@ -34,7 +34,6 @@ fun CallAppSnackBarHost(
         hostState = hostState,
         modifier = modifier
             .systemBarsPadding()
-            // Limit the Snackbar width for large screens
             .wrapContentWidth(align = Alignment.Start)
             .widthIn(max = 550.dp),
         snackbar = snackbar

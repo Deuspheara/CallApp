@@ -1,4 +1,4 @@
-package fr.deuspheara.callapp.ui.home
+package fr.deuspheara.callapp.ui.screens.home
 
 /**
  * _CallApp_
