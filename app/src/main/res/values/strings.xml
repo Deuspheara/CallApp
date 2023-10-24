@@ -1,6 +1,15 @@
 <resources>
     <string name="app_name">CallApp</string>
     <string name="home">Home</string>
-    <string name="login">Se connecter</string>
+    <string name="login">Login</string>
     <string name="email">Email</string>
+    <string name="error_signin">Error while signing</string>
+    <string name="password">Password</string>
+    <string name="forgot_password"><annotation style="hypertext">Forget password</annotation></string>
+    <string name="google_signin">Google sign in</string>
+    <string name="apple_signin">Apple sign in</string>
+    <string name="signup">Sign up</string>
+    <string name="error_email">Email is not valid</string>
+    <string name="check_icon">Icon check</string>
+    <string name="i_have_an_account">I have an account</string>
 </resources>

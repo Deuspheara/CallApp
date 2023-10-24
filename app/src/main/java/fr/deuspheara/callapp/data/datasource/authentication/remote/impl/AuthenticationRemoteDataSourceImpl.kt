@@ -4,10 +4,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import fr.deuspheara.callapp.core.coroutine.DispatcherModule
 import fr.deuspheara.callapp.data.datasource.authentication.remote.AuthenticationRemoteDataSource
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import java.time.Instant
 import javax.inject.Inject
@@ -21,22 +24,23 @@ import javax.inject.Inject
  * - __Author__ Deuspheara
  *
  * ### Description
- * Implementation of [AuthenticationRemoteDatasource]
+ * Implementation of [AuthenticationRemoteDataSource]
  *
  */
 class AuthenticationRemoteDataSourceImpl @Inject constructor(
+    @DispatcherModule.IoDispatcher private val ioContext: CoroutineDispatcher,
     private val firebaseAuth: FirebaseAuth,
 ) : AuthenticationRemoteDataSource {
-    override fun signUpWithPassword(email: String, password: String): Flow<String> {
+    override suspend fun signUpWithPassword(email: String, password: String): Flow<String> {
         return flow {
             val uid = firebaseAuth.createUserWithEmailAndPassword(email, password).await().user?.uid
             uid?.let { emit(it) }
         }.catch {
             if (it is FirebaseAuthUserCollisionException) throw IllegalStateException("User collision occurred.")
-        }
+        }.flowOn(ioContext)
     }
 
-    override fun signInWithPassword(email: String, password: String): Flow<String> {
+    override suspend fun signInWithPassword(email: String, password: String): Flow<String> {
         return flow {
             val uid = firebaseAuth.signInWithEmailAndPassword(email, password).await().user?.uid
             uid?.let { emit(it) } ?: throw IllegalStateException("Authentication failed: No user returned.")
@@ -46,10 +50,10 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
                 is FirebaseAuthInvalidUserException -> throw IllegalStateException("No user found for $email")
                 else -> throw it
             }
-        }
+        }.flowOn(ioContext)
     }
 
-    override fun isUserAuthenticated(): Flow<Boolean> {
+    override suspend fun isUserAuthenticated(): Flow<Boolean> {
         return flow {
             val isAuthenticated = firebaseAuth.currentUser?.getIdToken(true)?.await()?.token != null
             emit(isAuthenticated)
@@ -57,7 +61,7 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
         }.catch {
             firebaseAuth.signOut()
             emit(false)
-        }
+        }.flowOn(ioContext)
     }
 
 

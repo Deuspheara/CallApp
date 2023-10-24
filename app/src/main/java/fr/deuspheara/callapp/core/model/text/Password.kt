@@ -34,12 +34,21 @@ package fr.deuspheara.callapp.core.model.text
 @JvmInline
 value class Password(val value: String) {
 
+    val hasMinimumLength: Boolean
+        get() = value.length >= 8
+
+    val hasLowerCase: Boolean
+        get() = value.any { it.isLowerCase() }
+
+    val hasUpperCase: Boolean
+        get() = value.any { it.isUpperCase() }
+
+
+    val hasSpecialChar: Boolean
+        get() = value.any { it in SPECIAL_CHARS }
+
     val isStrong: Boolean
-        get() = value.length >= 8 &&
-                value.any { it.isLowerCase() } &&
-                value.any { it.isUpperCase() } &&
-                value.any { it.isDigit() } &&
-                value.any { it in SPECIAL_CHARS }
+        get() = hasMinimumLength && hasLowerCase && hasUpperCase && hasSpecialChar
 
     companion object {
         private val SPECIAL_CHARS = setOf('!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '+', '=', '<', '>', '?')

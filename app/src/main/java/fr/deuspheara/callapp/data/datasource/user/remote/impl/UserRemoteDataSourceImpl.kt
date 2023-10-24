@@ -3,7 +3,9 @@ package fr.deuspheara.callapp.data.datasource.user.remote.impl
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.snapshots
 import fr.deuspheara.callapp.core.coroutine.DispatcherModule
-import fr.deuspheara.callapp.data.datasource.user.model.UserRemote
+import fr.deuspheara.callapp.core.model.user.UserLightModel
+import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteFirestoreModel
+import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteModel
 import fr.deuspheara.callapp.data.datasource.user.remote.UserRemoteDataSource
 import fr.deuspheara.callapp.data.firebase.FirebaseModule
 import kotlinx.coroutines.CoroutineDispatcher
@@ -31,21 +33,24 @@ class UserRemoteDataSourceImpl @Inject constructor(
     @FirebaseModule.UserCollectionReference private val userCollection: CollectionReference,
     @DispatcherModule.IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : UserRemoteDataSource {
-    override fun registerUser(
+    override suspend fun registerUser(
         uid: String,
-        pseudonym: String,
-        realName: String,
         email: String,
-        profilePictureUrl: String?,
-        bio: String?
+        displayName: String,
+        firstName: String,
+        lastName: String,
+        phoneNumber : String,
+        photoUrl: String,
+        bio: String
     ): Flow<String> {
         return flow {
-            val newUserRemote = UserRemote(
+            val newUserRemote = UserRemoteFirestoreModel(
                 uid = uid,
-                pseudonym = pseudonym,
-                realName = realName,
+                displayName = displayName,
+                firstName = firstName,
+                lastName = lastName,
                 email = email,
-                profilePictureUrl = profilePictureUrl,
+                photoUrl = photoUrl,
                 bio = bio,
                 contactList = emptyList(),
             )
@@ -54,34 +59,36 @@ class UserRemoteDataSourceImpl @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
-    override fun getUserDetails(uid: String): Flow<UserRemote> {
+    override suspend fun getUserDetails(uid: String): Flow<UserRemoteFirestoreModel> {
         return userCollection.document(uid).snapshots()
-            .map { snapshot -> snapshot.toObject(UserRemote::class.java)!! }
+            .map { snapshot -> snapshot.toObject(UserRemoteFirestoreModel::class.java)!! }
             .flowOn(ioDispatcher)
     }
 
-    override fun updateUserDetails(
+    override suspend fun updateUserDetails(
         uid: String,
-        pseudonym: String?,
-        realName: String?,
+        displayName: String?,
+        firstName: String?,
+        lastName: String?,
         email: String?,
         profilePictureUrl: String?,
         bio: String?
-    ): Flow<UserRemote> {
+    ): Flow<UserRemoteFirestoreModel> {
         return flow {
             val updates = mutableMapOf<String, Any?>()
-            pseudonym?.let { updates["pseudonym"] = it }
-            realName?.let { updates["realName"] = it }
+            displayName?.let { updates["displayName"] = it }
+            firstName?.let { updates["firstName"] = it }
+            lastName?.let { updates["lastName"] = it }
             email?.let { updates["email"] = it }
-            profilePictureUrl?.let { updates["profilePictureUrl"] = it }
+            profilePictureUrl?.let { updates["photoUrl"] = it }
             bio?.let { updates["bio"] = it }
 
             userCollection.document(uid).update(updates).await()
-            emit(getUserDetails(uid).first())  // Emit the updated user data after performing the update
+            emit(getUserDetails(uid).first())
         }.flowOn(ioDispatcher)
     }
 
-    override fun addContactToUser(uid: String, contactUid: String): Flow<UserRemote> {
+    override suspend fun addContactToUser(uid: String, contactUid: String): Flow<UserRemoteFirestoreModel> {
         return flow {
             val user = getUserDetails(uid).first()
             val updatedContacts = user.contactList.toMutableList().apply { add(contactUid) }
@@ -90,7 +97,7 @@ class UserRemoteDataSourceImpl @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
-    override fun removeContactFromUser(uid: String, contactUid: String): Flow<UserRemote> {
+    override suspend fun removeContactFromUser(uid: String, contactUid: String): Flow<UserRemoteFirestoreModel> {
         return flow {
             val user = getUserDetails(uid).first()
             val updatedContacts = user.contactList.toMutableList().apply { remove(contactUid) }
@@ -99,9 +106,17 @@ class UserRemoteDataSourceImpl @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
-    override fun getUserContacts(uid: String): Flow<List<String>> {
+    override suspend fun getUserContacts(uid: String): Flow<List<String>> {
         return userCollection.document(uid).snapshots()
-            .map { snapshot -> snapshot.toObject(UserRemote::class.java)?.contactList ?: emptyList() }
+            .map { snapshot -> snapshot.toObject(UserRemoteFirestoreModel::class.java)?.contactList ?: emptyList() }
             .flowOn(ioDispatcher)
+    }
+
+    private fun UserRemoteFirestoreModel.toUserLightModel(): UserLightModel {
+        return UserLightModel(
+            uuid = uid,
+            displayName = displayName,
+            photoUrl = photoUrl,
+        )
     }
 }

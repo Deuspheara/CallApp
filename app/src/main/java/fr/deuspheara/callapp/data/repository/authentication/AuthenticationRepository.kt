@@ -1,21 +1,20 @@
-package fr.deuspheara.callapp.data.datasource.authentication.remote
+package fr.deuspheara.callapp.data.repository.authentication
 
 import kotlinx.coroutines.flow.Flow
-import java.time.Instant
 
 /**
  * _CallApp_
  *
- * fr.deuspheara.callapp.data.datasource.authentication.remote.AuthenticationRemoteDataSource
+ * fr.deuspheara.callapp.data.repository.authentication.AuthenticationRepository
  *
  * ### Information
  * - __Author__ Deuspheara
  *
  * ### Description
- * Authentication remote datasource
+ * Authentication repository
  *
  */
-interface AuthenticationRemoteDataSource {
+interface AuthenticationRepository {
 
     /**
      * Registers a new user using their email and password.

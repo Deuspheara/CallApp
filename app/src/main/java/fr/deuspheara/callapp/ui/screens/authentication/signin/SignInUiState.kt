@@ -35,6 +35,5 @@ sealed interface SignInUiState {
 
     class Success(val uid: String) : Consumable(), SignInUiState
 
-    @JvmInline
-    value class Error(val exception: Throwable) : SignInUiState
+    class Error(val exception: Throwable) : SignInUiState, Consumable()
 }

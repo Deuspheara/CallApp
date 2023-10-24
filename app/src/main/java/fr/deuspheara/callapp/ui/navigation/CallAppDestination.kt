@@ -95,7 +95,7 @@ sealed class CallAppDestination(
     }
 
     object SignIn : CallAppDestination(
-        title = R.string.login,
+        title = R.string.i_have_an_account,
         showTopAppBar = true,
         navigationIcon = R.drawable.ic_back,
         transitionConfig = TransitionConfig(
