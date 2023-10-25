@@ -58,22 +58,8 @@ fun CallAppPasswordTextField(
         maxLines = maxLines,
         singleLine = true,
         isEnable = isEnable,
-        trailingIcon = {
-            if (trailingIconOpen != null && trailingIconClose != null) {
-                IconButton(
-                    onClick = onTrailingIconClick
-                ) {
-                    Icon(
-                        painter = painterResource(
-                            id = if (trailingIconVisibility) trailingIconOpen else trailingIconClose
-                        ),
-                        contentDescription = stringResource(id = R.string.email),
-                        modifier = Modifier.size(24.dp),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            }
-        },
+        onTrailingIconClick = onTrailingIconClick,
+        trailingIcon = if (trailingIconVisibility) trailingIconOpen else trailingIconClose,
         visualTransformation = if (trailingIconVisibility) VisualTransformation.None else PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         keyboardActions = keyboardActions,

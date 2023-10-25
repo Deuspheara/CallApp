@@ -6,10 +6,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import fr.deuspheara.callapp.ui.components.snackbar.CallAppSnackBarHost
-import fr.deuspheara.callapp.ui.screens.authentication.AuthNavGraph
+import fr.deuspheara.callapp.ui.navigation.CallAppDestination
+import fr.deuspheara.callapp.ui.navigation.addAuthNavGraph
+import fr.deuspheara.callapp.ui.navigation.addMainNavGraph
 
 /**
  * _CallApp_
@@ -35,9 +37,21 @@ fun MainScreen(
 
     val isExpandedScreen = widthSizeClass == WindowWidthSizeClass.Expanded
 
-    AuthNavGraph(
+    NavHost(
         navController = navController,
-        isExpandedScreen = isExpandedScreen,
-        snackbarHostState = snackbarHostState
-    )
+        startDestination = CallAppDestination.Main.route,
+    ) {
+        addAuthNavGraph(
+            navController = navController,
+            isExpandedScreen = isExpandedScreen,
+            snackbarHostState = snackbarHostState
+        )
+        addMainNavGraph(
+            navController = navController,
+            isExpandedScreen = isExpandedScreen,
+            snackbarHostState = snackbarHostState
+        )
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package fr.deuspheara.callapp.ui.screens.home
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -27,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import fr.deuspheara.callapp.R
+import fr.deuspheara.callapp.ui.components.buttons.CallAppButton
 import fr.deuspheara.callapp.ui.components.snackbar.CallAppSnackBarHost
 import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 import kotlinx.coroutines.CoroutineScope
@@ -50,6 +52,7 @@ fun HomeScreen(
     destination: CallAppDestination = CallAppDestination.Home,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     navigateToSignInScreen : () -> Unit = {},
+    navigateToSignUpScreen : () -> Unit = {},
     coroutineScope: CoroutineScope = rememberCoroutineScope()
 ) {
     Scaffold(
@@ -65,7 +68,7 @@ fun HomeScreen(
     ) { innerPadding ->
 
 
-        Box(modifier = Modifier.padding(innerPadding)){
+        Column(modifier = Modifier.padding(innerPadding)){
             TextButton(
                 onClick = navigateToSignInScreen
             ){
@@ -75,6 +78,11 @@ fun HomeScreen(
                     color = MaterialTheme.colorScheme.onBackground
                 )
             }
+
+            CallAppButton(
+                text = R.string.sign_up,
+                onClick = navigateToSignUpScreen
+            )
         }
 
     }
@@ -89,7 +97,7 @@ fun HomeTopAppBar(
 ) {
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.secondary
+            containerColor = MaterialTheme.colorScheme.background
         ),
         title = {
             Text(

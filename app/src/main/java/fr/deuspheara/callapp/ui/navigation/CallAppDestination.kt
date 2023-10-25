@@ -100,11 +100,38 @@ sealed class CallAppDestination(
         navigationIcon = R.drawable.ic_back,
         transitionConfig = TransitionConfig(
             enter = Transition.SlideHorizontal,
-            exit = Transition.Fade
+            exit = Transition.SlideHorizontal
         )
     ) {
         override val route: String
             get() = "signin_page"
+    }
+
+    object SignUp : CallAppDestination(
+        title = R.string.signup,
+        showTopAppBar = true,
+        navigationIcon = R.drawable.ic_back,
+        transitionConfig = TransitionConfig(
+            enter = Transition.SlideHorizontal,
+            exit = Transition.SlideHorizontal
+        )
+    ) {
+        override val route: String
+            get() = "signup_page"
+    }
+
+
+   object Auth : CallAppDestination(
+        title = R.string.authentication,
+    ) {
+        override val route: String
+            get() = "auth"
+    }
+    object Main : CallAppDestination(
+        title = R.string.main,
+    ) {
+        override val route: String
+            get() = "Main"
     }
 }
 

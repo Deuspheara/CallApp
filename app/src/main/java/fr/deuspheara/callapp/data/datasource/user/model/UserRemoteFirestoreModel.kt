@@ -1,5 +1,6 @@
 package fr.deuspheara.callapp.data.datasource.user.model
 
+import com.google.firebase.firestore.DocumentId
 import fr.deuspheara.callapp.core.model.text.Email
 
 /**
@@ -23,4 +24,15 @@ data class UserRemoteFirestoreModel(
     val photoUrl : String,
     val bio : String,
     val contactList : List<String>,
-)
+){
+    constructor() : this(
+        uid = "",
+        displayName = "",
+        firstName = "",
+        lastName = "",
+        email = "",
+        photoUrl = "",
+        bio = "",
+        contactList = listOf()
+    )
+}

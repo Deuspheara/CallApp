@@ -12,4 +12,11 @@
     <string name="error_email">Email is not valid</string>
     <string name="check_icon">Icon check</string>
     <string name="i_have_an_account">I have an account</string>
+    <string name="authentication">Auth</string>
+    <string name="main">main</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="phone_number">Phone number</string>
+    <string name="sign_up">Sign up</string>
 </resources>

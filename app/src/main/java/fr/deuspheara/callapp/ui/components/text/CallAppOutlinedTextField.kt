@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -32,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import fr.deuspheara.callapp.R
 import fr.deuspheara.callapp.ui.theme.CallAppTheme
+import fr.deuspheara.callapp.ui.theme.customGreen
 import fr.deuspheara.callapp.ui.theme.shape.SmoothCornerShape
 import fr.deuspheara.callapp.ui.theme.textColor
 
@@ -56,7 +58,8 @@ fun CallAppOutlinedTextField(
     maxLines: Int = 1,
     @StringRes placeholderText: Int,
     @DrawableRes leadingIcon: Int? = null,
-    trailingIcon: @Composable () -> Unit = {},
+    @DrawableRes trailingIcon: Int? = null,
+    onTrailingIconClick: () -> Unit = {},
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -71,7 +74,6 @@ fun CallAppOutlinedTextField(
 
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = Modifier.fillMaxWidth()
     ) {
         TextField(
             value = value,
@@ -114,7 +116,7 @@ fun CallAppOutlinedTextField(
                     color = when {
                         isError -> MaterialTheme.colorScheme.error // Use error color when there's an error
                         focused.value -> MaterialTheme.colorScheme.textColor
-                        else -> MaterialTheme.colorScheme.outline
+                        else -> MaterialTheme.colorScheme.outlineVariant
                     },
                     shape = SmoothCornerShape(
                         cornerRadiusBL = 12.dp,
@@ -122,8 +124,7 @@ fun CallAppOutlinedTextField(
                         cornerRadiusTL = 12.dp,
                         cornerRadiusTR = 12.dp
                     )
-                )
-                .fillMaxWidth(),
+                ),
             maxLines = maxLines,
             textStyle = MaterialTheme.typography.bodyLarge + TextStyle(
                 color = if (focused.value) MaterialTheme.colorScheme.textColor else MaterialTheme.colorScheme.outline
@@ -134,7 +135,21 @@ fun CallAppOutlinedTextField(
                 disabledBorderColor = Color.Transparent,
                 errorBorderColor = Color.Transparent,
             ),
-            trailingIcon = trailingIcon,
+            trailingIcon = trailingIcon?.let<Int, @Composable (() -> Unit)?> {
+                return@let {
+                    IconButton(
+                        onClick = onTrailingIconClick
+                    ){
+                        Icon(
+                            painter = painterResource(id = trailingIcon),
+                            contentDescription = stringResource(id = placeholderText),
+                            modifier = Modifier.size(24.dp),
+                            tint = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.textColor
+                        )
+                    }
+
+                }
+            },
             leadingIcon = leadingIcon?.let<Int, @Composable (() -> Unit)?> {
                 return@let {
                     Icon(
@@ -191,7 +206,6 @@ fun CallAppOutlinedTextFieldPreview() {
                 labelText = R.string.email,
                 placeholderText = R.string.email,
                 leadingIcon = null,
-                trailingIcon = {},
                 visualTransformation = VisualTransformation.None,
                 keyboardOptions = KeyboardOptions.Default,
                 keyboardActions = KeyboardActions.Default,
@@ -210,7 +224,6 @@ fun CallAppOutlinedTextFieldPreview() {
                 labelText = R.string.email,
                 placeholderText = R.string.email,
                 leadingIcon = null,
-                trailingIcon = {},
                 visualTransformation = VisualTransformation.None,
                 keyboardOptions = KeyboardOptions.Default,
                 keyboardActions = KeyboardActions.Default,
@@ -228,14 +241,7 @@ fun CallAppOutlinedTextFieldPreview() {
                 labelText = R.string.email,
                 placeholderText = R.string.email,
                 leadingIcon = null,
-                trailingIcon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_back),
-                        contentDescription = stringResource(id = R.string.email),
-                        modifier = Modifier.size(24.dp),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                },
+                trailingIcon = R.drawable.ic_back,
                 visualTransformation = VisualTransformation.None,
                 keyboardOptions = KeyboardOptions.Default,
                 keyboardActions = KeyboardActions.Default,

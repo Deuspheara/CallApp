@@ -50,7 +50,8 @@ value class Password(val value: String) {
     val isStrong: Boolean
         get() = hasMinimumLength && hasLowerCase && hasUpperCase && hasSpecialChar
 
+
     companion object {
-        private val SPECIAL_CHARS = setOf('!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '+', '=', '<', '>', '?')
+        private val SPECIAL_CHARS = setOf('!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '+', '=', '<', '>', '?', '/', '\\', '|', '[', ']', '{', '}', '~', '`', ':', ';', '"', '\'')
     }
 }

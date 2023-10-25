@@ -68,6 +68,7 @@ import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 import fr.deuspheara.callapp.ui.screens.home.HomeTopAppBar
 import fr.deuspheara.callapp.ui.screens.home.rememberContentPaddingForScreen
 import fr.deuspheara.callapp.ui.theme.CallAppTheme
+import fr.deuspheara.callapp.ui.theme.customGreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -210,7 +211,7 @@ private fun SignInContentScreen(
         )
         LazyColumn(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(horizontal = 16.dp)
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .padding(innerPadding),
             contentPadding = contentPadding,
@@ -247,7 +248,7 @@ private fun SignInContentScreen(
                 SignInButton(
                     modifier = Modifier.padding(top = 16.dp),
                     onClick = submitForm,
-                    isEnabled = !isLoading && email.isValid && password.isStrong
+                    isEnabled = !isLoading && password.isStrong
                 )
             }
         }
@@ -295,17 +296,6 @@ private fun SignInForm(
             focusedValue = onEmailFocused,
         )
 
-        AnimatedVisibility(
-            visible = isMailError,
-            enter = expandVertically { -it },
-            exit = shrinkVertically { it }
-        ) {
-            ValidityComponent(
-                messageValid = "Format valide",
-                messageNotValid = "Format invalide",
-                isValid = email.isValid
-            )
-        }
 
         CallAppPasswordTextField(
             modifier = Modifier.fillMaxWidth(),
