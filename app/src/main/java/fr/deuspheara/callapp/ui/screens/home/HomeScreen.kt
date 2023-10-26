@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import fr.deuspheara.callapp.R
 import fr.deuspheara.callapp.ui.components.buttons.CallAppButton
 import fr.deuspheara.callapp.ui.components.snackbar.CallAppSnackBarHost
+import fr.deuspheara.callapp.ui.components.topbar.CallAppTopBar
 import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -59,7 +60,7 @@ fun HomeScreen(
         snackbarHost = { CallAppSnackBarHost(hostState = snackbarHostState) },
         topBar = {
             if (destination.showTopAppBar) {
-                HomeTopAppBar(
+                CallAppTopBar(
                     destination = destination
                 )
             }
@@ -86,30 +87,6 @@ fun HomeScreen(
         }
 
     }
-}
-
-@Composable
-fun HomeTopAppBar(
-    modifier: Modifier = Modifier,
-    destination: CallAppDestination,
-    navigationIcon: @Composable () -> Unit = {},
-    actions: @Composable RowScope.() -> Unit = {}
-) {
-    CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background
-        ),
-        title = {
-            Text(
-                text = stringResource(destination.title),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSecondary,
-            )
-        },
-        navigationIcon = navigationIcon,
-        actions = actions,
-        modifier = modifier
-    )
 }
 
 @Preview(showSystemUi = true)

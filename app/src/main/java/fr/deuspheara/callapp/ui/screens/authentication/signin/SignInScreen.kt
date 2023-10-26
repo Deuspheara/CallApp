@@ -64,8 +64,8 @@ import fr.deuspheara.callapp.ui.components.text.CallAppOutlinedTextField
 import fr.deuspheara.callapp.ui.components.text.CallAppOutlinedTextFieldPreview
 import fr.deuspheara.callapp.ui.components.text.CallAppPasswordTextField
 import fr.deuspheara.callapp.ui.components.text.ValidityComponent
+import fr.deuspheara.callapp.ui.components.topbar.CallAppTopBar
 import fr.deuspheara.callapp.ui.navigation.CallAppDestination
-import fr.deuspheara.callapp.ui.screens.home.HomeTopAppBar
 import fr.deuspheara.callapp.ui.screens.home.rememberContentPaddingForScreen
 import fr.deuspheara.callapp.ui.theme.CallAppTheme
 import fr.deuspheara.callapp.ui.theme.customGreen
@@ -188,7 +188,7 @@ private fun SignInContentScreen(
         snackbarHost = { CallAppSnackBarHost(hostState = snackbarHostState) },
         topBar = {
             if (showTopAppBar) {
-                HomeTopAppBar(
+                CallAppTopBar(
                     destination = CallAppDestination.SignIn,
                     navigationIcon = {
                         IconButton(

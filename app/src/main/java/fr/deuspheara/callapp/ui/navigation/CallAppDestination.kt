@@ -13,7 +13,10 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import fr.deuspheara.callapp.R
 
 /**
@@ -81,13 +84,45 @@ sealed class CallAppDestination(
 
     }
 
+    class ResetPassword(oobCode: String?) : CallAppRoutable {
+        override val route: String =
+            "${ROUTING_PREFIX}${if (oobCode != null) "?${ARG_KEY_CODE}=${oobCode}" else ""}"
+
+        companion object : CallAppDestination(
+            title = R.string.new_password,
+            showTopAppBar = true,
+            navigationIcon = R.drawable.ic_back,
+            transitionConfig = TransitionConfig(
+                enter = Transition.SlideHorizontal,
+                popExit = Transition.SlideHorizontal
+            ),
+            arguments = listOf(
+                navArgument(ResetPassword.ARG_KEY_CODE) {
+                    this.type = NavType.StringType
+                    this.nullable = true
+                }
+            ),
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern =
+                        "https://callapp-c1cd7.firebaseapp.com?${ResetPassword.ARG_KEY_CODE}={${ResetPassword.ARG_KEY_CODE}}"
+                }
+            )
+        ) {
+            const val ROUTING_PREFIX = "reset_password"
+            const val ARG_KEY_CODE = "oobCode"
+
+            override val route: String = "$ROUTING_PREFIX?$ARG_KEY_CODE={$ARG_KEY_CODE}"
+        }
+    }
+
     object Home : CallAppDestination(
         title = R.string.home,
         showTopAppBar = true,
         navigationIcon = R.drawable.ic_back,
         transitionConfig = TransitionConfig(
             enter = Transition.SlideHorizontal,
-            exit = Transition.Fade
+            popExit = Transition.SlideHorizontal
         )
     ) {
         override val route: String
@@ -100,7 +135,7 @@ sealed class CallAppDestination(
         navigationIcon = R.drawable.ic_back,
         transitionConfig = TransitionConfig(
             enter = Transition.SlideHorizontal,
-            exit = Transition.SlideHorizontal
+            popExit = Transition.SlideHorizontal
         )
     ) {
         override val route: String
@@ -113,11 +148,25 @@ sealed class CallAppDestination(
         navigationIcon = R.drawable.ic_back,
         transitionConfig = TransitionConfig(
             enter = Transition.SlideHorizontal,
-            exit = Transition.SlideHorizontal
+            popExit = Transition.SlideHorizontal
         )
     ) {
         override val route: String
             get() = "signup_page"
+    }
+
+    data object SendResetPassword : CallAppDestination(
+        title = R.string.forgotten_password,
+        showTopAppBar = true,
+        navigationIcon = R.drawable.ic_back,
+        transitionConfig = TransitionConfig(
+            enter = Transition.SlideHorizontal,
+            popExit = Transition.SlideHorizontal
+        )
+    ) {
+        override val route: String
+            get() = "send_reset_password"
+
     }
 
 

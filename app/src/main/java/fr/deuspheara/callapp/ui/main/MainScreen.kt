@@ -29,6 +29,7 @@ import fr.deuspheara.callapp.ui.navigation.addMainNavGraph
 fun MainScreen(
     widthSizeClass: WindowWidthSizeClass,
     navController: NavHostController = rememberNavController(),
+    launchClientMail: () -> Unit = {},
 ){
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -44,13 +45,15 @@ fun MainScreen(
         addAuthNavGraph(
             navController = navController,
             isExpandedScreen = isExpandedScreen,
-            snackbarHostState = snackbarHostState
+            snackbarHostState = snackbarHostState,
+            launchClientMail = launchClientMail
         )
         addMainNavGraph(
             navController = navController,
             isExpandedScreen = isExpandedScreen,
             snackbarHostState = snackbarHostState
         )
+
     }
 
 

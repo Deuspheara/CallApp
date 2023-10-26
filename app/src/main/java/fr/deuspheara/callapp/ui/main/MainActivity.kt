@@ -1,5 +1,7 @@
 package fr.deuspheara.callapp.ui.main
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -64,8 +66,28 @@ class MainActivity() : ComponentActivity() {
         setContent {
             val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
             CallAppTheme {
-                MainScreen(widthSizeClass)
+                MainScreen(
+                    widthSizeClass = widthSizeClass,
+                    launchClientMail = ::launchClientMail,
+                )
             }
+        }
+    }
+
+    private fun launchClientMail() {
+        val intent = Intent(Intent.ACTION_MAIN).apply {
+            this.addCategory(Intent.CATEGORY_APP_EMAIL)
+            this.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            this.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            this.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+        }
+
+        val chooser = Intent.createChooser(intent, null)
+        try {
+            this.startActivity(chooser)
+        } catch (e: ActivityNotFoundException) {
+            Log.e(TAG, "Error while starting activity", e)
         }
     }
 

@@ -6,6 +6,7 @@ import fr.deuspheara.callapp.data.repository.authentication.AuthenticationReposi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import java.time.Instant
 import javax.inject.Inject
 
 /**
@@ -40,5 +41,26 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
     override suspend fun isUserAuthenticated(): Flow<Boolean> = withContext(defaultContext) {
         remoteDataSource.isUserAuthenticated()
+    }
+
+    override suspend fun sendPasswordResetEmail(email: String): Flow<Boolean> =
+        withContext(defaultContext) {
+            remoteDataSource.sendPasswordResetEmail(email)
+        }
+
+    override suspend fun confirmResetPassword(oobCode: String, password: String): Flow<Boolean> =
+        withContext(defaultContext) {
+            remoteDataSource.confirmResetPassword(oobCode, password)
+        }
+
+    override suspend fun checkActionCode(code: String): Flow<Boolean> =
+        withContext(defaultContext) {
+            remoteDataSource.checkActionCode(code)
+        }
+
+    override suspend fun resetPassword(password: String): Flow<Instant?> {
+        return withContext(defaultContext) {
+            remoteDataSource.resetPassword(password)
+        }
     }
 }

@@ -18,8 +18,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val LightColors = lightColorScheme(
-    outline = Grey500,
-    outlineVariant = Grey200,
+    outline = Grey900,
+    outlineVariant = Grey500,
     primary = Purple500,
     onPrimary = White,
     secondary = White,
@@ -32,15 +32,15 @@ private val LightColors = lightColorScheme(
 
 
 private val DarkColors = darkColorScheme(
-    outline = Grey500,
-    outlineVariant = Grey200,
-    primary = Purple500,
+    outline = Grey400,
+    outlineVariant = Grey700,
+    primary = Purple400,
     onPrimary = White,
-    secondary = White,
-    onSecondary = Black,
+    secondary = Black,
+    onSecondary = White,
     background = Grey900,
-    surfaceVariant = Grey200,
-    onSurfaceVariant = Grey500,
+    surfaceVariant = Grey700,
+    onSurfaceVariant = Grey400,
     error = Red500,
 )
 
@@ -63,8 +63,8 @@ fun CallAppTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            window.statusBarColor = colorScheme.background.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 

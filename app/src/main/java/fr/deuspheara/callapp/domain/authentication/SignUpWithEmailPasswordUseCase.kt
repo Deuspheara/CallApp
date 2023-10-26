@@ -8,8 +8,6 @@ import fr.deuspheara.callapp.data.repository.user.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import java.time.Instant
 import javax.inject.Inject
 
 /**
@@ -42,27 +40,24 @@ class SignUpWithEmailPasswordUseCase @Inject constructor(
         profilePictureUrl: String?,
         bio: String?
     ): Flow<String?> {
-        try {
-            return authenticationRepository.signUpWithPassword(email.value, password.value)
-                .flatMapLatest {
-                    userRepository.registerUser(
-                        uid = it,
-                        pseudonym = pseudonym,
-                        firstName = firstName,
-                        lastName = lastName,
-                        email = email,
-                        profilePictureUrl = profilePictureUrl,
-                        bio = bio,
-                        phoneNumber = null
-                    )
-                }.catch {
-                    Log.e(TAG, "invoke: ", it)
-                    emit(null)
-                }
-        } catch (e: Exception) {
-            Log.e(TAG, "invoke: ", e)
-            throw e
-        }
+
+        return authenticationRepository.signUpWithPassword(email.value, password.value)
+            .flatMapLatest {
+                userRepository.registerUser(
+                    uid = it,
+                    pseudonym = pseudonym,
+                    firstName = firstName,
+                    lastName = lastName,
+                    email = email,
+                    profilePictureUrl = profilePictureUrl,
+                    bio = bio,
+                    phoneNumber = null
+                )
+            }.catch {
+                Log.e(TAG, "invoke: ", it)
+                emit(null)
+            }
+
     }
 
 }

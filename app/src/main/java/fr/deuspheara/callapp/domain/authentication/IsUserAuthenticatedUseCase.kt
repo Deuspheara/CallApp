@@ -3,6 +3,7 @@ package fr.deuspheara.callapp.domain.authentication
 import android.util.Log
 import fr.deuspheara.callapp.data.repository.authentication.AuthenticationRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import javax.inject.Inject
 
 /**
@@ -25,11 +26,9 @@ class IsUserAuthenticatedUseCase @Inject constructor(
     }
 
     suspend operator fun invoke(): Flow<Boolean> {
-        try {
-            return authenticationRepository.isUserAuthenticated()
-        } catch (e: Exception) {
-            Log.e(TAG, "invoke: ", e)
-            throw e
+        return authenticationRepository.isUserAuthenticated().catch {
+            Log.e(TAG, "invoke: ", it)
+            emit(false)
         }
     }
 }

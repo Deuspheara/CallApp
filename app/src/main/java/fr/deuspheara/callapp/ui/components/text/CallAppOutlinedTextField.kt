@@ -114,9 +114,8 @@ fun CallAppOutlinedTextField(
                 .border(
                     width = if (focused.value) 2.dp else 1.dp,
                     color = when {
-                        isError -> MaterialTheme.colorScheme.error // Use error color when there's an error
-                        focused.value -> MaterialTheme.colorScheme.textColor
-                        else -> MaterialTheme.colorScheme.outlineVariant
+                        isError -> MaterialTheme.colorScheme.error
+                        else -> MaterialTheme.colorScheme.outline
                     },
                     shape = SmoothCornerShape(
                         cornerRadiusBL = 12.dp,
@@ -144,7 +143,7 @@ fun CallAppOutlinedTextField(
                             painter = painterResource(id = trailingIcon),
                             contentDescription = stringResource(id = placeholderText),
                             modifier = Modifier.size(24.dp),
-                            tint = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.textColor
+                            tint = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline
                         )
                     }
 
