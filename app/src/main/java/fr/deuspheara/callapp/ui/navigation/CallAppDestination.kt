@@ -1,5 +1,6 @@
 package fr.deuspheara.callapp.ui.navigation
 
+import android.telecom.Call
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
@@ -82,6 +83,16 @@ sealed class CallAppDestination(
             )
         }
 
+        fun getByRoute(route: String): CallAppDestination? {
+            return when {
+                route.startsWith(Home.route) -> Home
+                route.startsWith(SignIn.route) -> SignIn
+                route.startsWith(SignUp.route) -> SignUp
+                route.startsWith(SendResetPassword.route) -> SendResetPassword
+                route.startsWith(ResetPassword.route) -> ResetPassword
+                else -> null
+            }
+        }
     }
 
     class ResetPassword(oobCode: String?) : CallAppRoutable {
@@ -105,7 +116,7 @@ sealed class CallAppDestination(
             deepLinks = listOf(
                 navDeepLink {
                     uriPattern =
-                        "https://callapp-c1cd7.firebaseapp.com?${ResetPassword.ARG_KEY_CODE}={${ResetPassword.ARG_KEY_CODE}}"
+                        "https://callapp-c1cd7.firebaseapp.com/__/auth/action?${ResetPassword.ARG_KEY_CODE}={${ResetPassword.ARG_KEY_CODE}}"
                 }
             )
         ) {

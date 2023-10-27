@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -24,6 +27,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,6 +40,8 @@ import fr.deuspheara.callapp.ui.components.buttons.CallAppButton
 import fr.deuspheara.callapp.ui.components.text.CallAppOutlinedTextField
 import fr.deuspheara.callapp.ui.components.text.CallAppPasswordTextField
 import fr.deuspheara.callapp.ui.components.text.ValidityComponent
+import fr.deuspheara.callapp.ui.components.topbar.CallAppTopBar
+import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 import fr.deuspheara.callapp.ui.theme.CallAppTheme
 
 /**
@@ -115,7 +121,8 @@ fun ResetPasswordScreen(
         isConfirmPasswordError = isConfirmPasswordError,
         isPasswordError = isPasswordError,
         isLoading = isLoading,
-        submitForm = viewModel::submitForm
+        submitForm = viewModel::submitForm,
+        onNavigateBack = onNavigateBack
     )
 
 }
@@ -139,96 +146,118 @@ fun ResetPasswordContent(
     isConfirmPasswordError: Boolean = false,
     submitForm: () -> Unit = {},
     isLoading: Boolean = false,
+    onNavigateBack: () -> Unit = {},
 ) {
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .background(MaterialTheme.colorScheme.surface)
-    ) {
-        CallAppPasswordTextField(
-            value = currentPassword.value,
-            onValueChange = onPasswordChange,
-            labelText = R.string.password,
-            placeholderText = R.string.password,
-            trailingIconOpen = R.drawable.ic_eye_open,
-            trailingIconClose = R.drawable.ic_eye_close,
-            trailingIconVisibility = visibilityPassword,
-            onTrailingIconClick = { onVisibilityPassword(!visibilityPassword) },
-            keyboardActions = KeyboardActions {
-                focusManager.moveFocus(FocusDirection.Next)
-            },
-            isError = isPasswordError,
-            isFocus = onPasswordFocused
-        )
-
-        AnimatedVisibility(
-            visible = isPasswordFocus,
-            enter = fadeIn(),
-            exit = fadeOut()
+    Scaffold(
+        topBar = {
+            CallAppTopBar(
+               destination = CallAppDestination.ResetPassword,
+                navigationIcon = {
+                    IconButton(
+                        onClick = onNavigateBack,
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_chevron_left),
+                            contentDescription = null
+                        )
+                    }
+                                 },
+            )
+        },
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp)
         ) {
-            Column {
+            CallAppPasswordTextField(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                value = currentPassword.value,
+                onValueChange = onPasswordChange,
+                labelText = R.string.password,
+                placeholderText = R.string.password,
+                trailingIconOpen = R.drawable.ic_eye_open,
+                trailingIconClose = R.drawable.ic_eye_close,
+                trailingIconVisibility = visibilityPassword,
+                onTrailingIconClick = { onVisibilityPassword(!visibilityPassword) },
+                keyboardActions = KeyboardActions {
+                    focusManager.moveFocus(FocusDirection.Next)
+                },
+                isError = isPasswordError,
+                isFocus = onPasswordFocused
+            )
+
+            AnimatedVisibility(
+                visible = isPasswordFocus,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                Column {
+                    ValidityComponent(
+                        messageValid = "1 symbole",
+                        messageNotValid = "1 symbole",
+                        isValid = currentPassword.hasSpecialChar
+                    )
+                    ValidityComponent(
+                        messageValid = "Une majuscule",
+                        messageNotValid = "Une majuscule",
+                        isValid = currentPassword.hasUpperCase
+                    )
+                    ValidityComponent(
+                        messageValid = "8 caractères",
+                        messageNotValid = "8 caractères",
+                        isValid = currentPassword.hasMinimumLength
+                    )
+                }
+            }
+
+            CallAppPasswordTextField(
+                value = currentConfirmPassword.value,
+                onValueChange = onConfirmPasswordChange,
+                modifier = Modifier.padding(top = 8.dp).fillMaxWidth(),
+                labelText = R.string.confirm_password,
+                placeholderText = R.string.confirm_password,
+                trailingIconOpen = R.drawable.ic_eye_open,
+                trailingIconClose = R.drawable.ic_eye_close,
+                trailingIconVisibility = visibilityConfirmPassword,
+                onTrailingIconClick = { onVisibilityConfirmPassword(!visibilityConfirmPassword) },
+                keyboardActions = KeyboardActions {
+                    focusManager.clearFocus()
+                },
+                isError = isConfirmPasswordError,
+                isFocus = onConfirmPasswordFocused
+            )
+
+            AnimatedVisibility(
+                visible = isConfirmPasswordFocus,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
                 ValidityComponent(
-                    messageValid = "1 symbole",
-                    messageNotValid = "1 symbole",
-                    isValid = currentPassword.hasSpecialChar
-                )
-                ValidityComponent(
-                    messageValid = "Une majuscule",
-                    messageNotValid = "Une majuscule",
-                    isValid = currentPassword.hasUpperCase
-                )
-                ValidityComponent(
-                    messageValid = "8 caractères",
-                    messageNotValid = "8 caractères",
-                    isValid = currentPassword.hasMinimumLength
+                    messageValid = stringResource(id = R.string.confirmation_of_password),
+                    messageNotValid = "Confirmation du mot de passe",
+                    isValid = currentPassword.value == currentConfirmPassword.value
                 )
             }
-        }
 
-        CallAppPasswordTextField(
-            value = currentConfirmPassword.value,
-            onValueChange = onConfirmPasswordChange,
-            modifier = Modifier.padding(top = 8.dp),
-            labelText = R.string.confirm_password,
-            placeholderText = R.string.confirm_password,
-            trailingIconOpen = R.drawable.ic_eye_open,
-            trailingIconClose = R.drawable.ic_eye_close,
-            trailingIconVisibility = visibilityConfirmPassword,
-            onTrailingIconClick = { onVisibilityConfirmPassword(!visibilityConfirmPassword) },
-            keyboardActions = KeyboardActions {
-                focusManager.clearFocus()
-            },
-            isError = isConfirmPasswordError,
-            isFocus = onConfirmPasswordFocused
-        )
-
-        AnimatedVisibility(
-            visible = isConfirmPasswordFocus,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            ValidityComponent(
-                messageValid = stringResource(id = R.string.confirmation_of_password),
-                messageNotValid = "Confirmation du mot de passe",
-                isValid = currentPassword.value == currentConfirmPassword.value
+            CallAppButton(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .fillMaxWidth(),
+                onClick = submitForm,
+                text = R.string.reset_password,
+                isEnabled = currentPassword.hasSpecialChar
+                        && currentPassword.hasUpperCase
+                        && currentPassword.hasMinimumLength
+                        && currentPassword.value == currentConfirmPassword.value
+                        && !isLoading,
             )
         }
-
-        CallAppButton(
-            modifier = Modifier
-                .padding(top = 16.dp)
-                .fillMaxWidth(),
-            onClick = submitForm,
-            text = R.string.reset_password,
-            isEnabled = currentPassword.hasSpecialChar
-                    && currentPassword.hasUpperCase
-                    && currentPassword.hasMinimumLength
-                    && currentPassword.value == currentConfirmPassword.value
-                    && !isLoading,
-        )
     }
+
+
 }
 
 

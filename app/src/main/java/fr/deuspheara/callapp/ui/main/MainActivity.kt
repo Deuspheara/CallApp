@@ -1,5 +1,7 @@
 package fr.deuspheara.callapp.ui.main
 
+import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
@@ -74,7 +76,19 @@ class MainActivity() : ComponentActivity() {
         }
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        Log.d(TAG, "onNewIntent: $intent")
+        val deepLinkPendingIntent: PendingIntent? = TaskStackBuilder.create(applicationContext).run {
+            addNextIntentWithParentStack(intent)
+            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+        deepLinkPendingIntent?.send()
+    }
+
     private fun launchClientMail() {
+        Log.d(TAG, "launchClientMail: ")
         val intent = Intent(Intent.ACTION_MAIN).apply {
             this.addCategory(Intent.CATEGORY_APP_EMAIL)
             this.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)

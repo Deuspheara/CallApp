@@ -79,6 +79,25 @@ fun NavGraphBuilder.addAuthNavGraph(
                 onNavigateBack = navController::popBackStack
             )
         }
+
+        composable(CallAppDestination.ResetPassword) {
+            ResetPasswordScreen(
+                onNavigateToLogin = {
+
+                    navController.navigate(CallAppDestination.SignIn) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            inclusive = false
+                            saveState = false
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                onNavigateBack = navController::popBackStack
+            )
+        }
+
+
     }
 
 }

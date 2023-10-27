@@ -1,11 +1,13 @@
 package fr.deuspheara.callapp.ui.navigation
 
 import androidx.compose.material3.SnackbarHostState
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.navigation
 import fr.deuspheara.callapp.ui.navigation.CallAppDestination.Companion.composable
 import fr.deuspheara.callapp.ui.navigation.CallAppRoutable.Companion.navigate
+import fr.deuspheara.callapp.ui.screens.authentication.reset.ResetPasswordScreen
 import fr.deuspheara.callapp.ui.screens.authentication.signin.SignInScreen
 import fr.deuspheara.callapp.ui.screens.home.HomeScreen
 
@@ -43,6 +45,8 @@ fun NavGraphBuilder.addMainNavGraph(
                 }
             )
         }
+
+
     }
 
 }
