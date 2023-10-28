@@ -5,6 +5,7 @@ on:
     branches:
       - develop
       - main
+      - feature/*
 
 env:
   KEYSTORE_DEBUG_FILE_B64: ${{ secrets.KEYSTORE_DEBUG_FILE_B64 }}

@@ -57,7 +57,7 @@ android {
         versionCode = versionBuild
         versionName = "$versionMajor.$versionMinor.$versionPatch"
         resourceConfigurations.add("fr")
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "fr.deuspheara.callapp.CallAppRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
