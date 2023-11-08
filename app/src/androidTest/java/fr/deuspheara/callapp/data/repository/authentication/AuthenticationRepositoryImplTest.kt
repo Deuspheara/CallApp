@@ -60,7 +60,7 @@ class AuthenticationRepositoryImplTest {
         Assert.assertEquals(expected, actual)
     }
 
-    @Test(expected = FirebaseException::class)
+    @Test(expected = IllegalStateException::class)
     fun signUpWithEmailAndPassword_failure() = runTest(testDispatcher) {
         repository.signUpWithPassword(CoreModelProvider.email, CoreModelProvider.password).first()
         repository.signUpWithPassword(CoreModelProvider.email, CoreModelProvider.password).first()
@@ -74,13 +74,13 @@ class AuthenticationRepositoryImplTest {
         Assert.assertEquals(firebaseAuth.currentUser!!.uid, actual)
     }
 
-    @Test(expected = FirebaseException::class)
+    @Test(expected = IllegalStateException::class)
     fun signInWithEmailAndPassword_failure_wrongPassword() = runTest(testDispatcher) {
         repository.signUpWithPassword(CoreModelProvider.email, CoreModelProvider.password).first()
         repository.signUpWithPassword(CoreModelProvider.email, "bad_password@").first()
     }
 
-    @Test(expected = FirebaseException::class)
+    @Test(expected = IllegalStateException::class)
     fun signInWithEmailAndPassword_failure_noUser() = runTest(testDispatcher) {
         repository.signInWithPassword(CoreModelProvider.email, CoreModelProvider.password).first()
     }
@@ -96,5 +96,29 @@ class AuthenticationRepositoryImplTest {
         firebaseAuth.signOut()
         repository.signInWithPassword(CoreModelProvider.email, CoreModelProvider.password).first()
         Assert.assertTrue(repository.isUserAuthenticated().first())
+    }
+
+    @Test
+    fun sendPasswordResetEmail_failure() = runTest(testDispatcher) {
+        val result = repository.sendPasswordResetEmail(CoreModelProvider.email).first()
+        Assert.assertFalse(result)
+    }
+
+    @Test
+    fun confirmResetPassword_wrong_code() = runTest(testDispatcher) {
+        val result = repository.confirmResetPassword("wrongCode", CoreModelProvider.password).first()
+        Assert.assertFalse(result)
+    }
+
+    @Test
+    fun checkActionCode_wrongCode() = runTest(testDispatcher) {
+        repository.checkActionCode("wrongCode").first()
+    }
+
+    @Test
+    fun resetPassword_success() = runTest(testDispatcher) {
+        repository.signUpWithPassword(CoreModelProvider.email, CoreModelProvider.password).first()
+        val result = repository.resetPassword(CoreModelProvider.password).first()
+        Assert.assertNotNull(result)
     }
 }

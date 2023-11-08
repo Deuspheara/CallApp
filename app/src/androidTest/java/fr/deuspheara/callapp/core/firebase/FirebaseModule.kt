@@ -39,6 +39,7 @@ class FirebaseModuleTest {
         }
     }
 
+
     @Provides
     fun provideFirestore(): FirebaseFirestore {
         return FirebaseFirestore.getInstance().apply {
@@ -63,7 +64,7 @@ class FirebaseModuleTest {
 suspend fun FirebaseAuth.cleanBeforeTesting() {
     try {
         this@cleanBeforeTesting.signInWithEmailAndPassword("callapp@gmail.com", "password").await()
-    } catch (_: java.lang.Exception) {
+    } catch (_: Exception) {
     }
     this@cleanBeforeTesting.currentUser?.delete()?.await()
     this@cleanBeforeTesting.signOut()

@@ -1,7 +1,9 @@
 package fr.deuspheara.callapp.data.repository.user.impl
 
+import android.provider.ContactsContract.CommonDataKinds.Phone
 import fr.deuspheara.callapp.core.coroutine.DispatcherModule
 import fr.deuspheara.callapp.core.model.text.Email
+import fr.deuspheara.callapp.core.model.text.PhoneNumber
 import fr.deuspheara.callapp.core.model.user.UserFullModel
 import fr.deuspheara.callapp.core.model.user.UserLightModel
 import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteFirestoreModel
@@ -37,7 +39,7 @@ class UserRepositoryImpl @Inject constructor(
         email: Email,
         profilePictureUrl: String?,
         bio: String?,
-        phoneNumber: String?
+        phoneNumber: PhoneNumber?
     ): Flow<String?> = withContext(defaultContext) {
         remoteDataSource.registerUser(
             uid = uid,
@@ -47,7 +49,7 @@ class UserRepositoryImpl @Inject constructor(
             email = email.value,
             photoUrl = profilePictureUrl ?: "",
             bio = bio ?: "",
-            phoneNumber = phoneNumber ?: "",
+            phoneNumber = phoneNumber?.value ?: "",
         )
     }
 
@@ -93,7 +95,7 @@ class UserRepositoryImpl @Inject constructor(
             remoteDataSource.getUserContacts(uid)
         }
 
-    private fun UserRemoteFirestoreModel.toUserLightModel(): UserLightModel {
+    fun UserRemoteFirestoreModel.toUserLightModel(): UserLightModel {
         return UserLightModel(
             uuid = uid,
             displayName = this.displayName,
@@ -102,7 +104,7 @@ class UserRepositoryImpl @Inject constructor(
             )
     }
 
-    private fun UserRemoteFirestoreModel.toUserFullModel(): UserFullModel {
+     fun UserRemoteFirestoreModel.toUserFullModel(): UserFullModel {
         return UserFullModel(
             uid = uid,
             displayName = displayName,
@@ -111,7 +113,7 @@ class UserRepositoryImpl @Inject constructor(
             email = email,
             photoUrl = photoUrl,
             bio = bio,
-            contactList = contactList,
+            contactList = contacts,
         )
     }
 }

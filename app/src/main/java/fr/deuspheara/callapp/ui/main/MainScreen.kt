@@ -55,9 +55,6 @@ fun MainScreen(
             isExpandedScreen = isExpandedScreen,
             snackbarHostState = snackbarHostState
         )
-
-
-
     }
 
 

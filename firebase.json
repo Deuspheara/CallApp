@@ -1,6 +1,12 @@
 {
+  "database": {
+    "rules": "database.rules.json"
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  },
   "storage": {
-    "rules": "storage.rules"
+    "rules": "testing-storage.rules"
   },
   "emulators": {
     "auth": {
@@ -16,12 +22,5 @@
       "enabled": true
     },
     "singleProjectMode": true
-  },
-  "database": {
-    "rules": "database.rules.json"
-  },
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
   }
 }

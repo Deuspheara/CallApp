@@ -120,6 +120,11 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
+
 dependencies {
     //region Androidx
     implementation (libs.bundles.androidx)

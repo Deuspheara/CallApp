@@ -1,6 +1,8 @@
 package fr.deuspheara.callapp.data.repository.user
 
+import android.provider.ContactsContract.CommonDataKinds.Phone
 import fr.deuspheara.callapp.core.model.text.Email
+import fr.deuspheara.callapp.core.model.text.PhoneNumber
 import fr.deuspheara.callapp.core.model.user.UserFullModel
 import fr.deuspheara.callapp.core.model.user.UserLightModel
 import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteModel
@@ -41,7 +43,7 @@ interface UserRepository {
         email: Email,
         profilePictureUrl: String?,
         bio: String?,
-        phoneNumber: String?
+        phoneNumber: PhoneNumber?
     ): Flow<String?>
 
     /**

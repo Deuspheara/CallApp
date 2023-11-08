@@ -91,7 +91,6 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
             Log.e(TAG, "confirmResetPassword: ", it)
             emit(false)
         }.flowOn(ioContext)
-
     }
 
     override suspend fun checkActionCode(code: String): Flow<Boolean> {

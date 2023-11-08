@@ -53,7 +53,8 @@ class UserRemoteDataSourceImpl @Inject constructor(
                 email = email,
                 photoUrl = photoUrl,
                 bio = bio,
-                contactList = emptyList(),
+                phoneNumber = phoneNumber,
+                contacts = emptyList(),
             )
             userCollection.document(uid).set(newUserRemote).await()
             emit(uid)
@@ -92,7 +93,7 @@ class UserRemoteDataSourceImpl @Inject constructor(
     override suspend fun addContactToUser(uid: String, contactUid: String): Flow<UserRemoteFirestoreModel> {
         return flow {
             val user = getUserDetails(uid).first()
-            val updatedContacts = user.contactList.toMutableList().apply { add(contactUid) }
+            val updatedContacts = user.contacts.toMutableList().apply { add(contactUid) }
             userCollection.document(uid).update("contacts", updatedContacts).await()
             emit(getUserDetails(uid).first())  // Emit the updated user data after adding the contact
         }.flowOn(ioDispatcher)
@@ -101,7 +102,7 @@ class UserRemoteDataSourceImpl @Inject constructor(
     override suspend fun removeContactFromUser(uid: String, contactUid: String): Flow<UserRemoteFirestoreModel> {
         return flow {
             val user = getUserDetails(uid).first()
-            val updatedContacts = user.contactList.toMutableList().apply { remove(contactUid) }
+            val updatedContacts = user.contacts.toMutableList().apply { remove(contactUid) }
             userCollection.document(uid).update("contacts", updatedContacts).await()
             emit(getUserDetails(uid).first())  // Emit the updated user data after removing the contact
         }.flowOn(ioDispatcher)
@@ -109,15 +110,7 @@ class UserRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getUserContacts(uid: String): Flow<List<String>> {
         return userCollection.document(uid).snapshots()
-            .map { snapshot -> snapshot.toObject(UserRemoteFirestoreModel::class.java)?.contactList ?: emptyList() }
+            .map { snapshot -> snapshot.toObject(UserRemoteFirestoreModel::class.java)?.contacts ?: emptyList() }
             .flowOn(ioDispatcher)
-    }
-
-    private fun UserRemoteFirestoreModel.toUserLightModel(): UserLightModel {
-        return UserLightModel(
-            uuid = uid,
-            displayName = displayName,
-            photoUrl = photoUrl,
-        )
     }
 }
