@@ -46,7 +46,11 @@
 -dontwarn javax.lang.model.util.SimpleTypeVisitor8
 -dontwarn javax.lang.model.util.Types
 -dontwarn javax.tools.Diagnostic$Kind
+-dontwarn javax.lang.model.element.AnnotationValue
+-dontwarn javax.lang.model.util.AbstractAnnotationValueVisitor8
 
 -keepattributes Signature
 -keep class com.google.android.gms.** { *; }
 -keep class com.google.firebase.** { *; }
+-keep class fr.deuspheara.callapp.data.datasource.user.model.UserRemoteModel{ *; }
+-keep class fr.deuspheara.callapp.data.datasource.user.model.UserRemoteFirestoreModel{ *; }

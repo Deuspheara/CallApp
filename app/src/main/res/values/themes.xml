@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.CallApp" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Platform.Theme.CallApp" parent="Theme.Material3.DayNight">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.CallApp" parent="Platform.Theme.CallApp" />
 </resources>

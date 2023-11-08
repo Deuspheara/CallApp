@@ -1,10 +1,10 @@
 [versions]
 
-android-gradle-plugin = "8.1.1"
+android-gradle-plugin = "8.1.2"
 kotlin = "1.9.10"
 coroutine = "1.7.3"
-dagger-hilt = "2.47"
-dagger-hilt-navigation = "1.1.0-alpha01"
+dagger-hilt = "2.48"
+dagger-hilt-navigation = "1.1.0-beta01"
 google-services = "4.4.0"
 crashlytics-plugin = "2.9.9"
 androidx-core = "1.12.0"
@@ -12,9 +12,8 @@ androidx-lifecycle = "2.6.2"
 androidx-splashscreen = "1.0.1"
 androidxTracing = "1.1.0"
 compose-compiler = "1.5.3"
-compose-ui-test = "1.5.1"
-compose-bom = "2023.09.01"
-compose-material3 = "1.1.2"
+compose-ui-test = "1.5.3"
+compose-bom = "2023.10.00"
 coil = "2.4.0"
 robolectric = "4.9.2"
 room = "2.6.0-rc01"
@@ -26,8 +25,12 @@ mockk-version="1.13.5"
 google-play-services = "20.7.0"
 recyclerview = "1.3.1"
 constraintlayout = "1.0.1"
-navigationCompose = "2.7.3"
+navigationCompose = "2.7.4"
 google-ksp = "1.9.10-1.0.13"
+material3WindowSizeClass = "1.1.2"
+androidx-appcompat = "1.6.1"
+material = "1.10.0"
+
 [libraries]
 
 coroutine-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutine" }
@@ -40,7 +43,7 @@ robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectr
 splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splashscreen" }
 
 androidx-tracing-ktx = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "androidxTracing" }
-compose-material = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
+compose-material = { module = "androidx.compose.material3:material3" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 compose-activity = { module = "androidx.activity:activity-compose" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
@@ -78,6 +81,10 @@ androidx-test-runner = { module = "androidx.test:runner", version.ref = "test-ru
 
 mockk = { module = "io.mockk:mockk-android", version.ref = "mockk-version" }
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+androidx-compose-materialWindow = { module = "androidx.compose.material3:material3-window-size-class" }
+androidx-compose-material = { module = "androidx.compose.material:material" }
+google-android-material = { module = "com.google.android.material:material", version.ref = "material" }
 
 
 [bundles]

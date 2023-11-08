@@ -57,7 +57,7 @@ android {
         versionCode = versionBuild
         versionName = "$versionMajor.$versionMinor.$versionPatch"
         resourceConfigurations.add("fr")
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "fr.deuspheara.callapp.CallAppRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -120,10 +120,18 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
+
 dependencies {
     //region Androidx
     implementation (libs.bundles.androidx)
+    implementation(libs.androidx.appcompat)
     implementation (libs.bundles.coroutine)
+    implementation(libs.androidx.compose.materialWindow)
+    implementation(libs.google.android.material)
     //endregion
 
     //region Hilt

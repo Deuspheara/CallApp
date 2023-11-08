@@ -13,22 +13,32 @@ tasks.register<JacocoReport>("pixel5Api30DebugAndroidTestWithCoverage") {
     }
 
     val fileFilter = arrayOf(
+        "**/*_*.*", // Exclude all file containing a `_` (generated code)
+        "**/*$*", // Exclude Kotlin Function to Java (generated code)
+        /* Common Android Scope */
         "**/R.class",
         "**/R$*.class",
         "**/BuildConfig.*",
         "**/Manifest*.*",
         "**/*Test*.*",
         "android/**/*.*",
+        /* Hilt/Dagger Scope */
         "**/*_GeneratedInjector.*",
         "**/*Provides*.*",
         "**/hilt/**/*.*",
         "**/dagger/**/*.*",
         "**/*InstanceHolder.*",
-        "**/ui/**"
+        /* Custom Scope */
+        "**/*Application.*", // Exclude Application until there is no override methods
+        "**/*Module*", // Exclude Hilt Module
+        "**/model/**", // Exclude model (Should be `data class` only)
+        "**/api/**", // Exclude Retrofit interface (generated code)
+        "**/database/*.*", // Exclude Room Database definition (generated code)
+        "**/ui/**" // Exclude UI
     )
 
-    val debugBuildDir = "${layout.buildDirectory}/intermediates/javac/debug"
-    val kotlinClassesDebug = "${layout.buildDirectory}/tmp/kotlin-classes/debug"
+    val debugBuildDir = "${buildDir}/intermediates/javac/debug"
+    val kotlinClassesDebug = "${buildDir}/tmp/kotlin-classes/debug"
     val coverageDataDir = "outputs/managed_device_code_coverage"
 
     sourceDirectories.setFrom("${project.projectDir}/src/main/java")
@@ -54,7 +64,7 @@ tasks.register<JacocoReport>("pixel5Api30DebugAndroidTestWithCoverage") {
 
     doLast {
         val report = File(
-            layout.buildDirectory.toString(),
+            project.buildDir,
             "reports/jacoco/pixel5Api30DebugAndroidTestWithCoverage/html/index.html"
         )
 

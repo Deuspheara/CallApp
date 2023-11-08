@@ -1,3 +1,30 @@
 <resources>
     <string name="app_name">CallApp</string>
+    <string name="home">Home</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="error_signin">Error while signing</string>
+    <string name="password">Password</string>
+    <string name="forgot_password"><annotation style="hypertext">Forget password</annotation></string>
+    <string name="google_signin">Google sign in</string>
+    <string name="apple_signin">Apple sign in</string>
+    <string name="signup">Sign up</string>
+    <string name="error_email">Email is not valid</string>
+    <string name="check_icon">Icon check</string>
+    <string name="i_have_an_account">I have an account</string>
+    <string name="authentication">auth</string>
+    <string name="main">main</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="phone_number">Phone number</string>
+    <string name="sign_up">Sign up</string>
+    <string name="your_email">Your mail</string>
+    <string name="placeholder_email">Email</string>
+    <string name="send_reset_password">Reset password</string>
+    <string name="open_client_mail">Open mailbox</string>
+    <string name="reset_password">Reset password</string>
+    <string name="forgotten_password">Forgotten password</string>
+    <string name="new_password">New password</string>
+    <string name="confirmation_of_password">Confirm password</string>
 </resources>
