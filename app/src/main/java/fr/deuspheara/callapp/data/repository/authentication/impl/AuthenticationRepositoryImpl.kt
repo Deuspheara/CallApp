@@ -1,10 +1,13 @@
 package fr.deuspheara.callapp.data.repository.authentication.impl
 
 import fr.deuspheara.callapp.core.coroutine.DispatcherModule
+import fr.deuspheara.callapp.core.model.user.UserFullModel
 import fr.deuspheara.callapp.data.datasource.authentication.remote.AuthenticationRemoteDataSource
+import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteModel
 import fr.deuspheara.callapp.data.repository.authentication.AuthenticationRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.time.Instant
 import javax.inject.Inject
@@ -63,4 +66,32 @@ class AuthenticationRepositoryImpl @Inject constructor(
             remoteDataSource.resetPassword(password)
         }
     }
+
+    override suspend fun signOut(): Flow<Instant?> {
+        return withContext(defaultContext) {
+            remoteDataSource.signOut()
+        }
+    }
+
+    override suspend fun getCurrentUser(): Flow<UserFullModel?> {
+        return withContext(defaultContext) {
+            remoteDataSource.getCurrentUser().map { it?.toUserFullModel() }
+        }
+    }
+
+    private fun UserRemoteModel.toUserFullModel(): UserFullModel {
+        return UserFullModel(
+            uid = uuid,
+            displayName = displayName,
+            firstName = firstName,
+            lastName = lastName,
+            email = email,
+            photoUrl = photoUrl,
+            bio = "",
+            phoneNumber = phoneNumber,
+            identifier = "",
+            contactList = emptyList()
+        )
+    }
+
 }

@@ -10,6 +10,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import fr.deuspheara.callapp.data.datasource.user.model.UserPublicModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.tasks.await
 import java.util.Locale
@@ -35,7 +36,14 @@ object FirebaseModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class UserCollectionReference {
         companion object {
-            const val COLLECTION_PATH = "user"
+            const val COLLECTION_PATH = "users"
+        }
+    }
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class UserPublicCollectionReference {
+        companion object {
+            const val COLLECTION_PATH = "users_public"
         }
     }
 
@@ -62,6 +70,14 @@ object FirebaseModule {
         firestore: FirebaseFirestore,
     ): CollectionReference {
         return firestore.collection(UserCollectionReference.COLLECTION_PATH)
+    }
+
+    @Provides
+    @UserPublicCollectionReference
+    fun provideUserPublicFirestoreCollectionReference(
+        firestore: FirebaseFirestore,
+    ): CollectionReference {
+        return firestore.collection(UserPublicCollectionReference.COLLECTION_PATH)
     }
 
 

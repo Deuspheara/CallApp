@@ -16,6 +16,9 @@ data class UserFullModel(
     /** uid of the user */
     val uid: String,
 
+    /** Unique identifier of the user */
+    val identifier: String,
+
     /** Pseudonym of the user */
     val displayName: String,
 
@@ -25,6 +28,8 @@ data class UserFullModel(
     /** First name of this user */
     val firstName: String = "",
 
+    /** Phone number of this user */
+    val phoneNumber: String = "",
 
     /** Email address of the user */
     val email: String,

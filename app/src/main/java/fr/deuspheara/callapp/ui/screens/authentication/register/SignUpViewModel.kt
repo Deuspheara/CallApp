@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.deuspheara.callapp.core.model.text.Email
+import fr.deuspheara.callapp.core.model.text.Identifier
 import fr.deuspheara.callapp.core.model.text.Password
 import fr.deuspheara.callapp.core.model.text.PhoneNumber
 import fr.deuspheara.callapp.domain.authentication.SignUpWithEmailPasswordUseCase
@@ -46,6 +47,7 @@ class SignUpViewModel @Inject constructor(
     private val _formInputState = MutableStateFlow(
         SignUpUiState.FormInputState(
             email = Email(""),
+            identifier = Identifier(""),
             password = Password(""),
             firstName = "",
             lastName = "",
@@ -81,6 +83,10 @@ class SignUpViewModel @Inject constructor(
         _formInputState.value = _formInputState.value.copy(phoneNumber = PhoneNumber(phoneNumber))
     }
 
+    fun onIdentifierChange(identifier: String) {
+        _formInputState.value = _formInputState.value.copy(identifier = Identifier(identifier))
+    }
+
     fun submitForm() = viewModelScope.launch {
         val formInputState = _formInputState.value
 
@@ -98,6 +104,7 @@ class SignUpViewModel @Inject constructor(
             isConfirmPasswordError = formInputState.password != formInputState.confirmPassword,
             isFirstNameError = formInputState.firstName.isEmpty(),
             isLastNameError = formInputState.lastName.isEmpty(),
+            isIdentifierError = formInputState.identifier.value.isEmpty(),
             isPhoneNumberError = !formInputState.phoneNumber.isValid
         )
         if (inputError.isError()) _uiState.emit(
@@ -106,6 +113,7 @@ class SignUpViewModel @Inject constructor(
             _uiState.emit(SignUpUiState.Loading(true))
             signUpWithEmailPassword(
                 email = formInputState.email,
+                identifier = formInputState.identifier.value,
                 password = formInputState.password,
                 firstName = formInputState.firstName,
                 lastName = formInputState.lastName,
@@ -123,6 +131,7 @@ class SignUpViewModel @Inject constructor(
 
 
     }
+
 
 
 }

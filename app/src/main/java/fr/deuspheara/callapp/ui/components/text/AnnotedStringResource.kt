@@ -30,7 +30,7 @@ fun annotatedStringResource(id: Int): AnnotatedString = buildAnnotatedString {
     if (annotations.isNotEmpty()) {
         withStyle(
             style = SpanStyle(
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onBackground,
             )
         ) {
             this.append(text, 0, text.getSpanStart(annotations.first()))
@@ -39,7 +39,7 @@ fun annotatedStringResource(id: Int): AnnotatedString = buildAnnotatedString {
         for (annotation in annotations) {
             if (annotation.key == "style" && annotation.value == "hypertext") withStyle(
                 SpanStyle(
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.onBackground,
                     textDecoration = TextDecoration.Underline
                 )
             ) {

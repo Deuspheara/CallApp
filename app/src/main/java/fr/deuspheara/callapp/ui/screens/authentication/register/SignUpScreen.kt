@@ -24,6 +24,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -44,6 +46,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import fr.deuspheara.callapp.R
 import fr.deuspheara.callapp.core.model.text.Email
+import fr.deuspheara.callapp.core.model.text.Identifier
 import fr.deuspheara.callapp.core.model.text.Password
 import fr.deuspheara.callapp.core.model.text.PhoneNumber
 import fr.deuspheara.callapp.ui.components.buttons.CallAppButton
@@ -51,6 +54,7 @@ import fr.deuspheara.callapp.ui.components.snackbar.CallAppSnackBarHost
 import fr.deuspheara.callapp.ui.components.text.CallAppOutlinedTextField
 import fr.deuspheara.callapp.ui.components.text.CallAppPasswordTextField
 import fr.deuspheara.callapp.ui.components.text.ValidityComponent
+import fr.deuspheara.callapp.ui.components.text.annotatedStringResource
 import fr.deuspheara.callapp.ui.components.topbar.CallAppTopBar
 import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 import fr.deuspheara.callapp.ui.theme.CallAppTheme
@@ -73,6 +77,7 @@ import fr.deuspheara.callapp.ui.theme.customGreen
 fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel(),
     navigateToSignInScreen: () -> Unit,
+    onNavigateToWelcomeScreen: () -> Unit = {},
     navigateBack: () -> Unit = {},
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
@@ -83,6 +88,9 @@ fun SignUpScreen(
     }
     val isPasswordError by remember {
         derivedStateOf { (uiState as? SignUpUiState.FormInputError)?.isPasswordBadFormatError == true }
+    }
+    val isIdentifierError by remember {
+        derivedStateOf { (uiState as? SignUpUiState.FormInputError)?.isIdentifierError == true }
     }
     val isPhoneNumberError by remember {
         derivedStateOf { (uiState as? SignUpUiState.FormInputError)?.isPhoneNumberError == true }
@@ -102,6 +110,7 @@ fun SignUpScreen(
 
     val formInputState by viewModel.formInputState.collectAsStateWithLifecycle()
     val firstname by remember { derivedStateOf { formInputState.firstName } }
+    val identifier by remember { derivedStateOf { formInputState.identifier } }
     val lastname by remember { derivedStateOf { formInputState.lastName } }
     val email by remember { derivedStateOf { formInputState.email } }
     val phoneNumber by remember { derivedStateOf { formInputState.phoneNumber } }
@@ -117,7 +126,7 @@ fun SignUpScreen(
     var isConfirmPasswordFocused by remember { mutableStateOf(false) }
 
     (uiState as? SignUpUiState.Success)?.let {
-        navigateBack()
+        onNavigateToWelcomeScreen()
     }
 
 
@@ -125,6 +134,8 @@ fun SignUpScreen(
         navigateToSignInScreen = navigateToSignInScreen,
         firstname = firstname,
         onFirstnameChange = viewModel::onFirstNameChange,
+        identifier = identifier,
+        onIdentifierChange = viewModel::onIdentifierChange,
         lastname = lastname,
         onLastnameChange = viewModel::onLastNameChange,
         email = email,
@@ -136,6 +147,7 @@ fun SignUpScreen(
         phoneNumber = phoneNumber,
         onPhoneNumberChange = viewModel::onPhoneNumberChange,
         isMailError = isMailError,
+        isIdentifierError = isIdentifierError,
         isPasswordError = isPasswordError,
         isPhoneNumberError = isPhoneNumberError,
         isConfirmPasswordError = isConfirmPasswordError,
@@ -171,6 +183,8 @@ private fun SignUpScreenContent(
     navigateToSignInScreen: () -> Unit = {},
     firstname: String = "",
     onFirstnameChange: (String) -> Unit = {},
+    identifier: Identifier = Identifier(""),
+    onIdentifierChange: (String) -> Unit = {},
     lastname: String = "",
     onLastnameChange: (String) -> Unit = {},
     email: Email = Email(""),
@@ -182,6 +196,7 @@ private fun SignUpScreenContent(
     phoneNumber: PhoneNumber = PhoneNumber(""),
     onPhoneNumberChange: (String) -> Unit = {},
     isMailError: Boolean = false,
+    isIdentifierError: Boolean = false,
     isPhoneNumberError: Boolean = false,
     isPasswordError: Boolean = false,
     isConfirmPasswordError: Boolean = false,
@@ -227,6 +242,8 @@ private fun SignUpScreenContent(
                 SignUpForm(
                     firstname = firstname,
                     onFirstnameChange = onFirstnameChange,
+                    identifier = identifier,
+                    onIdentifierChange = onIdentifierChange,
                     lastname = lastname,
                     onLastnameChange = onLastnameChange,
                     email = email,
@@ -238,6 +255,7 @@ private fun SignUpScreenContent(
                     phoneNumber = phoneNumber,
                     onPhoneNumberChange = onPhoneNumberChange,
                     isMailError = isMailError,
+                    isIdentifierError = isIdentifierError,
                     isPhoneNumberError = isPhoneNumberError,
                     isPasswordError = isPasswordError,
                     isConfirmPasswordError = isConfirmPasswordError,
@@ -267,6 +285,21 @@ private fun SignUpScreenContent(
                     isSignUpButtonEnabled = email.isValid && phoneNumber.isValid && password.isStrong && confirmPassword.isStrong && !isLoading
                 )
             }
+
+            item {
+                TextButton(
+                    onClick = navigateToSignInScreen,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(horizontal = 16.dp),
+                ) {
+                    Text(
+                        text = annotatedStringResource(R.string.already_have_an_account),
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+                }
+            }
         }
     }
 }
@@ -274,12 +307,14 @@ private fun SignUpScreenContent(
 @Composable
 private fun SignUpForm(
     firstname: String, onFirstnameChange: (String) -> Unit,
+    identifier: Identifier, onIdentifierChange: (String) -> Unit,
     lastname: String, onLastnameChange: (String) -> Unit,
     email: Email, onEmailChange: (String) -> Unit,
     password: Password, onPasswordChange: (String) -> Unit,
     confirmPassword: Password, onConfirmPasswordChange: (String) -> Unit,
     phoneNumber: PhoneNumber, onPhoneNumberChange: (String) -> Unit,
     isMailError: Boolean,
+    isIdentifierError: Boolean,
     isPhoneNumberError: Boolean,
     isPasswordError: Boolean,
     isConfirmPasswordError: Boolean,
@@ -334,6 +369,22 @@ private fun SignUpForm(
                 ),
             )
         }
+
+        CallAppOutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = identifier.value,
+            onValueChange = onIdentifierChange,
+            labelText = R.string.identifier,
+            placeholderText = R.string.identifier,
+            isError = isIdentifierError,
+            isEnable = !isLoading,
+            trailingIcon = if(isIdentifierError) R.drawable.ic_not_validate else null,
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                }
+            ),
+        )
 
         CallAppOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),

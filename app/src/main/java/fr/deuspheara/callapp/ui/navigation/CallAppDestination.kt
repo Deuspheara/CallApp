@@ -19,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import fr.deuspheara.callapp.R
+import fr.deuspheara.callapp.core.model.text.Identifier
 
 /**
  * _CallApp_
@@ -77,8 +78,8 @@ sealed class CallAppDestination(
                 arguments = destination.arguments,
                 content = content,
                 enterTransition = { getEnterTransition(destination.transitionConfig.enter) },
-                exitTransition = {  getExitTransition(destination.transitionConfig.exit) },
-                popEnterTransition = {  getEnterTransition(destination.transitionConfig.popEnter) },
+                exitTransition = { getExitTransition(destination.transitionConfig.exit) },
+                popEnterTransition = { getEnterTransition(destination.transitionConfig.popEnter) },
                 popExitTransition = { getExitTransition(destination.transitionConfig.popExit) }
             )
         }
@@ -181,17 +182,52 @@ sealed class CallAppDestination(
     }
 
 
-   object Auth : CallAppDestination(
+    data object Auth : CallAppDestination(
         title = R.string.authentication,
     ) {
         override val route: String
             get() = "auth"
     }
-    object Main : CallAppDestination(
+
+    data object Main : CallAppDestination(
         title = R.string.main,
     ) {
         override val route: String
             get() = "Main"
+    }
+
+    data object Welcome : CallAppDestination(
+        title = R.string.home,
+    ) {
+        override val route: String
+            get() = "welcome"
+    }
+
+    class Profile(
+        val identifier: Identifier?
+    ) : CallAppRoutable {
+        override val route: String
+            get() = "${ROUTING_PREFIX}${if (identifier?.value != null) "?${ARG_KEY_IDENTIFIER}=${identifier.value}" else ""}"
+
+        companion object : CallAppDestination(
+            title = R.string.profile,
+            showTopAppBar = true,
+            navigationIcon = R.drawable.ic_back,
+            transitionConfig = TransitionConfig(
+                enter = Transition.SlideHorizontal,
+                popExit = Transition.SlideHorizontal
+            ),
+            arguments = listOf(
+                navArgument(Profile.ARG_KEY_IDENTIFIER) {
+                    this.type = NavType.StringType
+                }
+            ),
+        ) {
+            const val ARG_KEY_IDENTIFIER = "identifier"
+            const val ROUTING_PREFIX = "profile"
+
+            override val route: String = "$ROUTING_PREFIX?$ARG_KEY_IDENTIFIER={$ARG_KEY_IDENTIFIER}"
+        }
     }
 }
 

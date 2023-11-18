@@ -30,8 +30,11 @@ google-ksp = "1.9.10-1.0.13"
 material3WindowSizeClass = "1.1.2"
 androidx-appcompat = "1.6.1"
 material = "1.10.0"
+agora = "3.5.0"
 
 [libraries]
+
+agora = { module = "io.agora.rtc:full-sdk", version.ref = "agora" }
 
 coroutine-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutine" }
 coroutine-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutine" }

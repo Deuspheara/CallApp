@@ -25,8 +25,9 @@ private val LightColors = lightColorScheme(
     secondary = White,
     onSecondary = Black,
     background = White,
-    surfaceVariant = Grey200,
+    surfaceVariant = Grey100,
     onSurfaceVariant = Grey500,
+    primaryContainer = Grey300,
     error = Red500,
 )
 
@@ -39,8 +40,9 @@ private val DarkColors = darkColorScheme(
     secondary = Black,
     onSecondary = White,
     background = Grey900,
-    surfaceVariant = Grey700,
+    surfaceVariant = Grey600,
     onSurfaceVariant = Grey400,
+    primaryContainer = Grey800,
     error = Red500,
 )
 
@@ -59,14 +61,14 @@ fun CallAppTheme(
         darkTheme -> DarkColors
         else -> LightColors
     }
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.background.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
-        }
-    }
+//    val view = LocalView.current
+//    if (!view.isInEditMode) {
+//        SideEffect {
+//            val window = (view.context as Activity).window
+//            window.statusBarColor = colorScheme.background.toArgb()
+//            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+//        }
+//    }
 
     MaterialTheme(
         colorScheme = colorScheme,

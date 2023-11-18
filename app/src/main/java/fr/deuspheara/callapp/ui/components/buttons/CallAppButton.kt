@@ -78,7 +78,7 @@ fun CallAppButton(
                 modifier = Modifier.padding(end = 8.dp),
                 painter = painterResource(id = it),
                 contentDescription = stringResource(id = text),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                tint = MaterialTheme.colorScheme.onPrimary
             )
         }
         Text(

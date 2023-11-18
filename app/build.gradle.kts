@@ -168,4 +168,8 @@ dependencies {
     androidTestImplementation (libs.androidx.test.runner)
     androidTestImplementation (libs.hilt.testing)
     kaptAndroidTest (libs.hilt.compiler)
+
+    // region Agora
+    implementation(libs.agora)
+    // endregion
 }

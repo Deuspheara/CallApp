@@ -16,5 +16,7 @@ sealed interface MainUiState {
 
     @JvmInline
     value class IsUserAuthenticated(val isUserAuthenticated: Boolean) : MainUiState
-    object Loading : MainUiState
+    data object Loading : MainUiState
+
+    data class Error(val exception: Throwable) : MainUiState
 }

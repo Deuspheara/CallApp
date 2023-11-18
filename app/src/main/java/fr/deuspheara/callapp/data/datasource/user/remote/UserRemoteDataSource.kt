@@ -1,8 +1,10 @@
 package fr.deuspheara.callapp.data.datasource.user.remote
 
 import fr.deuspheara.callapp.core.model.text.Email
+import fr.deuspheara.callapp.core.model.text.Identifier
 import fr.deuspheara.callapp.core.model.user.UserFullModel
 import fr.deuspheara.callapp.core.model.user.UserLightModel
+import fr.deuspheara.callapp.data.datasource.user.model.UserPublicModel
 import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteFirestoreModel
 import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteModel
 import kotlinx.coroutines.flow.Flow
@@ -36,6 +38,7 @@ interface UserRemoteDataSource {
      */
     suspend fun registerUser(
         uid: String,
+        identifier : String,
         email: String,
         displayName: String,
         firstName: String,
@@ -105,5 +108,22 @@ interface UserRemoteDataSource {
      * @return Flow emitting the list of contact UIDs.
      */
     suspend fun getUserContacts(uid: String): Flow<List<String>>
+
+    /**
+     * Retrieves the public information of a user.
+     * This information is available to anyone.
+     *
+     * @return Flow emitting the public information of the user.
+     */
+    suspend fun getPublicUserDetails(): Flow<List<UserPublicModel>>
+
+    /**
+     * Retrieves the public information of a user.
+     * This information is available to anyone.
+     *
+     * @param identifier User's unique identifier.
+     * @return Flow emitting the public information of the user.
+     */
+    suspend fun getPublicUserDetails(identifier: String): Flow<UserPublicModel>
 
 }

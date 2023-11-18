@@ -35,6 +35,7 @@ fun MainScreen(
     widthSizeClass: WindowWidthSizeClass,
     navController: NavHostController = rememberNavController(),
     launchClientMail: () -> Unit = {},
+    startDestination: CallAppDestination = CallAppDestination.Main,
 ){
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -42,18 +43,20 @@ fun MainScreen(
 
     NavHost(
         navController = navController,
-        startDestination = CallAppDestination.Main.route,
+        startDestination = startDestination.route,
     ) {
         addAuthNavGraph(
             navController = navController,
             isExpandedScreen = isExpandedScreen,
             snackbarHostState = snackbarHostState,
-            launchClientMail = launchClientMail
+            launchClientMail = launchClientMail,
+            startDestination = CallAppDestination.SignUp
         )
         addMainNavGraph(
             navController = navController,
             isExpandedScreen = isExpandedScreen,
-            snackbarHostState = snackbarHostState
+            snackbarHostState = snackbarHostState,
+            startDestination = CallAppDestination.Welcome
         )
     }
 

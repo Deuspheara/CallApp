@@ -2,6 +2,7 @@ package fr.deuspheara.callapp.domain.authentication
 
 import android.util.Log
 import fr.deuspheara.callapp.core.model.text.Email
+import fr.deuspheara.callapp.core.model.text.Identifier
 import fr.deuspheara.callapp.core.model.text.Password
 import fr.deuspheara.callapp.data.repository.authentication.AuthenticationRepository
 import fr.deuspheara.callapp.data.repository.user.UserRepository
@@ -33,6 +34,7 @@ class SignUpWithEmailPasswordUseCase @Inject constructor(
 
     suspend operator fun invoke(
         email: Email,
+        identifier : String,
         password: Password,
         pseudonym: String,
         firstName: String,
@@ -45,6 +47,7 @@ class SignUpWithEmailPasswordUseCase @Inject constructor(
             .flatMapLatest {
                 userRepository.registerUser(
                     uid = it,
+                    identifier = identifier,
                     pseudonym = pseudonym,
                     firstName = firstName,
                     lastName = lastName,

@@ -1,6 +1,7 @@
 package fr.deuspheara.callapp.data.datasource.authentication.remote
 
 import com.google.firebase.auth.ActionCodeResult
+import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteModel
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 
@@ -76,4 +77,20 @@ interface AuthenticationRemoteDataSource {
      * @return an [Instant]
      */
     suspend fun resetPassword(password: String): Flow<Instant?>
+
+
+    /**
+     * Sign out the user
+     *
+     * @return an [Instant] when the user is sign out
+     */
+    suspend fun signOut() : Flow<Instant?>
+
+    /**
+     * Get the current user information
+     *
+     * @return a [UserRemoteModel]
+     */
+
+    suspend fun getCurrentUser() : Flow<UserRemoteModel?>
 }

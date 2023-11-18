@@ -52,6 +52,9 @@ fun NavGraphBuilder.addAuthNavGraph(
                 navigateToSignInScreen = {
                     navController.navigate(CallAppDestination.SignIn)
                 },
+                onNavigateToWelcomeScreen = {
+                    navController.navigate(CallAppDestination.Welcome)
+                },
                 navigateBack = navController::popBackStack
             )
         }

@@ -54,3 +54,4 @@
 -keep class com.google.firebase.** { *; }
 -keep class fr.deuspheara.callapp.data.datasource.user.model.UserRemoteModel{ *; }
 -keep class fr.deuspheara.callapp.data.datasource.user.model.UserRemoteFirestoreModel{ *; }
+-keep class fr.deuspheara.callapp.data.datasource.user.model.UserPublicModel{ *; }

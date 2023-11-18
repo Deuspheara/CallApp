@@ -2,6 +2,7 @@ package fr.deuspheara.callapp.ui.screens.authentication.register
 
 import fr.deuspheara.callapp.core.model.common.Consumable
 import fr.deuspheara.callapp.core.model.text.Email
+import fr.deuspheara.callapp.core.model.text.Identifier
 import fr.deuspheara.callapp.core.model.text.Password
 import fr.deuspheara.callapp.core.model.text.PhoneNumber
 
@@ -20,6 +21,7 @@ import fr.deuspheara.callapp.core.model.text.PhoneNumber
 sealed interface SignUpUiState {
     data class FormInputState(
         val email: Email,
+        val identifier : Identifier,
         val password: Password,
         val firstName: String,
         val lastName: String,
@@ -29,6 +31,7 @@ sealed interface SignUpUiState {
 
     data class FormInputError(
         val isEmailBadFormatError: Boolean,
+        val isIdentifierError : Boolean,
         val isPasswordBadFormatError: Boolean,
         val isConfirmPasswordError: Boolean,
         val isFirstNameError: Boolean,
@@ -36,6 +39,7 @@ sealed interface SignUpUiState {
         val isPhoneNumberError: Boolean,
     ) : SignUpUiState {
         fun isError() = isEmailBadFormatError ||
+                isIdentifierError ||
                 isPasswordBadFormatError ||
                 isConfirmPasswordError ||
                 isFirstNameError ||

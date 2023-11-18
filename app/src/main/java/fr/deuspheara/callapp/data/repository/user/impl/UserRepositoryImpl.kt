@@ -6,6 +6,7 @@ import fr.deuspheara.callapp.core.model.text.Email
 import fr.deuspheara.callapp.core.model.text.PhoneNumber
 import fr.deuspheara.callapp.core.model.user.UserFullModel
 import fr.deuspheara.callapp.core.model.user.UserLightModel
+import fr.deuspheara.callapp.data.datasource.user.model.UserPublicModel
 import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteFirestoreModel
 import fr.deuspheara.callapp.data.datasource.user.remote.UserRemoteDataSource
 import fr.deuspheara.callapp.data.repository.user.UserRepository
@@ -33,6 +34,7 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
     override suspend fun registerUser(
         uid: String,
+        identifier: String,
         pseudonym: String,
         firstName: String,
         lastName: String,
@@ -43,6 +45,7 @@ class UserRepositoryImpl @Inject constructor(
     ): Flow<String?> = withContext(defaultContext) {
         remoteDataSource.registerUser(
             uid = uid,
+            identifier = identifier,
             displayName = pseudonym,
             firstName = firstName,
             lastName = lastName,
@@ -95,18 +98,28 @@ class UserRepositoryImpl @Inject constructor(
             remoteDataSource.getUserContacts(uid)
         }
 
-    fun UserRemoteFirestoreModel.toUserLightModel(): UserLightModel {
+    override suspend fun getPublicUserDetails(): Flow<List<UserPublicModel>> =
+        withContext(defaultContext) {
+            remoteDataSource.getPublicUserDetails()
+        }
+
+    override suspend fun getPublicUserDetails(identifier: String): Flow<UserPublicModel> {
+        return withContext(defaultContext) {
+            remoteDataSource.getPublicUserDetails(identifier)
+        }
+    }
+
+    private fun UserRemoteFirestoreModel.toUserLightModel(): UserLightModel {
         return UserLightModel(
             uuid = uid,
             displayName = this.displayName,
-            photoUrl = photoUrl,
-
-            )
+            photoUrl = photoUrl)
     }
 
-     fun UserRemoteFirestoreModel.toUserFullModel(): UserFullModel {
+     private fun UserRemoteFirestoreModel.toUserFullModel(): UserFullModel {
         return UserFullModel(
             uid = uid,
+            identifier = identifier,
             displayName = displayName,
             firstName = firstName,
             lastName = lastName,

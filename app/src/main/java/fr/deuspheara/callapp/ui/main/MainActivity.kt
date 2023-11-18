@@ -19,12 +19,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.AndroidEntryPoint
+import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 import fr.deuspheara.callapp.ui.theme.CallAppTheme
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -64,13 +66,16 @@ class MainActivity() : ComponentActivity() {
                 }
             }
         }
-
+        installSplashScreen().apply {
+            this.setKeepOnScreenCondition { state is MainUiState.Loading }
+        }
         setContent {
             val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
             CallAppTheme {
                 MainScreen(
                     widthSizeClass = widthSizeClass,
                     launchClientMail = ::launchClientMail,
+                    startDestination =  CallAppDestination.Main,
                 )
             }
         }
@@ -82,7 +87,7 @@ class MainActivity() : ComponentActivity() {
         Log.d(TAG, "onNewIntent: $intent")
         val deepLinkPendingIntent: PendingIntent? = TaskStackBuilder.create(applicationContext).run {
             addNextIntentWithParentStack(intent)
-            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+            getPendingIntent(0, PendingIntent.FLAG_MUTABLE)
         }
         deepLinkPendingIntent?.send()
     }

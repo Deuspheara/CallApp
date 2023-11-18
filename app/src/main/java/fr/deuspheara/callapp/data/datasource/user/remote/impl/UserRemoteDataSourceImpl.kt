@@ -3,7 +3,9 @@ package fr.deuspheara.callapp.data.datasource.user.remote.impl
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.snapshots
 import fr.deuspheara.callapp.core.coroutine.DispatcherModule
+import fr.deuspheara.callapp.core.model.text.Identifier
 import fr.deuspheara.callapp.core.model.user.UserLightModel
+import fr.deuspheara.callapp.data.datasource.user.model.UserPublicModel
 import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteFirestoreModel
 import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteModel
 import fr.deuspheara.callapp.data.datasource.user.remote.UserRemoteDataSource
@@ -12,6 +14,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
@@ -32,10 +35,12 @@ import javax.inject.Inject
  */
 class UserRemoteDataSourceImpl @Inject constructor(
     @FirebaseModule.UserCollectionReference private val userCollection: CollectionReference,
+    @FirebaseModule.UserPublicCollectionReference private val userPublicCollection: CollectionReference,
     @DispatcherModule.IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : UserRemoteDataSource {
     override suspend fun registerUser(
         uid: String,
+        identifier : String,
         email: String,
         displayName: String,
         firstName: String,
@@ -47,6 +52,7 @@ class UserRemoteDataSourceImpl @Inject constructor(
         return flow {
             val newUserRemote = UserRemoteFirestoreModel(
                 uid = uid,
+                identifier = identifier,
                 displayName = displayName,
                 firstName = firstName,
                 lastName = lastName,
@@ -56,7 +62,15 @@ class UserRemoteDataSourceImpl @Inject constructor(
                 phoneNumber = phoneNumber,
                 contacts = emptyList(),
             )
+            val newUserPublic = UserPublicModel(
+                uid = uid,
+                identifier = identifier,
+                displayName = displayName,
+                profilePictureUrl = photoUrl,
+                bio = bio,
+            )
             userCollection.document(uid).set(newUserRemote).await()
+            userPublicCollection.document(uid).set(newUserPublic).await()
             emit(uid)
         }.flowOn(ioDispatcher)
     }
@@ -113,4 +127,24 @@ class UserRemoteDataSourceImpl @Inject constructor(
             .map { snapshot -> snapshot.toObject(UserRemoteFirestoreModel::class.java)?.contacts ?: emptyList() }
             .flowOn(ioDispatcher)
     }
+
+    override suspend fun getPublicUserDetails(): Flow<List<UserPublicModel>> {
+        return userPublicCollection.snapshots()
+            .map { snapshot -> snapshot.toObjects(UserPublicModel::class.java) }
+            .flowOn(ioDispatcher)
+    }
+
+    override suspend fun getPublicUserDetails(identifier: String): Flow<UserPublicModel> {
+        return userPublicCollection.whereEqualTo("identifier", identifier)
+            .limit(1)
+            .get()
+            .await()
+            .documents
+            .firstOrNull()
+            ?.toObject(UserPublicModel::class.java)
+            ?.let { flowOf(it) }
+            ?.flowOn(ioDispatcher) ?: flowOf()
+    }
+
+
 }

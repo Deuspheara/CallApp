@@ -27,4 +27,14 @@
     <string name="forgotten_password">Forgotten password</string>
     <string name="new_password">New password</string>
     <string name="confirmation_of_password">Confirm password</string>
+    <string name="profile">Profile</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="identifier">Identifier</string>
+    <string name="search">Search</string>
+    <string name="clear">Clear</string>
+    <string name="could_not_retrieve_users">Could not retrieve users</string>
+    <string name="already_have_an_account"><annotation style="hypertext">Already have an account?</annotation></string>
+    <string name="call">Call</string>
+    <string name="chat">Chat</string>
+    <string name="add_to_contact">Add to contact</string>
 </resources>

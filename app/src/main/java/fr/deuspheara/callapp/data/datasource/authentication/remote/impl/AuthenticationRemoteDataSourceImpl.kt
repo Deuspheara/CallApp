@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import fr.deuspheara.callapp.core.coroutine.DispatcherModule
 import fr.deuspheara.callapp.data.datasource.authentication.remote.AuthenticationRemoteDataSource
+import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -111,6 +112,28 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
         }.catch {
             Log.e(TAG, "resetPassword: ", it)
             emit(null)
+        }.flowOn(ioContext)
+    }
+
+    override suspend fun signOut(): Flow<Instant> {
+        return flow {
+            firebaseAuth.signOut()
+            emit(Instant.now())
+        }.catch {
+            Log.e(TAG, "signOut: ", it)
+            emit(Instant.now())
+        }.flowOn(ioContext)
+    }
+
+    override suspend fun getCurrentUser(): Flow<UserRemoteModel?> {
+        return flow {
+            val user = firebaseAuth.currentUser
+            user?.reload()?.await()
+
+            emit(user?.let { UserRemoteModel(it) })
+        }.catch {
+            Log.e(TAG, "getCurrentUser: ", it)
+            emit(UserRemoteModel())
         }.flowOn(ioContext)
     }
 }

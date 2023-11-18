@@ -2,6 +2,7 @@ package fr.deuspheara.callapp.data.datasource.user.model
 
 import com.google.firebase.firestore.DocumentId
 import fr.deuspheara.callapp.core.model.text.Email
+import fr.deuspheara.callapp.core.model.text.Identifier
 import fr.deuspheara.callapp.core.model.text.PhoneNumber
 
 /**
@@ -17,7 +18,9 @@ import fr.deuspheara.callapp.core.model.text.PhoneNumber
  *
  */
 data class UserRemoteFirestoreModel(
+    @DocumentId
     val uid : String,
+    val identifier : String,
     val displayName : String,
     val firstName : String,
     val lastName : String,
@@ -29,6 +32,7 @@ data class UserRemoteFirestoreModel(
 ){
     constructor() : this(
         uid = "",
+        identifier = "",
         displayName = "",
         firstName = "",
         lastName = "",
