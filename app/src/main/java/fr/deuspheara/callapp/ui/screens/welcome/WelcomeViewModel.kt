@@ -58,6 +58,8 @@ class WelcomeViewModel @Inject constructor(
 
     private fun fetchPublicUsers() = viewModelScope.launch {
         _uiState.value = WelcomeUiState.Loading(true)
+        //Fake user for skeleton loader
+        _publicUsers.value = listOf(UserPublicModel())
        getPublicUsers()
             .map<List<UserPublicModel>, WelcomeUiState> {
                 _publicUsers.value = it

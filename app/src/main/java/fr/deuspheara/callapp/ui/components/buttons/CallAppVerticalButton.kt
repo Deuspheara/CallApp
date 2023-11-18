@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -51,7 +52,7 @@ fun CallAppVerticalButton(
 ) {
     Column(
         modifier = modifier
-            .width(80.dp)
+            .fillMaxWidth()
             .padding(top = 16.dp)
             .clip(SmoothCornerShape(
                 cornerRadiusBL = cornerRadius,

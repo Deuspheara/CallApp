@@ -1,17 +1,21 @@
 package fr.deuspheara.callapp.ui.screens.profil
 
 import android.content.Context
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,19 +30,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import fr.deuspheara.callapp.R
-import fr.deuspheara.callapp.ui.components.buttons.CallAppButton
 import fr.deuspheara.callapp.ui.components.buttons.CallAppVerticalButton
 import fr.deuspheara.callapp.ui.components.profile.RoundedImageProfile
 import fr.deuspheara.callapp.ui.components.topbar.CallAppTopBar
 import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 import fr.deuspheara.callapp.ui.theme.CallAppTheme
-import fr.deuspheara.callapp.ui.theme.shape.SmoothCornerShape
 
 /**
  * _CallApp_
@@ -93,18 +94,49 @@ fun ProfilScreen(
     }
 }
 
+data class ActionDestination(
+    @DrawableRes val icon: Int,
+    @StringRes val text: Int,
+    val destination: CallAppDestination,
+)
+
+val actionList = listOf(
+    ActionDestination(
+        icon = R.drawable.ic_call,
+        text = R.string.call,
+        destination = CallAppDestination.Call,
+    ),
+    ActionDestination(
+        icon = R.drawable.ic_video,
+        text = R.string.video_call,
+        destination = CallAppDestination.VideoCall,
+    ),
+    ActionDestination(
+        icon = R.drawable.ic_chat,
+        text = R.string.chat,
+        destination = CallAppDestination.Chat,
+    ),
+    ActionDestination(
+        icon = R.drawable.ic_add,
+        text = R.string.add_to_contact,
+        destination = CallAppDestination.AddToContact,
+    ),
+)
+
 @Composable
 private fun ProfilContent(
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
     profilePicture: String = "",
     identifier: String = "identifier",
-    displayName: String = "John Doe"
+    displayName: String = "John Doe",
+    onNavigateToDestination: (CallAppDestination) -> Unit = {},
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(24.dp),
+            .padding(horizontal = 24.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
@@ -129,43 +161,23 @@ private fun ProfilContent(
             style = MaterialTheme.typography.bodySmall,
         )
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            CallAppVerticalButton(
-                onClick = {},
-                modifier = Modifier
-                    .padding(top = 16.dp),
-                text = R.string.call,
-                leadingIcon = R.drawable.ic_call,
-                iconModifier = Modifier.size(24.dp).padding(top = 8.dp),
-                textModifier = Modifier.padding(bottom = 8.dp),
-                buttonColor = MaterialTheme.colorScheme.primary,
-                textColor = MaterialTheme.colorScheme.onPrimary,
-                cornerRadius = 12.dp
-            )
-
-            CallAppVerticalButton(
-                onClick = {},
-                modifier = Modifier
-                    .padding(top = 16.dp, start = 16.dp),
-                text = R.string.chat,
-                leadingIcon = R.drawable.ic_chat,
-                iconModifier = Modifier.size(24.dp).padding(top = 8.dp),
-                textModifier = Modifier.padding(bottom = 8.dp),
-                buttonColor = MaterialTheme.colorScheme.primary,
-                textColor = MaterialTheme.colorScheme.onPrimary,
-                cornerRadius = 12.dp
-            )
-
-            CallAppVerticalButton(
-                modifier = Modifier
-                    .padding(top = 16.dp, start = 16.dp)
-                    .fillMaxWidth(),
-                onClick = {},
-                leadingIcon = R.drawable.ic_add,
-                text = R.string.add_to_contact,
-            )
+            items(actionList.size) { index ->
+                actionList[index].apply {
+                    CallAppVerticalButton(
+                        onClick = {
+                            onNavigateToDestination(destination)
+                        },
+                        modifier = Modifier
+                            .widthIn(0.dp, 80.dp)
+                            .padding(top = 16.dp),
+                        leadingIcon = icon,
+                        text = text,
+                    )
+                }
+            }
         }
 
 

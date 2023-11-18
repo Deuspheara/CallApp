@@ -87,7 +87,7 @@ fun RoundedImageProfile(
                 modifier = Modifier
                     .widthIn(0.dp, 100.dp)
                     .align(Alignment.Center)
-                    .padding(16.dp),
+                    .padding(8.dp),
                 tint = tint
             )
         }

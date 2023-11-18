@@ -36,5 +36,6 @@
     <string name="already_have_an_account"><annotation style="hypertext">Already have an account?</annotation></string>
     <string name="call">Call</string>
     <string name="chat">Chat</string>
-    <string name="add_to_contact">Add to contact</string>
+    <string name="add_to_contact">Contact</string>
+    <string name="video_call">Video</string>
 </resources>

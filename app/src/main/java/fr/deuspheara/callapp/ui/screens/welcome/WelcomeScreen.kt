@@ -4,9 +4,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
@@ -22,6 +24,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -41,6 +44,8 @@ import fr.deuspheara.callapp.ui.components.profile.RoundedImageProfile
 import fr.deuspheara.callapp.ui.components.search.CallAppSearchBar
 import fr.deuspheara.callapp.ui.components.snackbar.CallAppSnackBarHost
 import fr.deuspheara.callapp.ui.components.snackbar.ErrorSnackbarVisuals
+import fr.deuspheara.callapp.ui.components.topbar.CallAppTopBar
+import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -87,22 +92,20 @@ fun WelcomeScreen(
     Scaffold(
         snackbarHost = { CallAppSnackBarHost(hostState = snackbarHostState) },
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = "Welcome",
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                },
+            CallAppTopBar(
+                destination = CallAppDestination.Welcome,
                 actions = {
                     RoundedImageProfile(
                         imageUrl = currentUser?.photoUrl,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier
                             .padding(16.dp)
-                            .height(48.dp)
+                            .wrapContentSize(align = Alignment.Center)
+                            .clip(CircleShape)
                             .clickable {
-                                onNavigateToProfile(Identifier(currentUser?.identifier ?: ""))
+                                currentUser?.identifier?.let {
+                                    onNavigateToProfile(Identifier(it))
+                                } ?: onNavigateSignUpScreen()
                             },
                     )
 
@@ -161,11 +164,11 @@ private fun WelcomeContent(
         ) {
             items(publicUsers.size) { index ->
                 ContactCard(
-                    modifier = Modifier.skeletonLoader(isLoading = isLoading),
                     profilePicture = publicUsers[index].profilePictureUrl,
                     identifier = publicUsers[index].identifier,
                     displayName = publicUsers[index].displayName,
                     onClick = { onNavigateToProfile(Identifier(publicUsers[index].identifier)) },
+                    isLoading = isLoading,
                 )
             }
 

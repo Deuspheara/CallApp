@@ -229,6 +229,114 @@ sealed class CallAppDestination(
             override val route: String = "$ROUTING_PREFIX?$ARG_KEY_IDENTIFIER={$ARG_KEY_IDENTIFIER}"
         }
     }
+
+    class Call(
+        val identifier: Identifier?
+    ) : CallAppRoutable {
+        override val route: String
+            get() = "${ROUTING_PREFIX}${if (identifier?.value != null) "?${ARG_KEY_IDENTIFIER}=${identifier.value}" else ""}"
+
+        companion object : CallAppDestination(
+            title = R.string.call,
+            showTopAppBar = true,
+            navigationIcon = R.drawable.ic_back,
+            transitionConfig = TransitionConfig(
+                enter = Transition.SlideHorizontal,
+                popExit = Transition.SlideHorizontal
+            ),
+            arguments = listOf(
+                navArgument(Call.ARG_KEY_IDENTIFIER) {
+                    this.type = NavType.StringType
+                }
+            ),
+        ) {
+            const val ARG_KEY_IDENTIFIER = "identifier"
+            const val ROUTING_PREFIX = "call"
+
+            override val route: String = "$ROUTING_PREFIX?$ARG_KEY_IDENTIFIER={$ARG_KEY_IDENTIFIER}"
+        }
+    }
+
+    class VideoCall(
+        val identifier: Identifier?
+    ) : CallAppRoutable {
+        override val route: String
+            get() = "${ROUTING_PREFIX}${if (identifier?.value != null) "?${ARG_KEY_IDENTIFIER}=${identifier.value}" else ""}"
+
+        companion object : CallAppDestination(
+            title = R.string.video_call,
+            showTopAppBar = true,
+            navigationIcon = R.drawable.ic_back,
+            transitionConfig = TransitionConfig(
+                enter = Transition.SlideHorizontal,
+                popExit = Transition.SlideHorizontal
+            ),
+            arguments = listOf(
+                navArgument(VideoCall.ARG_KEY_IDENTIFIER) {
+                    this.type = NavType.StringType
+                }
+            ),
+        ) {
+            const val ARG_KEY_IDENTIFIER = "identifier"
+            const val ROUTING_PREFIX = "video_call"
+
+            override val route: String = "$ROUTING_PREFIX?$ARG_KEY_IDENTIFIER={$ARG_KEY_IDENTIFIER}"
+        }
+    }
+
+    class Chat(
+        val identifier: Identifier?
+    ) : CallAppRoutable {
+        override val route: String
+            get() = "${ROUTING_PREFIX}${if (identifier?.value != null) "?${ARG_KEY_IDENTIFIER}=${identifier.value}" else ""}"
+
+        companion object : CallAppDestination(
+            title = R.string.chat,
+            showTopAppBar = true,
+            navigationIcon = R.drawable.ic_back,
+            transitionConfig = TransitionConfig(
+                enter = Transition.SlideHorizontal,
+                popExit = Transition.SlideHorizontal
+            ),
+            arguments = listOf(
+                navArgument(Chat.ARG_KEY_IDENTIFIER) {
+                    this.type = NavType.StringType
+                }
+            ),
+        ) {
+            const val ARG_KEY_IDENTIFIER = "identifier"
+            const val ROUTING_PREFIX = "chat"
+
+            override val route: String = "$ROUTING_PREFIX?$ARG_KEY_IDENTIFIER={$ARG_KEY_IDENTIFIER}"
+        }
+    }
+
+    class AddToContact(
+        val identifier: Identifier?
+    ) : CallAppRoutable {
+        override val route: String
+            get() = "${ROUTING_PREFIX}${if (identifier?.value != null) "?${ARG_KEY_IDENTIFIER}=${identifier.value}" else ""}"
+
+        companion object : CallAppDestination(
+            title = R.string.add_to_contact,
+            showTopAppBar = true,
+            navigationIcon = R.drawable.ic_back,
+            transitionConfig = TransitionConfig(
+                enter = Transition.SlideHorizontal,
+                popExit = Transition.SlideHorizontal
+            ),
+            arguments = listOf(
+                navArgument(AddToContact.ARG_KEY_IDENTIFIER) {
+                    this.type = NavType.StringType
+                }
+            ),
+        ) {
+            const val ARG_KEY_IDENTIFIER = "identifier"
+            const val ROUTING_PREFIX = "add_to_contact"
+
+            override val route: String = "$ROUTING_PREFIX?$ARG_KEY_IDENTIFIER={$ARG_KEY_IDENTIFIER}"
+        }
+    }
 }
 
 
