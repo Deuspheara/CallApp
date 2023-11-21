@@ -46,6 +46,7 @@ import fr.deuspheara.callapp.ui.components.snackbar.CallAppSnackBarHost
 import fr.deuspheara.callapp.ui.components.snackbar.ErrorSnackbarVisuals
 import fr.deuspheara.callapp.ui.components.topbar.CallAppTopBar
 import fr.deuspheara.callapp.ui.navigation.CallAppDestination
+import fr.deuspheara.callapp.ui.theme.CallAppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -180,5 +181,7 @@ private fun WelcomeContent(
 @Composable
 @Preview(showSystemUi = true)
 private fun WelcomeScreenPreview() {
-    WelcomeScreen()
+    CallAppTheme {
+        WelcomeContent()
+    }
 }

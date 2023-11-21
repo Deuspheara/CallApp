@@ -24,4 +24,5 @@ sealed interface ProfilUiState {
     data class Error(val exception: Throwable) : ProfilUiState
     
     class Success(val userPublicModel: UserPublicModel?) : ProfilUiState, Consumable()
+    class SuccessLocal(val userFullModel: UserFullModel) : ProfilUiState, Consumable()
 }

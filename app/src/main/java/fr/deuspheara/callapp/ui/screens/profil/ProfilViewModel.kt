@@ -8,6 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.deuspheara.callapp.core.model.text.Identifier
 import fr.deuspheara.callapp.core.model.user.UserFullModel
 import fr.deuspheara.callapp.data.datasource.user.model.UserPublicModel
+import fr.deuspheara.callapp.domain.authentication.GetCurrentLocalUserUseCase
+import fr.deuspheara.callapp.domain.user.GetCurrentUserInformationUseCase
 import fr.deuspheara.callapp.domain.user.GetPublicUserDetailsUseCase
 import fr.deuspheara.callapp.domain.user.GetPublicUsersUseCase
 import fr.deuspheara.callapp.domain.user.GetUserDetailsUseCase
@@ -15,8 +17,11 @@ import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,7 +40,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfilViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getPublicUserDetails: GetPublicUserDetailsUseCase
+    private val getPublicUserDetails: GetPublicUserDetailsUseCase,
+    private val getCurrentLocalUser: GetCurrentLocalUserUseCase
 ) : ViewModel() {
 
     private companion object {
@@ -58,16 +64,25 @@ class ProfilViewModel @Inject constructor(
     }
 
 
-    private fun fetchUserDetails(identifier: Identifier) = viewModelScope.launch {
-        getPublicUserDetails(identifier.value)
-            .map<UserPublicModel?, ProfilUiState> {
-                Log.d(TAG, "fetchUserDetails: $it")
-                ProfilUiState.Success(it)
-            }.catch { e ->
-                ProfilUiState.Error(e)
-            }.let {
-                _uiState.emitAll(it)
-            }
+    private suspend fun fetchUserDetails(identifier: Identifier) = viewModelScope.launch {
+        _uiState.emit(ProfilUiState.Loading(true))
+        combine(
+            getCurrentLocalUser(),
+            getPublicUserDetails(identifier.value)
+        ) { localUser, publicUser ->
+            Log.d(TAG, "fetchUserDetails: $localUser")
+            localUser?.takeIf { it.identifier == identifier.value }
+                ?.let { ProfilUiState.SuccessLocal(it) }
+                ?: publicUser?.let { ProfilUiState.Success(it) }
+                ?: ProfilUiState.Error(IllegalArgumentException("User not found"))
+
+        }.catch {
+            _uiState.emit(ProfilUiState.Error(it))
+        }.let { flow ->
+            _uiState.emitAll(flow)
+        }
+
     }
+
 
 }

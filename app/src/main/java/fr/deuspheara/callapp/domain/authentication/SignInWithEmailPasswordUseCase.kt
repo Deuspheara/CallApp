@@ -36,7 +36,7 @@ class SignInWithEmailPasswordUseCase @Inject constructor(
 
         return authenticationRepository.signInWithPassword(email.value, password.value)
             .flatMapLatest { uid ->
-                userRepository.getUserDetails(uid)
+                userRepository.getUserDetails(uid.uuid)
             }.catch {
                 Log.e(TAG, "invoke: ", it)
                 emit(null)

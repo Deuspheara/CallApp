@@ -87,7 +87,7 @@ interface UserRepository {
      *
      * @return Flow signaling the completion of the addition.
      */
-    suspend fun addContactToUser(uid: String, contactUid: String): Flow<UserLightModel>
+    suspend fun addContactToUser(uid: String, contactUid: String): Flow<UserLightModel?>
 
     /**
      * Removes a contact from the user's contact list.
@@ -97,7 +97,7 @@ interface UserRepository {
      *
      * @return Flow signaling the completion of the removal.
      */
-    suspend fun removeContactFromUser(uid: String, contactUid: String): Flow<UserLightModel>
+    suspend fun removeContactFromUser(uid: String, contactUid: String): Flow<UserLightModel?>
 
     /**
      * Retrieves the list of contacts for a user.
