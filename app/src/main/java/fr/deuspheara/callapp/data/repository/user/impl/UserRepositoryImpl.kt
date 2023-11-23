@@ -14,7 +14,6 @@ import fr.deuspheara.callapp.data.datasource.user.remote.UserRemoteDataSource
 import fr.deuspheara.callapp.data.repository.user.UserRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -98,80 +97,142 @@ class UserRepositoryImpl @Inject constructor(
     }.flowOn(defaultContext)
 
 
-
-
-override suspend fun getUserDetails(uid: String): Flow<UserFullModel?> =
-    withContext(defaultContext) {
+    override suspend fun getUserDetails(uid: String): Flow<UserFullModel?> =
         remoteDataSource.getUserDetails(uid).map { it?.toUserFullModel() }
-    }
 
-override suspend fun updateUserDetails(
-    uid: String,
-    displayName: String?,
-    firstName: String?,
-    lastName: String?,
-    email: String?,
-    profilePictureUrl: String?,
-    bio: String?
-): Flow<UserLightModel?> = withContext(defaultContext) {
-    remoteDataSource.updateUserDetails(
+    override suspend fun updateUserDetails(
+        uid: String,
+        displayName: String?,
+        firstName: String?,
+        lastName: String?,
+        email: Email?,
+        profilePictureUrl: String?,
+        bio: String?,
+        phoneNumber: PhoneNumber?
+    ): Flow<UserLightModel?> = remoteDataSource.updateUserDetails(
         uid = uid,
         displayName = displayName,
         firstName = firstName,
         lastName = lastName,
         email = email,
         profilePictureUrl = profilePictureUrl,
-        bio = bio
-    ).map { it?.toUserLightModel() }
-}
-
-override suspend fun addContactToUser(uid: String, contactUid: String): Flow<UserLightModel?> =
-    withContext(defaultContext) {
-        remoteDataSource.addContactToUser(uid, contactUid).map { it?.toUserLightModel() }
-    }
-
-override suspend fun removeContactFromUser(
-    uid: String,
-    contactUid: String
-): Flow<UserLightModel?> = withContext(defaultContext) {
-    remoteDataSource.removeContactFromUser(uid, contactUid).map { it?.toUserLightModel() }
-}
-
-override suspend fun getUserContacts(uid: String): Flow<List<String>> =
-    withContext(defaultContext) {
-        remoteDataSource.getUserContacts(uid)
-    }
-
-override suspend fun getPublicUserDetails(): Flow<List<UserPublicModel>> =
-    withContext(defaultContext) {
-        remoteDataSource.getPublicUserDetails()
-    }
-
-override suspend fun getPublicUserDetails(identifier: String): Flow<UserPublicModel> {
-    return withContext(defaultContext) {
-        remoteDataSource.getPublicUserDetails(identifier)
-    }
-}
-
-private fun UserRemoteFirestoreModel.toUserLightModel(): UserLightModel {
-    return UserLightModel(
-        uuid = uid,
-        displayName = this.displayName,
-        photoUrl = photoUrl
-    )
-}
-
-private fun UserRemoteFirestoreModel.toUserFullModel(): UserFullModel {
-    return UserFullModel(
-        uid = uid,
-        identifier = identifier,
-        displayName = displayName,
-        firstName = firstName,
-        lastName = lastName,
-        email = email,
-        photoUrl = photoUrl,
         bio = bio,
-        contactList = contacts,
-    )
-}
+        phoneNumber = phoneNumber
+    ).map { user ->
+        Log.d(TAG, "updateUserDetails: $user")
+        user?.toUserLightModel()
+    }.onEach { user ->
+        user?.let {
+            localDataSource.updateUserWithUid(
+                uid = uid,
+                displayName = displayName,
+                firstname = firstName,
+                lastname = lastName,
+                email = email?.value,
+                photoUrl = profilePictureUrl,
+                bio = bio,
+                phoneNumber = phoneNumber?.value,
+                isEmailVerified = true,
+                contactList = null,
+                providerId = null,
+                identifier = null
+            ).first()
+        }
+    }.flowOn(defaultContext)
+
+    override suspend fun addContactToUser(uid: String, contactUid: String): Flow<UserLightModel?> =
+        withContext(defaultContext) {
+            remoteDataSource.addContactToUser(uid, contactUid).map { it?.toUserLightModel() }
+        }
+
+    override suspend fun removeContactFromUser(
+        uid: String,
+        contactUid: String
+    ): Flow<UserLightModel?> = withContext(defaultContext) {
+        remoteDataSource.removeContactFromUser(uid, contactUid).map { it?.toUserLightModel() }
+    }
+
+    override suspend fun getUserContacts(uid: String): Flow<List<String>> =
+        withContext(defaultContext) {
+            remoteDataSource.getUserContacts(uid)
+        }
+
+    override suspend fun getPublicUserDetails(): Flow<List<UserPublicModel>> =
+        withContext(defaultContext) {
+            remoteDataSource.getPublicUserDetails()
+        }
+
+    override suspend fun getPublicUserDetails(identifier: String): Flow<UserPublicModel> {
+        return withContext(defaultContext) {
+            remoteDataSource.getPublicUserDetails(identifier)
+        }
+    }
+
+    override suspend fun insertLocalUser(
+        uid: String,
+        identifier: String,
+        displayName: String,
+        firstName: String,
+        lastName: String,
+        email: Email,
+        profilePictureUrl: String?,
+        bio: String?,
+        phoneNumber: PhoneNumber?
+    ): Flow<Long?> {
+        return localDataSource.insertUser(
+            LocalUserEntity(
+                fireStoreUUID = uid,
+                displayName = displayName,
+                identifier = identifier,
+                firstName = firstName,
+                lastName = lastName,
+                email = email.value,
+                photoUrl = profilePictureUrl ?: "",
+                bio = bio ?: "",
+                phoneNumber = phoneNumber?.value ?: "",
+                isEmailVerified = false,
+                contactList = emptyList(),
+                providerId = "password",
+            )
+        )
+    }
+
+    private fun UserRemoteFirestoreModel.toUserLightModel(): UserLightModel {
+        return UserLightModel(
+            uuid = uid,
+            displayName = this.displayName,
+            photoUrl = photoUrl
+        )
+    }
+
+    private fun UserRemoteFirestoreModel.toUserFullModel(): UserFullModel {
+        return UserFullModel(
+            uid = uid,
+            identifier = identifier,
+            displayName = displayName,
+            firstName = firstName,
+            lastName = lastName,
+            email = email,
+            photoUrl = photoUrl,
+            bio = bio,
+            contactList = contacts,
+        )
+    }
+
+    private fun UserRemoteFirestoreModel.toLocalUserEntity(): LocalUserEntity {
+        return LocalUserEntity(
+            fireStoreUUID = uid,
+            displayName = displayName,
+            identifier = identifier,
+            firstName = firstName,
+            lastName = lastName,
+            email = email,
+            photoUrl = photoUrl,
+            bio = bio,
+            phoneNumber = phoneNumber,
+            isEmailVerified = false,
+            contactList = contacts,
+            providerId = "password",
+        )
+    }
 }

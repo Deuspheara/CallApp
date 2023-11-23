@@ -38,7 +38,7 @@ interface AuthenticationRepository {
      *
      * @return Flow emitting the user's unique UID upon successful authentication.
      */
-    suspend fun signInWithPassword(email: String, password: String): Flow<UserRemoteModel>
+    suspend fun signInWithPassword(email: String, password: String): Flow<UserFullModel>
 
     /**
      * Checks if there's an authenticated user session active.
@@ -98,5 +98,5 @@ interface AuthenticationRepository {
      * Get current local user
      * @return a [UserFullModel]
      */
-    suspend fun getCurrentLocalUser() : Flow<UserFullModel?>
+    suspend fun getUserByUid(uid : String) : Flow<UserFullModel?>
 }

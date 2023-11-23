@@ -4,6 +4,8 @@ import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.snapshots
 import fr.deuspheara.callapp.core.coroutine.DispatcherModule
+import fr.deuspheara.callapp.core.model.text.Email
+import fr.deuspheara.callapp.core.model.text.PhoneNumber
 import fr.deuspheara.callapp.data.datasource.user.model.UserPublicModel
 import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteFirestoreModel
 import fr.deuspheara.callapp.data.datasource.user.remote.UserRemoteDataSource
@@ -50,8 +52,7 @@ class UserRemoteDataSourceImpl @Inject constructor(
         phoneNumber: String,
         photoUrl: String,
         bio: String
-    ): Flow<String> {
-        return flow {
+    ): Flow<String> = flow {
             val newUserRemote = UserRemoteFirestoreModel(
                 uid = uid,
                 identifier = identifier,
@@ -75,15 +76,16 @@ class UserRemoteDataSourceImpl @Inject constructor(
             userPublicCollection.document(uid).set(newUserPublic).await()
             emit(uid)
         }.catch { e ->
-            Log.e(TAG, "registerUser: ", e)
-            throw IllegalStateException("Error while registering user", e)
-        }.flowOn(ioDispatcher)
-    }
+        Log.e(TAG, "registerUser: ", e)
+        throw IllegalStateException("Error while registering user", e)
+    }.flowOn(ioDispatcher)
+
 
     override suspend fun getUserDetails(uid: String): Flow<UserRemoteFirestoreModel?> =
         flow {
+            Log.d(TAG, "getUserDetails: $uid")
             emit(
-                userCollection.document(uid).get().await()
+                userCollection.document(uid).snapshots().first()
                     .toObject(UserRemoteFirestoreModel::class.java)
             )
         }.catch { e ->
@@ -96,26 +98,36 @@ class UserRemoteDataSourceImpl @Inject constructor(
         displayName: String?,
         firstName: String?,
         lastName: String?,
-        email: String?,
+        email: Email?,
         profilePictureUrl: String?,
-        bio: String?
-    ): Flow<UserRemoteFirestoreModel?> {
-        return flow {
-            val updates = mutableMapOf<String, Any?>()
-            displayName?.let { updates["displayName"] = it }
-            firstName?.let { updates["firstName"] = it }
-            lastName?.let { updates["lastName"] = it }
-            email?.let { updates["email"] = it }
-            profilePictureUrl?.let { updates["photoUrl"] = it }
-            bio?.let { updates["bio"] = it }
+        bio: String?,
+        phoneNumber: PhoneNumber?
+    ): Flow<UserRemoteFirestoreModel?> = flow {
+        val updatesPrivate = mapOf(
+            "displayName" to displayName,
+            "firstName" to firstName,
+            "lastName" to lastName,
+            "email" to email?.value,
+            "photoUrl" to profilePictureUrl,
+            "bio" to bio,
+            "phoneNumber" to phoneNumber?.value
+        ).filterValues { it != null }
 
-            userCollection.document(uid).update(updates).await()
-            emit(getUserDetails(uid).first())
-        }.catch {
-            Log.e(TAG, "updateUserDetails: ", it)
-            throw IllegalStateException("Error while updating user details", it)
-        }.flowOn(ioDispatcher)
-    }
+        val updatesPublic = mapOf(
+            "displayName" to displayName,
+            "bio" to bio
+        ).filterValues { it != null }
+
+        userCollection.document(uid).update(updatesPrivate).await()
+        userPublicCollection.document(uid).update(updatesPublic).await()
+
+        emit(getUserDetails(uid).first())
+    }.catch { e ->
+        Log.e(TAG, "updateUserDetails: ", e)
+        throw IllegalStateException("Error while updating user details", e)
+    }.flowOn(ioDispatcher)
+
+
 
     override suspend fun addContactToUser(
         uid: String,
@@ -170,20 +182,31 @@ class UserRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getPublicUserDetails(identifier: String): Flow<UserPublicModel> = flow {
-        userPublicCollection.whereEqualTo("identifier", identifier)
-            .limit(1)
-            .get()
-            .await()
-            .documents
-            .firstOrNull()
-            ?.toObject(UserPublicModel::class.java)
-            ?.let {
-                emit(it)
+
+        val userDocument = userPublicCollection.whereEqualTo("identifier", identifier).get().await()
+            .documents.firstOrNull()
+
+
+        if (userDocument != null) {
+            val userPublicModel = userDocument.toObject(UserPublicModel::class.java)
+            if (userPublicModel != null) {
+                emit(userPublicModel)
+            } else {
+                throw IllegalStateException("Error converting user document to UserPublicModel")
             }
-    }.catch { e ->
-        Log.e(TAG, "getPublicUserDetails: ", e)
-        throw IllegalStateException("Error while getting public user details", e)
+        } else {
+            emitErrorState(IllegalStateException("User document not found"))
+        }
+
+    }.catch {
+        Log.e(TAG, "getPublicUserDetails: ", it)
+        throw IllegalStateException("Error while getting public user details", it)
     }.flowOn(ioDispatcher)
+
+    private fun emitErrorState(e: Throwable): UserPublicModel {
+        // Handle the error state as needed
+        return UserPublicModel(/* Set default values or handle accordingly */)
+    }
 
 
 }

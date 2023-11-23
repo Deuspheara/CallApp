@@ -44,6 +44,9 @@ fun NavGraphBuilder.addAuthNavGraph(
                 navigateToForgetPassword = {
                     navController.navigate(CallAppDestination.SendResetPassword)
                 },
+                onNavigateToWelcome = {
+                    navController.navigate(CallAppDestination.Main)
+                },
             )
         }
 

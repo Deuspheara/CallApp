@@ -37,7 +37,10 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
         private const val TAG = "AuthenticationRemoteDataSourceImpl"
     }
 
-    override suspend fun signUpWithPassword(email: String, password: String): Flow<UserRemoteModel> {
+    override suspend fun signUpWithPassword(
+        email: String,
+        password: String
+    ): Flow<UserRemoteModel> {
         return flow {
             val user = firebaseAuth.createUserWithEmailAndPassword(email, password).await().user
             user?.let { emit(UserRemoteModel(it)) }
@@ -48,7 +51,10 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
         }.flowOn(ioContext)
     }
 
-    override suspend fun signInWithPassword(email: String, password: String): Flow<UserRemoteModel> {
+    override suspend fun signInWithPassword(
+        email: String,
+        password: String
+    ): Flow<UserRemoteModel> {
         return flow {
             val user = firebaseAuth.signInWithEmailAndPassword(email, password).await().user
             user?.let { emit(UserRemoteModel(it)) }
@@ -127,17 +133,13 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
         }.flowOn(ioContext)
     }
 
-    override suspend fun getCurrentUser(): Flow<UserRemoteModel?> {
-        return flow {
-            val user = firebaseAuth.currentUser
-            user?.reload()?.await()
+    override suspend fun getCurrentUser(): Flow<UserRemoteModel?> = flow {
+        emit(firebaseAuth.currentUser?.let { UserRemoteModel(it) })
+    }.catch {
+        Log.e(TAG, "getCurrentUser: ", it)
+        throw it
+    }.flowOn(ioContext)
 
-            emit(user?.let { UserRemoteModel(it) })
-        }.catch {
-            Log.e(TAG, "getCurrentUser: ", it)
-            emit(UserRemoteModel())
-        }.flowOn(ioContext)
-    }
 }
 
 

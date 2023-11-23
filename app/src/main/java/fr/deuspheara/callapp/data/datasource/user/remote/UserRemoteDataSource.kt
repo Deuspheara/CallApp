@@ -2,6 +2,7 @@ package fr.deuspheara.callapp.data.datasource.user.remote
 
 import fr.deuspheara.callapp.core.model.text.Email
 import fr.deuspheara.callapp.core.model.text.Identifier
+import fr.deuspheara.callapp.core.model.text.PhoneNumber
 import fr.deuspheara.callapp.core.model.user.UserFullModel
 import fr.deuspheara.callapp.core.model.user.UserLightModel
 import fr.deuspheara.callapp.data.datasource.user.model.UserPublicModel
@@ -75,9 +76,10 @@ interface UserRemoteDataSource {
         displayName: String?,
         firstName: String?,
         lastName: String?,
-        email: String?,
+        email: Email?,
         profilePictureUrl: String?,
-        bio: String?
+        bio: String?,
+        phoneNumber: PhoneNumber?
     ): Flow<UserRemoteFirestoreModel?>
 
     /**

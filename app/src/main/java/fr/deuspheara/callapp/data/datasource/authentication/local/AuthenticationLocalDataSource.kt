@@ -61,17 +61,17 @@ interface AuthenticationLocalDataSource {
      */
     suspend fun updateUserWithUid(
         uid: String,
-        identifier: Identifier,
-        displayName: String,
-        firstname: String,
-        lastname: String,
-        photoUrl: String,
-        email: String,
-        phoneNumber: String,
-        isEmailVerified: Boolean,
-        bio: String,
-        contactList: List<String>,
-        providerId: String,
+        identifier: Identifier?,
+        displayName: String?,
+        firstname: String?,
+        lastname: String?,
+        photoUrl: String?,
+        email: String?,
+        phoneNumber: String?,
+        isEmailVerified: Boolean?,
+        bio: String?,
+        contactList: List<String>?,
+        providerId: String?,
     ): Flow<Int>
 
     /**

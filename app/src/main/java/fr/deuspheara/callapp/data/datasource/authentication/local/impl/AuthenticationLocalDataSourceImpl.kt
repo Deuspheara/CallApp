@@ -112,24 +112,24 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
     }.flowOn(ioContext)
     override suspend fun updateUserWithUid(
         uid: String,
-        identifier: Identifier,
-        displayName: String,
-        firstname: String,
-        lastname: String,
-        photoUrl: String,
-        email: String,
-        phoneNumber: String,
-        isEmailVerified: Boolean,
-        bio: String,
-        contactList: List<String>,
-        providerId: String,
+        identifier: Identifier?,
+        displayName: String?,
+        firstname: String?,
+        lastname: String?,
+        photoUrl: String?,
+        email: String?,
+        phoneNumber: String?,
+        isEmailVerified: Boolean?,
+        bio: String?,
+        contactList: List<String>?,
+        providerId: String?,
     ): Flow<Int> = channelFlow {
         launch {
             try {
                 val user = database.withTransaction {
                     database.userDao.updateUserWithUid(
                         uid,
-                        identifier.value,
+                        identifier?.value,
                         displayName,
                         firstname,
                         lastname,
@@ -142,6 +142,7 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
                         providerId
                     )
                 }
+                Log.d(TAG, "updateUserWithUid: $user")
                 send(user)
                 close()
             } catch (e: Exception) {

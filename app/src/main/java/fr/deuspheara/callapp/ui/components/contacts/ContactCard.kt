@@ -46,14 +46,11 @@ import fr.deuspheara.callapp.ui.theme.shape.SmoothCornerShape
 fun ContactCard(
     modifier: Modifier = Modifier,
     profilePicture: String = "",
-    identifier: String = "identifier",
+    identifier: String = "JohnIdentifier",
     displayName: String = "Johndsdfdsfsdfdsfdsfsd Doe",
     onClick: () -> Unit = {},
     isLoading: Boolean = false,
 ) {
-    if (isLoading) {
-        ProfileSkeletonLoader()
-    } else{
         Column(
             modifier = modifier
                 .border(
@@ -81,13 +78,16 @@ fun ContactCard(
                     .size(100.dp)
                     .clip(RoundedCornerShape(50.dp))
                     .background(MaterialTheme.colorScheme.surfaceVariant),
+                isLoading = isLoading,
             )
 
-            Text(
-                modifier = Modifier.padding(top = 16.dp),
-                text = "@$identifier",
-                style = MaterialTheme.typography.bodyLarge,
-            )
+            identifier.takeIf { it.isNotEmpty() }?.let {
+                Text(
+                    modifier = Modifier.padding(top = 16.dp),
+                    text = "@$it",
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            }
 
             Text(
                 modifier = Modifier.padding(top = 4.dp),
@@ -96,58 +96,10 @@ fun ContactCard(
                 maxLines = 1,
             )
         }
-    }
 
 
 
-}
 
-@Composable
-fun ProfileSkeletonLoader() {
-    Canvas(
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1f)
-            .clip(
-                SmoothCornerShape(
-                    cornerRadiusBL = 16.dp,
-                    cornerRadiusBR = 16.dp,
-                    cornerRadiusTL = 16.dp,
-                    cornerRadiusTR = 16.dp
-                )
-            ).skeletonLoader(isLoading = true)
-    ) {
-        val circleRadiusPercentage = 0.70 // Adjust as needed
-        val nameRectHeightPercentage = 0.1 // Adjust as needed
-        val identifierRectHeightPercentage = 0.05 // Adjust as needed
-
-        val canvasHeight = size.width / 2 * 1.75f // Adjust the aspect ratio as needed
-
-        // draw a circle for the profile picture
-        drawCircle(
-            color = Color.Gray, // Set the color for the circle
-            center = Offset(size.width / 2, canvasHeight * 0.40f),
-            radius = ((size.width - 32.dp.toPx() * 2) * circleRadiusPercentage / 2).toFloat()
-        )
-
-        // rounded rectangle for the name center under the profile picture with vertical padding
-        drawRoundRect(
-            color = Color.Gray, // Set the color for the rectangle
-            topLeft = Offset(size.width / 2 - size.width * 0.2f, canvasHeight * 0.80f),
-            size = Size(size.width * 0.4f, (canvasHeight * nameRectHeightPercentage).toFloat()),
-            cornerRadius = CornerRadius(32f, 32f)
-        )
-
-        // rounded rectangle for the identifier with vertical padding
-        drawRoundRect(
-            color = Color.Gray, // Set the color for the rectangle
-            topLeft = Offset(size.width / 2 - size.width * 0.15f, canvasHeight * 0.95f),
-            size = Size(size.width * 0.3f,
-                (canvasHeight * identifierRectHeightPercentage).toFloat()
-            ),
-            cornerRadius = CornerRadius(16f, 16f)
-        )
-    }
 }
 
 

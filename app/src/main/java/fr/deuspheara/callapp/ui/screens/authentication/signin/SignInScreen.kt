@@ -60,6 +60,7 @@ import fr.deuspheara.callapp.ui.components.buttons.CallAppButton
 import fr.deuspheara.callapp.ui.components.buttons.CallAppTextButton
 import fr.deuspheara.callapp.ui.components.snackbar.CallAppSnackBarHost
 import fr.deuspheara.callapp.ui.components.snackbar.ErrorSnackbarVisuals
+import fr.deuspheara.callapp.ui.components.snackbar.SuccessSnackbarVisuals
 import fr.deuspheara.callapp.ui.components.text.CallAppOutlinedTextField
 import fr.deuspheara.callapp.ui.components.text.CallAppOutlinedTextFieldPreview
 import fr.deuspheara.callapp.ui.components.text.CallAppPasswordTextField
@@ -93,6 +94,7 @@ fun SignInScreen(
     viewModel: SignInViewModel = hiltViewModel(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navigateBack: () -> Unit = {},
+    onNavigateToWelcome: () -> Unit = {},
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -105,11 +107,18 @@ fun SignInScreen(
         }
     }
 
-    (uiState as? SignInUiState.FormInputError)?.let {
+    (uiState as? SignInUiState.FormInputError)?.consume()?.let {
         val message = stringResource(id = R.string.error_signin)
         coroutineScope.launch {
             snackbarHostState.showSnackbar(ErrorSnackbarVisuals(message = message))
         }
+    }
+    (uiState as? SignInUiState.Success)?.consume()?.let {
+        val message = stringResource(id = R.string.success_signin)
+        coroutineScope.launch {
+            snackbarHostState.showSnackbar(SuccessSnackbarVisuals(message = message))
+        }
+        onNavigateToWelcome()
     }
 
     val isLoading by remember {

@@ -25,15 +25,18 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,6 +54,9 @@ import fr.deuspheara.callapp.ui.components.profile.RoundedImageProfile
 import fr.deuspheara.callapp.ui.components.topbar.CallAppTopBar
 import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 import fr.deuspheara.callapp.ui.theme.CallAppTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 /**
  * _CallApp_
@@ -98,6 +104,8 @@ val actionList = listOf(
 fun ProfilScreen(
     viewModel: ProfilViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
+    onNavigateToEditProfile: () -> Unit = {},
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -114,6 +122,12 @@ fun ProfilScreen(
         derivedStateOf { (uiState as? ProfilUiState.Loading)?.isLoading == true }
     }
 
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            viewModel.fetchUserDetails()
+        }
+    }
+
     Scaffold(
         topBar = {
             CallAppTopBar(
@@ -126,6 +140,22 @@ fun ProfilScreen(
                             painter = painterResource(id = R.drawable.ic_chevron_left),
                             contentDescription = null
                         )
+                    }
+                },
+                actions = {
+                    userLocalDetails?.run{
+                        if(isLoading) {
+                           CircularProgressIndicator()
+                        } else {
+                            IconButton(
+                                onClick = onNavigateToEditProfile,
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_edit),
+                                    contentDescription = null
+                                )
+                            }
+                        }
                     }
                 }
             )
@@ -172,6 +202,7 @@ private fun ProfilContent(
                 .size(100.dp)
                 .clip(RoundedCornerShape(50.dp))
                 .background(MaterialTheme.colorScheme.surfaceVariant),
+            isLoading = isLoading,
         )
 
         identifier.orLocal(userLocalDetails?.identifier)?.let {

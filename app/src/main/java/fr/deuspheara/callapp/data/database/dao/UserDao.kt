@@ -88,24 +88,34 @@ interface UserDao {
      * @param contactList The updated contact list of the user.
      * @param providerId The updated provider id of the user.
      */
-    @Query("UPDATE user SET display_name = :displayName,identifier = :identifier, first_name = :firstName, last_name = :lastName, " +
-            "photo_url = :photoUrl, email = :email, phone_number = :phoneNumber, " +
-            "is_email_verified = :isEmailVerified, bio = :bio, contact_list = :contactList, " +
-            "provider_id = :providerId WHERE firestore_uuid = :fireStoreUUID")
+    @Query("UPDATE user SET display_name = COALESCE(:displayName, display_name), " +
+            "identifier = COALESCE(:identifier, identifier), " +
+            "first_name = COALESCE(:firstName, first_name), " +
+            "last_name = COALESCE(:lastName, last_name), " +
+            "photo_url = COALESCE(:photoUrl, photo_url), " +
+            "email = COALESCE(:email, email), " +
+            "phone_number = COALESCE(:phoneNumber, phone_number), " +
+            "is_email_verified = COALESCE(:isEmailVerified, is_email_verified), " +
+            "bio = COALESCE(:bio, bio), " +
+            "contact_list = COALESCE(:contactList, contact_list), " +
+            "provider_id = COALESCE(:providerId, provider_id) " +
+            "WHERE firestore_uuid = :fireStoreUUID")
     suspend fun updateUserWithUid(
         fireStoreUUID: String,
-        identifier: String,
-        displayName: String,
-        firstName: String,
-        lastName: String,
-        photoUrl: String,
-        email: String,
-        phoneNumber: String,
-        isEmailVerified: Boolean,
-        bio: String,
-        contactList: List<String>,
-        providerId: String
+        identifier: String?,
+        displayName: String?,
+        firstName: String?,
+        lastName: String?,
+        photoUrl: String?,
+        email: String?,
+        phoneNumber: String?,
+        isEmailVerified: Boolean?,
+        bio: String?,
+        contactList: List<String>?,
+        providerId: String?
     ): Int
+
+
 
 
 

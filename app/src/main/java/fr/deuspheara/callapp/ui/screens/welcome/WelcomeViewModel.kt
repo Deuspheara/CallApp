@@ -1,11 +1,13 @@
 package fr.deuspheara.callapp.ui.screens.welcome
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.deuspheara.callapp.core.model.user.UserFullModel
 import fr.deuspheara.callapp.data.datasource.user.model.UserPublicModel
+import fr.deuspheara.callapp.domain.authentication.IsUserAuthenticatedUseCase
 import fr.deuspheara.callapp.domain.user.GetCurrentUserInformationUseCase
 import fr.deuspheara.callapp.domain.user.GetPublicUsersUseCase
 import fr.deuspheara.callapp.ui.screens.authentication.reset.ResetPasswordUiState
@@ -33,7 +35,8 @@ import javax.inject.Inject
 @HiltViewModel
 class WelcomeViewModel @Inject constructor(
     private val getPublicUsers: GetPublicUsersUseCase,
-    private val getCurrentUserInformation: GetCurrentUserInformationUseCase
+    private val getCurrentUserInformation: GetCurrentUserInformationUseCase,
+    private val isUserAuthenticated: IsUserAuthenticatedUseCase
 ) : ViewModel() {
     private companion object {
         private const val TAG = "WelcomeViewModel"
@@ -72,14 +75,27 @@ class WelcomeViewModel @Inject constructor(
 
     }
 
-    private fun fetchCurrentUser() = viewModelScope.launch {
+    fun fetchCurrentUser() = viewModelScope.launch {
         _uiState.value = WelcomeUiState.Loading(true)
         getCurrentUserInformation()
             .map<UserFullModel?, WelcomeUiState> {
                 it?.let {
+                    Log.d(TAG, "fetchCurrentUser: $it")
                     _currentUser.value = it
                     WelcomeUiState.Profil
                 } ?: throw Exception("User is null")
+            }.catch { e ->
+                WelcomeUiState.Error(e)
+            }.let {
+                _uiState.emitAll(it)
+            }
+    }
+
+    fun checkIsUserAuthenticated() = viewModelScope.launch {
+        _uiState.value = WelcomeUiState.Loading(true)
+        isUserAuthenticated()
+            .map<Boolean, WelcomeUiState> {
+                WelcomeUiState.IsUserAuthenticated(it)
             }.catch { e ->
                 WelcomeUiState.Error(e)
             }.let {
