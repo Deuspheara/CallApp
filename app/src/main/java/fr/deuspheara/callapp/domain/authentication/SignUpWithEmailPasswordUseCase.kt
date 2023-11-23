@@ -46,7 +46,7 @@ class SignUpWithEmailPasswordUseCase @Inject constructor(
         return authenticationRepository.signUpWithPassword(email.value, password.value)
             .flatMapLatest {
                 userRepository.registerUser(
-                    uid = it,
+                    uid = it.uuid,
                     identifier = identifier,
                     pseudonym = pseudonym,
                     firstName = firstName,

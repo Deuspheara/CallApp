@@ -73,8 +73,11 @@ fun CallAppOutlinedTextField(
     val focused = remember { mutableStateOf(false) }
 
     Column(
+        modifier = modifier
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
+
         TextField(
             value = value,
             onValueChange = { newText ->
@@ -154,7 +157,7 @@ fun CallAppOutlinedTextField(
                     Icon(
                         painter = painterResource(id = leadingIcon),
                         contentDescription = stringResource(id = placeholderText),
-                        modifier = Modifier.size(24.dp),
+                        modifier = Modifier.size(20.dp),
                         tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
@@ -172,16 +175,17 @@ fun CallAppOutlinedTextField(
             singleLine = singleLine,
             isError = isError,
             enabled = isEnable,
-            supportingText = supportingText?.let<Int, @Composable (() -> Unit)?> {
-                return@let {
-                    Text(
-                        text = stringResource(id = it),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            },
         )
+        supportingText?.let {
+
+            Text(
+                text = "* ${stringResource(id = it)}",
+                style = MaterialTheme.typography.bodySmall,
+                color = if(isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.customGreen
+            )
+
+        }
+
     }
 }
 
@@ -246,9 +250,9 @@ fun CallAppOutlinedTextFieldPreview() {
                 keyboardActions = KeyboardActions.Default,
                 singleLine = true,
                 maxCharacter = null,
-                isError = false,
+                isError = true,
                 isEnable = false,
-                supportingText = null,
+                supportingText = R.string.invalid_bio,
             )
         }
     }

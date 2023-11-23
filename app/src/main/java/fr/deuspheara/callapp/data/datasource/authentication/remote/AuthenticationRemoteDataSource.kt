@@ -27,7 +27,7 @@ interface AuthenticationRemoteDataSource {
      *
      * @return Flow emitting the user's unique UID upon successful registration.
      */
-    suspend fun signUpWithPassword(email: String, password: String): Flow<String>
+    suspend fun signUpWithPassword(email: String, password: String): Flow<UserRemoteModel>
 
     /**
      * Authenticates a user using their email and password.
@@ -37,7 +37,7 @@ interface AuthenticationRemoteDataSource {
      *
      * @return Flow emitting the user's unique UID upon successful authentication.
      */
-    suspend fun signInWithPassword(email: String, password: String): Flow<String>
+    suspend fun signInWithPassword(email: String, password: String): Flow<UserRemoteModel>
 
     /**
      * Checks if there's an authenticated user session active.
@@ -84,7 +84,7 @@ interface AuthenticationRemoteDataSource {
      *
      * @return an [Instant] when the user is sign out
      */
-    suspend fun signOut() : Flow<Instant?>
+    suspend fun signOut() : Flow<String?>
 
     /**
      * Get the current user information

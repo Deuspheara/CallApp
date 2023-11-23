@@ -74,9 +74,10 @@ interface UserRepository {
         displayName: String?,
         firstName: String?,
         lastName: String?,
-        email: String?,
+        email: Email?,
         profilePictureUrl: String?,
-        bio: String?
+        bio: String?,
+        phoneNumber: PhoneNumber?
     ): Flow<UserLightModel?>
 
     /**
@@ -87,7 +88,7 @@ interface UserRepository {
      *
      * @return Flow signaling the completion of the addition.
      */
-    suspend fun addContactToUser(uid: String, contactUid: String): Flow<UserLightModel>
+    suspend fun addContactToUser(uid: String, contactUid: String): Flow<UserLightModel?>
 
     /**
      * Removes a contact from the user's contact list.
@@ -97,7 +98,7 @@ interface UserRepository {
      *
      * @return Flow signaling the completion of the removal.
      */
-    suspend fun removeContactFromUser(uid: String, contactUid: String): Flow<UserLightModel>
+    suspend fun removeContactFromUser(uid: String, contactUid: String): Flow<UserLightModel?>
 
     /**
      * Retrieves the list of contacts for a user.
@@ -124,5 +125,32 @@ interface UserRepository {
      * @return Flow emitting the public information of the user.
      */
     suspend fun getPublicUserDetails(identifier: String): Flow<UserPublicModel>
+
+    /**
+     * Inserts a user entity into the local database.
+     *
+     * @param uid User's unique identifier.
+     * @param identifier User's chosen pseudonym or username.
+     * @param displayName User's display name.
+     * @param firstName User's first name.
+     * @param lastName User's last name.
+     * @param email User's email address.
+     * @param profilePictureUrl URL pointing to the user's profile picture.
+     * @param bio User's bio or status message.
+     * @param phoneNumber User's phone number.
+     *
+     * @return Flow emitting the user's unique UID upon successful insertion.
+     */
+    suspend fun insertLocalUser(
+        uid: String,
+        identifier: String,
+        displayName: String,
+        firstName: String,
+        lastName: String,
+        email: Email,
+        profilePictureUrl: String?,
+        bio: String?,
+        phoneNumber: PhoneNumber?
+    ): Flow<Long?>
 
 }

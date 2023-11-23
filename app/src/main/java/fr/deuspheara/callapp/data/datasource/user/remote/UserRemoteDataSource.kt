@@ -2,6 +2,7 @@ package fr.deuspheara.callapp.data.datasource.user.remote
 
 import fr.deuspheara.callapp.core.model.text.Email
 import fr.deuspheara.callapp.core.model.text.Identifier
+import fr.deuspheara.callapp.core.model.text.PhoneNumber
 import fr.deuspheara.callapp.core.model.user.UserFullModel
 import fr.deuspheara.callapp.core.model.user.UserLightModel
 import fr.deuspheara.callapp.data.datasource.user.model.UserPublicModel
@@ -55,7 +56,7 @@ interface UserRemoteDataSource {
      *
      * @return Flow emitting the detailed information of the specified user.
      */
-    suspend fun getUserDetails(uid: String): Flow<UserRemoteFirestoreModel>
+    suspend fun getUserDetails(uid: String): Flow<UserRemoteFirestoreModel?>
 
     /**
      * Updates the information of a user.
@@ -75,9 +76,10 @@ interface UserRemoteDataSource {
         displayName: String?,
         firstName: String?,
         lastName: String?,
-        email: String?,
+        email: Email?,
         profilePictureUrl: String?,
-        bio: String?
+        bio: String?,
+        phoneNumber: PhoneNumber?
     ): Flow<UserRemoteFirestoreModel?>
 
     /**
@@ -88,7 +90,7 @@ interface UserRemoteDataSource {
      *
      * @return Flow signaling the completion of the addition.
      */
-    suspend fun addContactToUser(uid: String, contactUid: String): Flow<UserRemoteFirestoreModel>
+    suspend fun addContactToUser(uid: String, contactUid: String): Flow<UserRemoteFirestoreModel?>
 
     /**
      * Removes a contact from the user's contact list.
@@ -98,7 +100,7 @@ interface UserRemoteDataSource {
      *
      * @return Flow signaling the completion of the removal.
      */
-    suspend fun removeContactFromUser(uid: String, contactUid: String): Flow<UserRemoteFirestoreModel>
+    suspend fun removeContactFromUser(uid: String, contactUid: String): Flow<UserRemoteFirestoreModel?>
 
     /**
      * Retrieves the list of contacts for a user.

@@ -37,20 +37,27 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
         private const val TAG = "AuthenticationRemoteDataSourceImpl"
     }
 
-    override suspend fun signUpWithPassword(email: String, password: String): Flow<String> {
+    override suspend fun signUpWithPassword(
+        email: String,
+        password: String
+    ): Flow<UserRemoteModel> {
         return flow {
-            val uid = firebaseAuth.createUserWithEmailAndPassword(email, password).await().user?.uid
-            uid?.let { emit(it) }
+            val user = firebaseAuth.createUserWithEmailAndPassword(email, password).await().user
+            user?.let { emit(UserRemoteModel(it)) }
+                ?: throw IllegalStateException("Authentication failed: No user returned.")
         }.catch {
             Log.e(TAG, "signUpWithPassword: ", it)
             if (it is FirebaseAuthUserCollisionException) throw IllegalStateException("User collision occurred.")
         }.flowOn(ioContext)
     }
 
-    override suspend fun signInWithPassword(email: String, password: String): Flow<String> {
+    override suspend fun signInWithPassword(
+        email: String,
+        password: String
+    ): Flow<UserRemoteModel> {
         return flow {
-            val uid = firebaseAuth.signInWithEmailAndPassword(email, password).await().user?.uid
-            uid?.let { emit(it) }
+            val user = firebaseAuth.signInWithEmailAndPassword(email, password).await().user
+            user?.let { emit(UserRemoteModel(it)) }
                 ?: throw IllegalStateException("Authentication failed: No user returned.")
         }.catch {
             Log.e(TAG, "signInWithPassword: ", it)
@@ -115,27 +122,24 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
         }.flowOn(ioContext)
     }
 
-    override suspend fun signOut(): Flow<Instant> {
+    override suspend fun signOut(): Flow<String?> {
         return flow {
+            val uid = firebaseAuth.currentUser?.uid
             firebaseAuth.signOut()
-            emit(Instant.now())
+            emit(uid)
         }.catch {
             Log.e(TAG, "signOut: ", it)
-            emit(Instant.now())
+            emit(null)
         }.flowOn(ioContext)
     }
 
-    override suspend fun getCurrentUser(): Flow<UserRemoteModel?> {
-        return flow {
-            val user = firebaseAuth.currentUser
-            user?.reload()?.await()
+    override suspend fun getCurrentUser(): Flow<UserRemoteModel?> = flow {
+        emit(firebaseAuth.currentUser?.let { UserRemoteModel(it) })
+    }.catch {
+        Log.e(TAG, "getCurrentUser: ", it)
+        throw it
+    }.flowOn(ioContext)
 
-            emit(user?.let { UserRemoteModel(it) })
-        }.catch {
-            Log.e(TAG, "getCurrentUser: ", it)
-            emit(UserRemoteModel())
-        }.flowOn(ioContext)
-    }
 }
 
 

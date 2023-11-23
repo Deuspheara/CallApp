@@ -66,9 +66,7 @@ class MainActivity() : ComponentActivity() {
                 }
             }
         }
-        installSplashScreen().apply {
-            this.setKeepOnScreenCondition { state is MainUiState.Loading }
-        }
+        installSplashScreen()
         setContent {
             val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
             CallAppTheme {

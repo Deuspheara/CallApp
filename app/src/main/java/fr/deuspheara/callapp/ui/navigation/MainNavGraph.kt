@@ -12,6 +12,7 @@ import fr.deuspheara.callapp.ui.screens.profil.ProfilScreen
 import fr.deuspheara.callapp.ui.screens.authentication.reset.ResetPasswordScreen
 import fr.deuspheara.callapp.ui.screens.authentication.signin.SignInScreen
 import fr.deuspheara.callapp.ui.screens.home.HomeScreen
+import fr.deuspheara.callapp.ui.screens.profil.edit.EditProfileScreen
 import fr.deuspheara.callapp.ui.screens.welcome.WelcomeScreen
 import fr.deuspheara.callapp.ui.screens.welcome.WelcomeViewModel
 
@@ -65,9 +66,18 @@ fun NavGraphBuilder.addMainNavGraph(
         composable(CallAppDestination.Profile){
             ProfilScreen(
                 onNavigateBack = navController::popBackStack,
+                onNavigateToEditProfile = {
+                    navController.navigate(CallAppDestination.EditProfile)
+                }
             )
         }
 
+        composable(CallAppDestination.EditProfile){
+            EditProfileScreen(
+                onNavigateBack = navController::popBackStack,
+                snackbarHostState = snackbarHostState,
+            )
+        }
 
     }
 

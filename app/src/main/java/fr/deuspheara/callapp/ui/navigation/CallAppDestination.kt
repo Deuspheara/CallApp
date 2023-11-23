@@ -203,6 +203,19 @@ sealed class CallAppDestination(
             get() = "welcome"
     }
 
+    data object EditProfile : CallAppDestination(
+        title = R.string.edit_profile,
+        showTopAppBar = true,
+        navigationIcon = R.drawable.ic_back,
+        transitionConfig = TransitionConfig(
+            enter = Transition.SlideHorizontal,
+            popExit = Transition.SlideHorizontal
+        )
+    ) {
+        override val route: String
+            get() = "edit_profile"
+    }
+
     class Profile(
         val identifier: Identifier?
     ) : CallAppRoutable {

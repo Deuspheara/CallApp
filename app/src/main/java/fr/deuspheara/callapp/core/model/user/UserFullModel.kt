@@ -38,7 +38,7 @@ data class UserFullModel(
     val photoUrl: String?,
 
     /** Bio or status message of the user */
-    val bio: String?,
+    val bio: String,
 
     /** Date of the last update of the user */
     val contactList: List<String>

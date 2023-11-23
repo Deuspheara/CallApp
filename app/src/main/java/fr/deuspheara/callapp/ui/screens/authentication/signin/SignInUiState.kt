@@ -26,14 +26,14 @@ sealed interface SignInUiState {
     data class FormInputError(
         val isEmailBadFormatError: Boolean,
         val isPasswordEmpty: Boolean,
-    ) : SignInUiState {
+    ) : SignInUiState, Consumable() {
         fun isError() = isEmailBadFormatError || isPasswordEmpty
     }
 
-    @JvmInline
-    value class Loading(val isLoading: Boolean = false) : SignInUiState
 
     class Success(val uid: String) : Consumable(), SignInUiState
 
+    @JvmInline
+    value class Loading(val isLoading: Boolean = false) : SignInUiState
     class Error(val exception: Throwable) : SignInUiState, Consumable()
 }
