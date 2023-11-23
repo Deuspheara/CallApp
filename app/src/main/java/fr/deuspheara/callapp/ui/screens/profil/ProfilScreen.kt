@@ -14,7 +14,10 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -26,6 +29,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -43,6 +47,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -190,11 +195,11 @@ private fun ProfilContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 24.dp)
-            .verticalScroll(rememberScrollState()),
+            .padding(horizontal = 24.dp, vertical = 16.dp), // Adjusted vertical padding
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
+        // Profile Picture
         RoundedImageProfile(
             imageUrl = profilePicture,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -205,21 +210,25 @@ private fun ProfilContent(
             isLoading = isLoading,
         )
 
+        // Identifier
         identifier.orLocal(userLocalDetails?.identifier)?.let {
             Text(
-                modifier = Modifier.padding(top = 16.dp),
+                modifier = Modifier.padding(top = 8.dp), // Adjusted top padding
                 text = "@$it",
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium, // Adjusted typography
             )
         }
 
+        // Display Name
         displayName.orLocal(userLocalDetails?.displayName)?.let {
             Text(
                 modifier = Modifier.padding(top = 4.dp),
                 text = it,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.headlineSmall, // Adjusted typography
             )
         }
+
+        // Bio
         bio.orLocal(userLocalDetails?.bio)?.let {
             Text(
                 modifier = Modifier.padding(top = 16.dp),
@@ -228,16 +237,20 @@ private fun ProfilContent(
             )
         }
 
+        // User Details
         userLocalDetails?.let { localDetails ->
-            Text(
-                modifier = Modifier.padding(top = 4.dp),
-                text = localDetails.email,
-                style = MaterialTheme.typography.bodySmall,
+            Divider(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .fillMaxWidth(),
+                color = MaterialTheme.colorScheme.surfaceVariant,
             )
         }
 
+        // Action Buttons
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(top = 16.dp), // Adjusted top padding
         ) {
             itemsIndexed(actionList) { index, action ->
                 val isVisible = userLocalDetails == null && !isLoading
@@ -254,17 +267,16 @@ private fun ProfilContent(
                         },
                         modifier = Modifier
                             .widthIn(0.dp, 80.dp)
-                            .padding(top = 16.dp),
+                            .padding(end = 8.dp), // Adjusted end padding
                         leadingIcon = action.icon,
                         text = action.text,
                     )
                 }
-
             }
         }
-
     }
 }
+
 
 fun String?.orLocal(localValue: String?): String? {
     return this?.takeIf { it.isNotBlank() } ?: localValue?.takeIf { it.isNotBlank() }
@@ -277,6 +289,28 @@ fun ProfilScreenPreview() {
         ProfilContent(
             displayName = "John Doe",
             identifier = "identifier",
+        )
+    }
+}
+@Preview(showSystemUi = true)
+@Composable
+fun ProfilScreenLocalPreview() {
+    CallAppTheme {
+        ProfilContent(
+            displayName = "John Doe",
+            identifier = "identifier",
+            userLocalDetails = UserFullModel(
+                uid = "uid",
+                displayName = "John Doe",
+                email = "john.doe@gmail.com",
+                phoneNumber = "0123456789",
+                firstName = "John",
+                lastName = "Doe",
+                bio = "bio",
+                photoUrl = "https://picsum.photos/200/300",
+                contactList = listOf("contact1", "contact2"),
+                identifier = "identifier",
+            ),
         )
     }
 }
