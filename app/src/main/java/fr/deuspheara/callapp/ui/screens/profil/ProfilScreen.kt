@@ -40,9 +40,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import fr.deuspheara.callapp.R
 import fr.deuspheara.callapp.core.model.user.UserFullModel
+import fr.deuspheara.callapp.ui.components.bar.top.CallAppTopBar
 import fr.deuspheara.callapp.ui.components.buttons.CallAppVerticalButton
 import fr.deuspheara.callapp.ui.components.profile.RoundedImageProfile
-import fr.deuspheara.callapp.ui.components.bar.top.CallAppTopBar
 import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 import fr.deuspheara.callapp.ui.theme.CallAppTheme
 import kotlinx.coroutines.CoroutineScope
@@ -133,9 +133,9 @@ fun ProfilScreen(
                     }
                 },
                 actions = {
-                    userLocalDetails?.run{
-                        if(isLoading) {
-                           CircularProgressIndicator()
+                    userLocalDetails?.run {
+                        if (isLoading) {
+                            CircularProgressIndicator()
                         } else {
                             IconButton(
                                 onClick = onNavigateToEditProfile,
@@ -152,15 +152,15 @@ fun ProfilScreen(
         }
     ) { innerPadding ->
 
-            ProfilContent(
-                modifier = Modifier.padding(innerPadding),
-                identifier = userDetails?.identifier,
-                displayName = userDetails?.displayName,
-                profilePicture = userDetails?.profilePictureUrl,
-                bio = userDetails?.bio,
-                userLocalDetails = userLocalDetails,
-                isLoading = isLoading,
-            )
+        ProfilContent(
+            modifier = Modifier.padding(innerPadding),
+            identifier = userDetails?.identifier,
+            displayName = userDetails?.displayName,
+            profilePicture = userDetails?.profilePictureUrl,
+            bio = userDetails?.bio,
+            userLocalDetails = userLocalDetails,
+            isLoading = isLoading,
+        )
 
 
     }
@@ -277,6 +277,7 @@ fun ProfilScreenPreview() {
         )
     }
 }
+
 @Preview(showSystemUi = true)
 @Composable
 fun ProfilScreenLocalPreview() {

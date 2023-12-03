@@ -84,7 +84,7 @@ class UserRemoteDataSourceImplTest {
     fun updateUser_email() = runTest(testDispatcher) {
         dataSource.registerUser(
             uid = "testing",
-            email ="johndoe@example.com",
+            email = "johndoe@example.com",
             firstName = "John",
             lastName = "Doe",
             phoneNumber = "1234567890",
@@ -100,8 +100,11 @@ class UserRemoteDataSourceImplTest {
             profilePictureUrl = "https://image.testing/profile/testing",
             bio = "I'm a test",
             displayName = "John Doe"
-            ).first()
-        assertEquals(DataModelProvider.providerFirestoreRemoteUser().copy(email = "new_value"), actual)
+        ).first()
+        assertEquals(
+            DataModelProvider.providerFirestoreRemoteUser().copy(email = "new_value"),
+            actual
+        )
     }
 
 
@@ -150,30 +153,30 @@ class UserRemoteDataSourceImplTest {
     }
 
 
-        @Test
-        fun getUserContacts() = runTest(testDispatcher) {
-            dataSource.registerUser(
-                uid = "testing",
-                displayName = "John Doe",
-                lastName = "Doe",
-                firstName = "John",
-                email = "johndoe@example.com",
-                phoneNumber = "1234567890",
-                photoUrl = "https://image.testing/profile/testing",
-                bio = "I'm a test",
-            ).first()
+    @Test
+    fun getUserContacts() = runTest(testDispatcher) {
+        dataSource.registerUser(
+            uid = "testing",
+            displayName = "John Doe",
+            lastName = "Doe",
+            firstName = "John",
+            email = "johndoe@example.com",
+            phoneNumber = "1234567890",
+            photoUrl = "https://image.testing/profile/testing",
+            bio = "I'm a test",
+        ).first()
 
-            dataSource.addContactToUser(
-                uid = "testing",
-                contactUid = "testing"
-            ).first()
+        dataSource.addContactToUser(
+            uid = "testing",
+            contactUid = "testing"
+        ).first()
 
-            val actual = dataSource.getUserContacts(
-                uid = "testing"
-            ).first()
+        val actual = dataSource.getUserContacts(
+            uid = "testing"
+        ).first()
 
-            assertEquals(listOf("testing"), actual)
-        }
+        assertEquals(listOf("testing"), actual)
+    }
 
     @Test
     fun removeContactFromUser() = runTest(testDispatcher) {

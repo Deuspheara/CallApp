@@ -25,14 +25,14 @@ class CreateChannelsUseCase @Inject constructor(
     }
 
     suspend operator fun invoke(
-        channelName : String,
+        channelName: String,
         numberOfParticipant: Int,
         creator: String
-    ) : Flow<VideoChannel?> =
+    ): Flow<VideoChannel?> =
         channelsRepository
-        .createChannel(
-            channelName,
-            numberOfParticipant,
-            creator
-        )
+            .createChannel(
+                channelName,
+                numberOfParticipant,
+                creator
+            )
 }

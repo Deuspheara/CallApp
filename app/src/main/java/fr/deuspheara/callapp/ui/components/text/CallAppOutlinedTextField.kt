@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
@@ -141,7 +140,7 @@ fun CallAppOutlinedTextField(
                 return@let {
                     IconButton(
                         onClick = onTrailingIconClick
-                    ){
+                    ) {
                         Icon(
                             painter = painterResource(id = trailingIcon),
                             contentDescription = stringResource(id = placeholderText),
@@ -181,7 +180,7 @@ fun CallAppOutlinedTextField(
             Text(
                 text = "* ${stringResource(id = it)}",
                 style = MaterialTheme.typography.bodySmall,
-                color = if(isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.customGreen
+                color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.customGreen
             )
 
         }

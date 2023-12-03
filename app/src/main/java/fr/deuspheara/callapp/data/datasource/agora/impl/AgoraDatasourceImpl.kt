@@ -68,8 +68,16 @@ class AgoraDatasourceImpl @Inject constructor(
         throw it
     }.flowOn(ioContext)
 
-    override suspend fun joinChannel(token: String, channelName: String, uid: String, options: Any): Flow<Int> = flow {
-        Log.d(TAG, "joinChannel: $token, $channelName, $uid, $options, rtc is null: ${rtcEngine == null}")
+    override suspend fun joinChannel(
+        token: String,
+        channelName: String,
+        uid: String,
+        options: Any
+    ): Flow<Int> = flow {
+        Log.d(
+            TAG,
+            "joinChannel: $token, $channelName, $uid, $options, rtc is null: ${rtcEngine == null}"
+        )
         val result = rtcEngine?.joinChannel(token, channelName, "", uid.toInt())
 
         if (result != null) {
@@ -112,14 +120,17 @@ class AgoraDatasourceImpl @Inject constructor(
     override suspend fun getToken(channelName: String, uid: String): Flow<TokenResponse> {
         return flow {
             Log.d(TAG, "getToken: $channelName, $uid")
-            emit(agoraSelfHostedApi.generateToken(
-                TokenRequest(
-                    tokenType = "rtc",
-                    channel = channelName,
-                    uid = uid,
-                    expire = 3600,
-                    role = "publisher")
-            ).safeUnwrap())
+            emit(
+                agoraSelfHostedApi.generateToken(
+                    TokenRequest(
+                        tokenType = "rtc",
+                        channel = channelName,
+                        uid = uid,
+                        expire = 3600,
+                        role = "publisher"
+                    )
+                ).safeUnwrap()
+            )
         }.catch {
             Log.e(TAG, "getToken: ", it)
             throw it

@@ -53,29 +53,29 @@ class UserRemoteDataSourceImpl @Inject constructor(
         photoUrl: String,
         bio: String
     ): Flow<String> = flow {
-            val newUserRemote = UserRemoteFirestoreModel(
-                uid = uid,
-                identifier = identifier,
-                displayName = displayName,
-                firstName = firstName,
-                lastName = lastName,
-                email = email,
-                photoUrl = photoUrl,
-                bio = bio,
-                phoneNumber = phoneNumber,
-                contacts = emptyList(),
-            )
-            val newUserPublic = UserPublicModel(
-                uid = uid,
-                identifier = identifier,
-                displayName = displayName,
-                profilePictureUrl = photoUrl,
-                bio = bio,
-            )
-            userCollection.document(uid).set(newUserRemote).await()
-            userPublicCollection.document(uid).set(newUserPublic).await()
-            emit(uid)
-        }.catch { e ->
+        val newUserRemote = UserRemoteFirestoreModel(
+            uid = uid,
+            identifier = identifier,
+            displayName = displayName,
+            firstName = firstName,
+            lastName = lastName,
+            email = email,
+            photoUrl = photoUrl,
+            bio = bio,
+            phoneNumber = phoneNumber,
+            contacts = emptyList(),
+        )
+        val newUserPublic = UserPublicModel(
+            uid = uid,
+            identifier = identifier,
+            displayName = displayName,
+            profilePictureUrl = photoUrl,
+            bio = bio,
+        )
+        userCollection.document(uid).set(newUserRemote).await()
+        userPublicCollection.document(uid).set(newUserPublic).await()
+        emit(uid)
+    }.catch { e ->
         Log.e(TAG, "registerUser: ", e)
         throw IllegalStateException("Error while registering user", e)
     }.flowOn(ioDispatcher)
@@ -126,7 +126,6 @@ class UserRemoteDataSourceImpl @Inject constructor(
         Log.e(TAG, "updateUserDetails: ", e)
         throw IllegalStateException("Error while updating user details", e)
     }.flowOn(ioDispatcher)
-
 
 
     override suspend fun addContactToUser(

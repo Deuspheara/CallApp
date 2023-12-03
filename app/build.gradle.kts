@@ -41,7 +41,8 @@ android {
             this.storePassword = properties.getProperty("storePassword")
             this.keyPassword = properties.getProperty("keyPassword")
             this.keyAlias = properties.getProperty("keyAlias")
-            this.storeFile = file("${rootProject.rootDir}/.signing/release/${properties.getProperty("storeFile")}")
+            this.storeFile =
+                file("${rootProject.rootDir}/.signing/release/${properties.getProperty("storeFile")}")
         }
         create("callapp-debug") {
             val properties =
@@ -49,7 +50,8 @@ android {
             this.storePassword = properties.getProperty("storePassword")
             this.keyPassword = properties.getProperty("keyPassword")
             this.keyAlias = properties.getProperty("keyAlias")
-            this.storeFile = file("${rootProject.rootDir}/.signing/debug/${properties.getProperty("storeFile")}")
+            this.storeFile =
+                file("${rootProject.rootDir}/.signing/debug/${properties.getProperty("storeFile")}")
         }
     }
 
@@ -99,7 +101,7 @@ android {
     }
     buildFeatures {
         compose = true
-        buildConfig =  true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
@@ -133,9 +135,9 @@ kapt {
 
 dependencies {
     //region Androidx
-    implementation (libs.bundles.androidx)
+    implementation(libs.bundles.androidx)
     implementation(libs.androidx.appcompat)
-    implementation (libs.bundles.coroutine)
+    implementation(libs.bundles.coroutine)
     implementation(libs.androidx.compose.materialWindow)
     implementation(libs.google.android.material)
     //endregion
@@ -145,39 +147,39 @@ dependencies {
     //endregion
 
     //region Hilt
-    implementation (libs.bundles.hilt)
+    implementation(libs.bundles.hilt)
     kapt(libs.hilt.compiler)
-    implementation (libs.androidx.recyclerview)
-    androidTestImplementation (libs.hilt.testing)
+    implementation(libs.androidx.recyclerview)
+    androidTestImplementation(libs.hilt.testing)
     //endregion
 
     //region Compose
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
     debugImplementation(libs.bundles.compose.debug)
-    androidTestImplementation (libs.bundles.compose.test)
+    androidTestImplementation(libs.bundles.compose.test)
     //endregion
 
     //region Firebase
-    implementation (platform(libs.firebase.bom))
-    implementation (libs.bundles.firebase)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.bundles.firebase)
     //endregion
 
     // region Room
     implementation(libs.bundles.room)
     ksp(libs.room.compiler)
-    androidTestImplementation (libs.room.testing)
+    androidTestImplementation(libs.room.testing)
     //endregion
 
-    testImplementation (libs.junit)
-    testImplementation (libs.coroutine.test)
-    debugImplementation (libs.mockk)
-    androidTestImplementation (libs.robolectric)
+    testImplementation(libs.junit)
+    testImplementation(libs.coroutine.test)
+    debugImplementation(libs.mockk)
+    androidTestImplementation(libs.robolectric)
 
-    androidTestImplementation (libs.androidx.junit)
-    androidTestImplementation (libs.androidx.test.runner)
-    androidTestImplementation (libs.hilt.testing)
-    kaptAndroidTest (libs.hilt.compiler)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.hilt.testing)
+    kaptAndroidTest(libs.hilt.compiler)
 
     // region Agora
     implementation(libs.agora)

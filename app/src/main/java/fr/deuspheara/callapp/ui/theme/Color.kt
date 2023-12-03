@@ -13,7 +13,7 @@ val Magenta400 = Color(0xFFFF63C1)
 val Magenta300 = Color(0xFFFF9FDB)
 val Magenta200 = Color(0xFFFFCAED)
 val Magenta100 = Color(0xFFFEE5F5)
-val Magenta50  = Color(0xFFFEF1F9)
+val Magenta50 = Color(0xFFFEF1F9)
 
 // Purple color palette
 val Purple950 = Color(0xFF2C0B6A)
@@ -26,7 +26,7 @@ val Purple400 = Color(0xFFA285FF)
 val Purple300 = Color(0xFFC1B1FF)
 val Purple200 = Color(0xFFDAD4FF)
 val Purple100 = Color(0xFFECE8FF)
-val Purple50  = Color(0xFFF5F2FF)
+val Purple50 = Color(0xFFF5F2FF)
 
 
 // Blue
@@ -40,7 +40,7 @@ val Blue400 = Color(0xFF48C7FF)
 val Blue300 = Color(0xFF83DCFF)
 val Blue200 = Color(0xFFA0BFF9)
 val Blue100 = Color(0xFFD6F1FF)
-val Blue50  = Color(0xFFEDFAFF)
+val Blue50 = Color(0xFFEDFAFF)
 
 // Green
 val Green950 = Color(0xFF003305)
@@ -53,7 +53,7 @@ val Green400 = Color(0xFF24FB20)
 val Green300 = Color(0xFF5BFF53)
 val Green200 = Color(0xFF9AFF92)
 val Green100 = Color(0xFFCBFFC5)
-val Green50  = Color(0xFFE8FFE4)
+val Green50 = Color(0xFFE8FFE4)
 
 // Yellow
 val Yellow950 = Color(0xFF442504)
@@ -66,7 +66,7 @@ val Yellow400 = Color(0xFFFE5E0D)
 val Yellow300 = Color(0xFFFFF441)
 val Yellow200 = Color(0xFFFFFD86)
 val Yellow100 = Color(0xFFFEFFC1)
-val Yellow50  = Color(0xFFFFFFE7)
+val Yellow50 = Color(0xFFFFFFE7)
 
 // Orange
 val Orange950 = Color(0xFF461B04)
@@ -79,7 +79,7 @@ val Orange400 = Color(0xFFFFAD32)
 val Orange300 = Color(0xFFFFCE6D)
 val Orange200 = Color(0xFFFFE3A5)
 val Orange100 = Color(0xFFFFF3D3)
-val Orange50  = Color(0xFFFFFAEC)
+val Orange50 = Color(0xFFFFFAEC)
 
 // Red
 val Red950 = Color(0xFF4B0804)
@@ -92,7 +92,7 @@ val Red400 = Color(0xFFFFA29D)
 val Red300 = Color(0xFFFFA29D)
 val Red200 = Color(0xFFFFC8C5)
 val Red100 = Color(0xFFFFE1DF)
-val Red50  = Color(0xFFFFF2F1)
+val Red50 = Color(0xFFFFF2F1)
 
 // Brown
 val Brown950 = Color(0xFF371511)
@@ -105,7 +105,7 @@ val Brown400 = Color(0xFFCF8E50)
 val Brown300 = Color(0xFFD8A971)
 val Brown200 = Color(0xFFE5C9A2)
 val Brown100 = Color(0xFFF3E5D2)
-val Brown50  = Color(0xFFFBF6EF)
+val Brown50 = Color(0xFFFBF6EF)
 
 // Platinum
 val Platinum950 = Color(0xFF192B38)
@@ -118,10 +118,10 @@ val Platinum400 = Color(0xFF81B4CD)
 val Platinum300 = Color(0xFF9FC6DA)
 val Platinum200 = Color(0xFFCCDFEB)
 val Platinum100 = Color(0xFFE8F0F6)
-val Platinum50  = Color(0xFFF4F8FB)
+val Platinum50 = Color(0xFFF4F8FB)
 
 // Grey and Black & White
-val Black   = Color(0xFF000000)
+val Black = Color(0xFF000000)
 val Grey900 = Color(0xFF141414)
 val Grey800 = Color(0xFF1F1F1F)
 val Grey700 = Color(0xFF333333)
@@ -131,6 +131,6 @@ val Grey400 = Color(0xFFAFAFAF)
 val Grey300 = Color(0xFFCBCBCB)
 val Grey200 = Color(0xFFE2E2E2)
 val Grey100 = Color(0xFFEEEEEE)
-val Grey50  = Color(0xFFF6F6F6)
+val Grey50 = Color(0xFFF6F6F6)
 
-val White   = Color(0xFFFFFFFF)
+val White = Color(0xFFFFFFFF)

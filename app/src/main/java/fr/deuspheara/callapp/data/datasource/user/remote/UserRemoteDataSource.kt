@@ -1,15 +1,10 @@
 package fr.deuspheara.callapp.data.datasource.user.remote
 
 import fr.deuspheara.callapp.core.model.text.Email
-import fr.deuspheara.callapp.core.model.text.Identifier
 import fr.deuspheara.callapp.core.model.text.PhoneNumber
-import fr.deuspheara.callapp.core.model.user.UserFullModel
-import fr.deuspheara.callapp.core.model.user.UserLightModel
 import fr.deuspheara.callapp.data.datasource.user.model.UserPublicModel
 import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteFirestoreModel
-import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteModel
 import kotlinx.coroutines.flow.Flow
-import java.time.Instant
 
 /**
  * _CallApp_
@@ -39,7 +34,7 @@ interface UserRemoteDataSource {
      */
     suspend fun registerUser(
         uid: String,
-        identifier : String,
+        identifier: String,
         email: String,
         displayName: String,
         firstName: String,
@@ -100,7 +95,10 @@ interface UserRemoteDataSource {
      *
      * @return Flow signaling the completion of the removal.
      */
-    suspend fun removeContactFromUser(uid: String, contactUid: String): Flow<UserRemoteFirestoreModel?>
+    suspend fun removeContactFromUser(
+        uid: String,
+        contactUid: String
+    ): Flow<UserRemoteFirestoreModel?>
 
     /**
      * Retrieves the list of contacts for a user.

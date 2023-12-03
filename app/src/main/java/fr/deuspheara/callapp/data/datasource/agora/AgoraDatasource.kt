@@ -19,8 +19,22 @@ import kotlinx.coroutines.flow.Flow
  *
  */
 interface AgoraDataSource {
-    suspend fun initEngine(context: Context, eventHandler: IRtcEngineEventHandler, channelName: String, userRole: String, token: String, uid: String): Flow<RtcEngine?>
-    suspend fun joinChannel(token: String, channelName: String, uid: String, options: Any): Flow<Int>
+    suspend fun initEngine(
+        context: Context,
+        eventHandler: IRtcEngineEventHandler,
+        channelName: String,
+        userRole: String,
+        token: String,
+        uid: String
+    ): Flow<RtcEngine?>
+
+    suspend fun joinChannel(
+        token: String,
+        channelName: String,
+        uid: String,
+        options: Any
+    ): Flow<Int>
+
     suspend fun leaveChannel(): Flow<Int>
 
     suspend fun muteLocalAudioStream(muted: Boolean): Flow<Int>

@@ -16,6 +16,6 @@ data class VideoChannel(
     val channelName: String,
     val creator: String,
     val numberOfParticipants: Int,
-){
+) {
     constructor() : this("", "", 0)
 }

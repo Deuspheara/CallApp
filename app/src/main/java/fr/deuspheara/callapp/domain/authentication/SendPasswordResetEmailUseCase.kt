@@ -4,7 +4,6 @@ import android.util.Log
 import fr.deuspheara.callapp.data.repository.authentication.AuthenticationRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 /**

@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -38,7 +37,8 @@ class ChannelsDatasourceImpl @Inject constructor(
     }
 
     override suspend fun getChannels(): Flow<List<VideoChannel>> = flow {
-        val channel = channelsCollectionReference.snapshots().first().toObjects(VideoChannel::class.java)
+        val channel =
+            channelsCollectionReference.snapshots().first().toObjects(VideoChannel::class.java)
         emit(channel)
     }.catch {
         Log.e(TAG, "getChannels: ", it)

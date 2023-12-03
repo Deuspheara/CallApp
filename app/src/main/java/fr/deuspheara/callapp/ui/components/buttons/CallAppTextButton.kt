@@ -46,7 +46,7 @@ fun CallAppTextButton(
                 bounded = false,
                 radius = 8.dp
             ),
-            onClick = {  }
+            onClick = { }
         ),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Transparent,

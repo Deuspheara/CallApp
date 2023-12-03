@@ -5,14 +5,10 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.PersistentCacheSettings
 import com.google.firebase.firestore.ktx.firestoreSettings
-import com.google.firebase.firestore.ktx.snapshots
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import fr.deuspheara.callapp.data.datasource.user.model.UserPublicModel
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.tasks.await
 import java.util.Locale
 import javax.inject.Qualifier
 
@@ -39,6 +35,7 @@ object FirebaseModule {
             const val COLLECTION_PATH = "users"
         }
     }
+
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class UserPublicCollectionReference {

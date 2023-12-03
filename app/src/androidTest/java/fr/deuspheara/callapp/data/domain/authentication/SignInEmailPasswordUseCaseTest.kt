@@ -8,10 +8,6 @@ import fr.deuspheara.callapp.core.firebase.cleanBeforeTesting
 import fr.deuspheara.callapp.core.model.CoreModelProvider
 import fr.deuspheara.callapp.core.model.text.Email
 import fr.deuspheara.callapp.core.model.text.Password
-import fr.deuspheara.callapp.core.model.text.PhoneNumber
-import fr.deuspheara.callapp.data.DataModelProvider
-import fr.deuspheara.callapp.data.repository.authentication.AuthenticationRepository
-import fr.deuspheara.callapp.data.repository.user.UserRepository
 import fr.deuspheara.callapp.domain.authentication.SignInWithEmailPasswordUseCase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -66,7 +62,8 @@ class SignInWithEmailPasswordUseCaseTest {
 
     @Test
     fun invoke_success() = runTest(testDispatcher) {
-        val actual = useCase(Email("johndoe@example.com"), Password(CoreModelProvider.password)).first()?.uid
+        val actual =
+            useCase(Email("johndoe@example.com"), Password(CoreModelProvider.password)).first()?.uid
         val expected = firebaseAuth.currentUser?.uid
         assertEquals(expected, actual)
     }

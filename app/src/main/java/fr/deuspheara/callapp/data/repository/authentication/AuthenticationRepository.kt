@@ -84,7 +84,7 @@ interface AuthenticationRepository {
      *
      * @return an [Instant] when the user is sign out
      */
-    suspend fun signOut() : Flow<String?>
+    suspend fun signOut(): Flow<String?>
 
     /**
      * Get the current user information
@@ -92,11 +92,11 @@ interface AuthenticationRepository {
      * @return a [UserRemoteModel]
      */
 
-    suspend fun getCurrentUser() : Flow<UserFullModel?>
+    suspend fun getCurrentUser(): Flow<UserFullModel?>
 
     /**
      * Get current local user
      * @return a [UserFullModel]
      */
-    suspend fun getUserByUid(uid : String) : Flow<UserFullModel?>
+    suspend fun getUserByUid(uid: String): Flow<UserFullModel?>
 }

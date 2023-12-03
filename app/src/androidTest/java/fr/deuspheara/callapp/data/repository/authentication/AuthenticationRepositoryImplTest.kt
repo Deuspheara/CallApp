@@ -1,6 +1,5 @@
 package fr.deuspheara.callapp.data.repository.authentication
 
-import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -15,7 +14,6 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.Instant
 import javax.inject.Inject
 
 /**
@@ -55,7 +53,9 @@ class AuthenticationRepositoryImplTest {
 
     @Test
     fun signUpWithEmailAndPassword_success() = runTest(testDispatcher) {
-        val actual = repository.signUpWithPassword(CoreModelProvider.email, CoreModelProvider.password).first()
+        val actual =
+            repository.signUpWithPassword(CoreModelProvider.email, CoreModelProvider.password)
+                .first()
         val expected = firebaseAuth.currentUser?.uid!!
         Assert.assertEquals(expected, actual)
     }
@@ -70,7 +70,9 @@ class AuthenticationRepositoryImplTest {
     fun signInWithEmailAndPassword_success() = runTest(testDispatcher) {
         repository.signUpWithPassword(CoreModelProvider.email, CoreModelProvider.password).first()
         firebaseAuth.signOut()
-        val actual = repository.signInWithPassword(CoreModelProvider.email, CoreModelProvider.password).first()
+        val actual =
+            repository.signInWithPassword(CoreModelProvider.email, CoreModelProvider.password)
+                .first()
         Assert.assertEquals(firebaseAuth.currentUser!!.uid, actual)
     }
 
@@ -106,7 +108,8 @@ class AuthenticationRepositoryImplTest {
 
     @Test
     fun confirmResetPassword_wrong_code() = runTest(testDispatcher) {
-        val result = repository.confirmResetPassword("wrongCode", CoreModelProvider.password).first()
+        val result =
+            repository.confirmResetPassword("wrongCode", CoreModelProvider.password).first()
         Assert.assertFalse(result)
     }
 

@@ -11,8 +11,6 @@ import fr.deuspheara.callapp.core.model.user.UserFullModel
 import fr.deuspheara.callapp.core.model.user.UserLightModel
 import fr.deuspheara.callapp.domain.authentication.GetCurrentLocalUserUseCase
 import fr.deuspheara.callapp.domain.user.UpdateUserDetailsUseCase
-import fr.deuspheara.callapp.ui.screens.authentication.register.SignUpUiState
-import fr.deuspheara.callapp.ui.screens.authentication.signin.SignInUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,7 +35,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class EditProfileViewModel @Inject constructor(
-    private val updateUserDetails : UpdateUserDetailsUseCase,
+    private val updateUserDetails: UpdateUserDetailsUseCase,
     private val getCurrentLocalUser: GetCurrentLocalUserUseCase
 ) : ViewModel() {
     private companion object {
@@ -58,17 +56,20 @@ class EditProfileViewModel @Inject constructor(
     val formInputState: StateFlow<EditProfileUiState.FormInputState> =
         _formInputState.asStateFlow()
 
-    private val _uiState = MutableStateFlow<EditProfileUiState>(EditProfileUiState.FormInputState(
-        displayName = "",
-        firstName = "",
-        lastName = "",
-        email = Email(""),
-        password = Password(""),
-        bio = "",
-        phoneNumber = PhoneNumber(""),
-    ))
+    private val _uiState = MutableStateFlow<EditProfileUiState>(
+        EditProfileUiState.FormInputState(
+            displayName = "",
+            firstName = "",
+            lastName = "",
+            email = Email(""),
+            password = Password(""),
+            bio = "",
+            phoneNumber = PhoneNumber(""),
+        )
+    )
 
     val uiState = _uiState.asStateFlow()
+
     init {
         viewModelScope.launch {
             getLocalUser()
@@ -76,10 +77,10 @@ class EditProfileViewModel @Inject constructor(
     }
 
 
-
     fun submitDisplayName(newValue: String) = viewModelScope.launch {
         _formInputState.update { it.copy(displayName = newValue) }
     }
+
     fun submitFirstName(newValue: String) {
         _formInputState.value = _formInputState.value.copy(firstName = newValue)
     }
@@ -105,10 +106,9 @@ class EditProfileViewModel @Inject constructor(
             isBioEmpty = formInput.bio.isEmpty(),
             isPhoneNumberEmpty = formInput.phoneNumber.value.isEmpty(),
         )
-        if (inputError.isError()){
+        if (inputError.isError()) {
             _uiState.value = inputError
-        }
-        else {
+        } else {
             _uiState.value = EditProfileUiState.Loading(true)
             Log.d(TAG, "submitForm: ${formInput.displayName}")
             updateUserDetails(
@@ -133,22 +133,22 @@ class EditProfileViewModel @Inject constructor(
     private fun getLocalUser() = viewModelScope.launch {
         getCurrentLocalUser()
             .map<UserFullModel?, EditProfileUiState> { user ->
-            user?.let {
-                _formInputState.value = _formInputState.value.copy(
-                    displayName = it.displayName,
-                    firstName = it.firstName,
-                    lastName = it.lastName,
-                    email = Email(it.email),
-                    bio = it.bio,
-                    phoneNumber = PhoneNumber(it.phoneNumber)
-                )
-                EditProfileUiState.SuccessLocal(it)
-            } ?: throw IllegalStateException("Can not get local user")
-        }.catch {
-            emit(EditProfileUiState.Error(it))
-        }.let {
-            _uiState.emitAll(it)
-        }
+                user?.let {
+                    _formInputState.value = _formInputState.value.copy(
+                        displayName = it.displayName,
+                        firstName = it.firstName,
+                        lastName = it.lastName,
+                        email = Email(it.email),
+                        bio = it.bio,
+                        phoneNumber = PhoneNumber(it.phoneNumber)
+                    )
+                    EditProfileUiState.SuccessLocal(it)
+                } ?: throw IllegalStateException("Can not get local user")
+            }.catch {
+                emit(EditProfileUiState.Error(it))
+            }.let {
+                _uiState.emitAll(it)
+            }
     }
 
 

@@ -1,7 +1,6 @@
 package fr.deuspheara.callapp.data.repository.authentication.impl
 
 import android.util.Log
-import com.google.firebase.firestore.auth.User
 import fr.deuspheara.callapp.core.coroutine.DispatcherModule
 import fr.deuspheara.callapp.core.model.user.UserFullModel
 import fr.deuspheara.callapp.data.database.model.LocalUserEntity
@@ -12,12 +11,9 @@ import fr.deuspheara.callapp.data.repository.authentication.AuthenticationReposi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import java.time.Instant
 import javax.inject.Inject
@@ -104,19 +100,18 @@ class AuthenticationRepositoryImpl @Inject constructor(
         remoteDataSource.getCurrentUser().map {
             it?.toUserFullModel()
         }
-        .catch {
-            Log.e(TAG, "getCurrentUser: ", it)
-            throw it
-        }.flowOn(defaultContext)
+            .catch {
+                Log.e(TAG, "getCurrentUser: ", it)
+                throw it
+            }.flowOn(defaultContext)
 
-    override suspend fun getUserByUid(uid : String): Flow<UserFullModel?> =
+    override suspend fun getUserByUid(uid: String): Flow<UserFullModel?> =
         localDataSource.getUserByUid(uid).mapLatest {
             it?.toUserFullModel()
         }.catch {
             Log.e(TAG, "getUserByUid: ", it)
             throw it
         }.flowOn(defaultContext)
-
 
 
     private fun UserRemoteModel.toUserFullModel(): UserFullModel {
@@ -148,7 +143,6 @@ class AuthenticationRepositoryImpl @Inject constructor(
             contactList = emptyList()
         )
     }
-
 
 
 }

@@ -1,13 +1,11 @@
 package fr.deuspheara.callapp.ui.screens.profil.edit
 
-import android.provider.ContactsContract.CommonDataKinds.Phone
 import fr.deuspheara.callapp.core.model.common.Consumable
 import fr.deuspheara.callapp.core.model.text.Email
 import fr.deuspheara.callapp.core.model.text.Password
 import fr.deuspheara.callapp.core.model.text.PhoneNumber
 import fr.deuspheara.callapp.core.model.user.UserFullModel
 import fr.deuspheara.callapp.core.model.user.UserLightModel
-import fr.deuspheara.callapp.ui.screens.authentication.signin.SignInUiState
 
 /**
  * _CallApp_
@@ -24,13 +22,13 @@ import fr.deuspheara.callapp.ui.screens.authentication.signin.SignInUiState
 sealed interface EditProfileUiState {
 
     data class FormInputState(
-        val displayName : String,
-        val firstName : String,
-        val lastName : String,
+        val displayName: String,
+        val firstName: String,
+        val lastName: String,
         val email: Email,
         val password: Password,
-        val bio : String,
-        val phoneNumber : PhoneNumber,
+        val bio: String,
+        val phoneNumber: PhoneNumber,
     ) : EditProfileUiState
 
     data class FormInputError(
@@ -40,14 +38,15 @@ sealed interface EditProfileUiState {
         val isBioEmpty: Boolean,
         val isPhoneNumberEmpty: Boolean,
     ) : EditProfileUiState, Consumable() {
-        fun isError() = isDisplayNameEmpty || isFirstNameEmpty || isLastNameEmpty  || isBioEmpty || isPhoneNumberEmpty
+        fun isError() =
+            isDisplayNameEmpty || isFirstNameEmpty || isLastNameEmpty || isBioEmpty || isPhoneNumberEmpty
     }
 
     @JvmInline
     value class Loading(val isLoading: Boolean = false) : EditProfileUiState
     class Error(val exception: Throwable) : EditProfileUiState, Consumable()
 
-    class Success(val userLightModel : UserLightModel?) : Consumable(), EditProfileUiState
+    class Success(val userLightModel: UserLightModel?) : Consumable(), EditProfileUiState
 
     class SuccessLocal(val userFullModel: UserFullModel?) : Consumable(), EditProfileUiState
 

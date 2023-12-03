@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.Flow
 interface ChannelsDatasource {
     suspend fun getChannels(): Flow<List<VideoChannel>>
 
-    suspend fun createChannel(channel: VideoChannel) : Flow<VideoChannel?>
+    suspend fun createChannel(channel: VideoChannel): Flow<VideoChannel?>
 
 
 }

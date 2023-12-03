@@ -14,8 +14,6 @@ import fr.deuspheara.callapp.data.datasource.channels.video.remote.ChannelsDatas
 import fr.deuspheara.callapp.data.datasource.channels.video.remote.impl.ChannelsDatasourceImpl
 import fr.deuspheara.callapp.data.datasource.user.remote.UserRemoteDataSource
 import fr.deuspheara.callapp.data.datasource.user.remote.impl.UserRemoteDataSourceImpl
-import fr.deuspheara.callapp.data.repository.channels.ChannelsRepository
-import fr.deuspheara.callapp.data.repository.channels.impl.ChannelsRepositoryImpl
 
 /**
  * _CallApp_

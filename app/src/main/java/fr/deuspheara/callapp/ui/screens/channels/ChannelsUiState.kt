@@ -21,6 +21,7 @@ sealed interface ChannelsUiState {
         val numberOfParticipant: Int,
         val creator: String
     ) : ChannelsUiState
+
     @JvmInline
     value class Loading(val isLoading: Boolean) : ChannelsUiState
     data class Success(val channels: List<VideoChannel>) : ChannelsUiState, Consumable()

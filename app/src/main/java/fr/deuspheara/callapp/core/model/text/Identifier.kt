@@ -1,7 +1,5 @@
 package fr.deuspheara.callapp.core.model.text
 
-import android.util.Patterns
-
 /**
  * _CallApp_
  *

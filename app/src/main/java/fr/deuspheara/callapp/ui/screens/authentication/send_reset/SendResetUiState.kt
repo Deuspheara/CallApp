@@ -32,6 +32,7 @@ sealed interface SendResetUiState {
     value class Loading(val isLoading: Boolean = false) : SendResetUiState
 
     data class Success(val isEmailSend: Boolean) : SendResetUiState, Consumable()
+
     @JvmInline
     value class Error(val exception: Throwable) : SendResetUiState
 }

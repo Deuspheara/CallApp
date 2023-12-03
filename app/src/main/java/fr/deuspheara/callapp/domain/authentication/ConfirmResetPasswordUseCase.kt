@@ -2,7 +2,6 @@ package fr.deuspheara.callapp.domain.authentication
 
 import fr.deuspheara.callapp.data.repository.authentication.AuthenticationRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 /**

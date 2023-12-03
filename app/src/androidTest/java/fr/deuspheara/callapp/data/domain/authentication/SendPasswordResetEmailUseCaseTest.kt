@@ -7,7 +7,6 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import fr.deuspheara.callapp.core.firebase.cleanBeforeTesting
 import fr.deuspheara.callapp.core.model.CoreModelProvider
 import fr.deuspheara.callapp.data.repository.authentication.AuthenticationRepository
-import fr.deuspheara.callapp.domain.authentication.ResetPasswordUseCase
 import fr.deuspheara.callapp.domain.authentication.SendPasswordResetEmailUseCase
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.first

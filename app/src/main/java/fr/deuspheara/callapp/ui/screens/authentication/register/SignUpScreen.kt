@@ -46,13 +46,13 @@ import fr.deuspheara.callapp.core.model.text.Email
 import fr.deuspheara.callapp.core.model.text.Identifier
 import fr.deuspheara.callapp.core.model.text.Password
 import fr.deuspheara.callapp.core.model.text.PhoneNumber
+import fr.deuspheara.callapp.ui.components.bar.top.CallAppTopBar
 import fr.deuspheara.callapp.ui.components.buttons.CallAppButton
 import fr.deuspheara.callapp.ui.components.snackbar.CallAppSnackBarHost
 import fr.deuspheara.callapp.ui.components.text.CallAppOutlinedTextField
 import fr.deuspheara.callapp.ui.components.text.CallAppPasswordTextField
 import fr.deuspheara.callapp.ui.components.text.ValidityComponent
 import fr.deuspheara.callapp.ui.components.text.annotatedStringResource
-import fr.deuspheara.callapp.ui.components.bar.top.CallAppTopBar
 import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 import fr.deuspheara.callapp.ui.theme.CallAppTheme
 
@@ -342,7 +342,7 @@ private fun SignUpForm(
                 placeholderText = R.string.first_name,
                 isError = isFirstNameError,
                 isEnable = !isLoading,
-                trailingIcon = if(isFirstNameError) R.drawable.ic_not_validate else null,
+                trailingIcon = if (isFirstNameError) R.drawable.ic_not_validate else null,
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.moveFocus(FocusDirection.Down)
@@ -357,7 +357,7 @@ private fun SignUpForm(
                 placeholderText = R.string.last_name,
                 isError = isLastNameError,
                 isEnable = !isLoading,
-                trailingIcon = if(isLastNameError) R.drawable.ic_not_validate else null,
+                trailingIcon = if (isLastNameError) R.drawable.ic_not_validate else null,
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.moveFocus(FocusDirection.Down)
@@ -374,7 +374,7 @@ private fun SignUpForm(
             placeholderText = R.string.identifier,
             isError = isIdentifierError,
             isEnable = !isLoading,
-            trailingIcon = if(isIdentifierError) R.drawable.ic_not_validate else null,
+            trailingIcon = if (isIdentifierError) R.drawable.ic_not_validate else null,
             keyboardActions = KeyboardActions(
                 onDone = {
                     focusManager.moveFocus(FocusDirection.Down)

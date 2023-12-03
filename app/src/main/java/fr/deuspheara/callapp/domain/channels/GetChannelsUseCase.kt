@@ -24,9 +24,9 @@ class GetChannelsUseCase @Inject constructor(
         const val TAG = "GetChannelsUseCase"
     }
 
-    suspend operator fun invoke() : Flow<List<VideoChannel>> =
+    suspend operator fun invoke(): Flow<List<VideoChannel>> =
         channelsRepository
-        .getChannels()
+            .getChannels()
 
 
 }

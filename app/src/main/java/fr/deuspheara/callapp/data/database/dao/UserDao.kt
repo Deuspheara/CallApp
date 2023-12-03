@@ -5,8 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import androidx.room.Update
-import fr.deuspheara.callapp.core.model.text.Identifier
 import fr.deuspheara.callapp.data.database.model.LocalUserEntity
 
 /**
@@ -88,18 +86,20 @@ interface UserDao {
      * @param contactList The updated contact list of the user.
      * @param providerId The updated provider id of the user.
      */
-    @Query("UPDATE user SET display_name = COALESCE(:displayName, display_name), " +
-            "identifier = COALESCE(:identifier, identifier), " +
-            "first_name = COALESCE(:firstName, first_name), " +
-            "last_name = COALESCE(:lastName, last_name), " +
-            "photo_url = COALESCE(:photoUrl, photo_url), " +
-            "email = COALESCE(:email, email), " +
-            "phone_number = COALESCE(:phoneNumber, phone_number), " +
-            "is_email_verified = COALESCE(:isEmailVerified, is_email_verified), " +
-            "bio = COALESCE(:bio, bio), " +
-            "contact_list = COALESCE(:contactList, contact_list), " +
-            "provider_id = COALESCE(:providerId, provider_id) " +
-            "WHERE firestore_uuid = :fireStoreUUID")
+    @Query(
+        "UPDATE user SET display_name = COALESCE(:displayName, display_name), " +
+                "identifier = COALESCE(:identifier, identifier), " +
+                "first_name = COALESCE(:firstName, first_name), " +
+                "last_name = COALESCE(:lastName, last_name), " +
+                "photo_url = COALESCE(:photoUrl, photo_url), " +
+                "email = COALESCE(:email, email), " +
+                "phone_number = COALESCE(:phoneNumber, phone_number), " +
+                "is_email_verified = COALESCE(:isEmailVerified, is_email_verified), " +
+                "bio = COALESCE(:bio, bio), " +
+                "contact_list = COALESCE(:contactList, contact_list), " +
+                "provider_id = COALESCE(:providerId, provider_id) " +
+                "WHERE firestore_uuid = :fireStoreUUID"
+    )
     suspend fun updateUserWithUid(
         fireStoreUUID: String,
         identifier: String?,
@@ -116,9 +116,6 @@ interface UserDao {
     ): Int
 
 
-
-
-
     /**
      * Inserts a user entity into the "user" table or updates an existing one based on the unique identifier (firestore_uuid).
      * If a user with the provided unique identifier does not exist, a new user is inserted. If the user already exists,
@@ -133,7 +130,7 @@ interface UserDao {
      * Deletes all user entities from the "user" table.
      */
     @Query("DELETE FROM user")
-    suspend fun deleteAllUsers() : Int
+    suspend fun deleteAllUsers(): Int
 
 
 }

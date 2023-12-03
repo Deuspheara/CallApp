@@ -34,6 +34,7 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
     private companion object {
         private const val TAG = "AuthLocalDataSourceImpl"
     }
+
     override suspend fun insertUser(entity: LocalUserEntity): Flow<Long> = channelFlow {
         launch {
             try {
@@ -64,8 +65,6 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
     }.flowOn(ioContext)
 
 
-
-
     override fun getUserByEmail(email: String): Flow<LocalUserEntity?> = channelFlow {
         launch {
             try {
@@ -80,6 +79,7 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
             }
         }
     }.flowOn(ioContext)
+
     override fun getUserByUid(uid: String): Flow<LocalUserEntity?> = channelFlow {
         launch {
             try {
@@ -110,6 +110,7 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
             }
         }
     }.flowOn(ioContext)
+
     override suspend fun updateUserWithUid(
         uid: String,
         identifier: Identifier?,
@@ -152,33 +153,34 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
         }
     }.flowOn(ioContext)
 
-    override suspend fun insertOrUpdateUser(localUserEntity: LocalUserEntity): Flow<Long> = channelFlow {
-        launch {
-            try {
-                val existingUser = database.withTransaction {
-                    database.userDao.getUserByEmail(localUserEntity.email)
-                }
-
-                if (existingUser == null) {
-                    val id = database.withTransaction {
-                        database.userDao.insertUser(localUserEntity)
+    override suspend fun insertOrUpdateUser(localUserEntity: LocalUserEntity): Flow<Long> =
+        channelFlow {
+            launch {
+                try {
+                    val existingUser = database.withTransaction {
+                        database.userDao.getUserByEmail(localUserEntity.email)
                     }
-                    send(id)
-                } else {
-                    send(existingUser.localId) // Assuming localId is the unique identifier
-                }
 
-                close() // Close the channel after emitting the result
-            } catch (e: Exception) {
-                Log.e(
-                    TAG,
-                    "Error while inserting user in database with user: ${localUserEntity.email}",
-                    e
-                )
-                close(e) // Close the channel with an error if an exception occurs
+                    if (existingUser == null) {
+                        val id = database.withTransaction {
+                            database.userDao.insertUser(localUserEntity)
+                        }
+                        send(id)
+                    } else {
+                        send(existingUser.localId) // Assuming localId is the unique identifier
+                    }
+
+                    close() // Close the channel after emitting the result
+                } catch (e: Exception) {
+                    Log.e(
+                        TAG,
+                        "Error while inserting user in database with user: ${localUserEntity.email}",
+                        e
+                    )
+                    close(e) // Close the channel with an error if an exception occurs
+                }
             }
-        }
-    }.flowOn(ioContext)
+        }.flowOn(ioContext)
 
     override suspend fun deleteUser(): Flow<Int> = channelFlow {
         launch {

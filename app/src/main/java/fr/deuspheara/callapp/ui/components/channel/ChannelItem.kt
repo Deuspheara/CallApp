@@ -48,11 +48,11 @@ fun ChannelItem(
             .padding(horizontal = 16.dp)
             .clip(
                 SmoothCornerShape(
-                cornerRadiusBL = 16.dp,
-                cornerRadiusBR = 16.dp,
-                cornerRadiusTL = 16.dp,
-                cornerRadiusTR = 16.dp
-            )
+                    cornerRadiusBL = 16.dp,
+                    cornerRadiusBR = 16.dp,
+                    cornerRadiusTL = 16.dp,
+                    cornerRadiusTR = 16.dp
+                )
             )
             .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
             .clickable(onClick = onClick)

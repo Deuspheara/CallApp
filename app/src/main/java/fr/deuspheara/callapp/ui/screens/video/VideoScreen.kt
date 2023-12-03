@@ -82,19 +82,19 @@ fun VideoScreen(
 
     Scaffold {
 
-            UIRequirePermissions(
-                permissions = permissions,
-                onPermissionGranted = {
-                    Log.d(TAG, "onPermissionGranted: ")
-                    CallScreen(userRole = "Broadcaster")
-                },
-                onPermissionDenied = { requester ->
-                    Text("Permission denied")
-                    SideEffect {
-                        requester()
-                    }
+        UIRequirePermissions(
+            permissions = permissions,
+            onPermissionGranted = {
+                Log.d(TAG, "onPermissionGranted: ")
+                CallScreen(userRole = "Broadcaster")
+            },
+            onPermissionDenied = { requester ->
+                Text("Permission denied")
+                SideEffect {
+                    requester()
                 }
-            )
+            }
+        )
 
     }
 
@@ -198,7 +198,8 @@ private fun CallScreen(
         Box(
             Modifier
                 .fillMaxSize()
-                .background(Color.Black)) {
+                .background(Color.Black)
+        ) {
             localSurfaceView?.let { local ->
                 AndroidView(factory = { local }, Modifier.fillMaxSize())
             }

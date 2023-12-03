@@ -47,7 +47,8 @@ class VideoViewModel @Inject constructor(
     val uiState = _uiState
 
     private val _uid = MutableStateFlow<String?>(null)
-    private val _channelName = savedStateHandle.get<String>(CallAppDestination.Video.ARG_KEY_CHANNEL_NAME)
+    private val _channelName =
+        savedStateHandle.get<String>(CallAppDestination.Video.ARG_KEY_CHANNEL_NAME)
 
     private val _rtcEngine = MutableStateFlow<RtcEngine?>(null)
     val rtcEngine = _rtcEngine.asStateFlow()
@@ -71,7 +72,7 @@ class VideoViewModel @Inject constructor(
         userRole: String = "Broadcaster",
     ) = viewModelScope.launch {
         Log.d(TAG, "initAgoraEngine: $userRole, channelName: $_channelName")
-        if(_uid.value == null || _channelName == null) return@launch
+        if (_uid.value == null || _channelName == null) return@launch
 
         _uid.value?.let { uid ->
 
@@ -81,7 +82,7 @@ class VideoViewModel @Inject constructor(
                 _channelName,
                 userRole,
                 uid
-                ).map<RtcEngine?, VideoUiState> {
+            ).map<RtcEngine?, VideoUiState> {
                 _rtcEngine.value = it
                 VideoUiState.SuccessInitAgoraEngine(it)
             }.catch {
@@ -97,7 +98,7 @@ class VideoViewModel @Inject constructor(
         userRole: String = "Broadcaster",
     ) = viewModelScope.launch {
         Log.d(TAG, "joinAgoraChannel: $userRole, channelName: $_channelName")
-        if(_uid.value == null || _channelName == null) return@launch
+        if (_uid.value == null || _channelName == null) return@launch
 
         _uid.value?.let { userUid ->
             joinChannel(
@@ -106,13 +107,13 @@ class VideoViewModel @Inject constructor(
                 userRole,
                 userUid
             )
-            .map<Int, VideoUiState> {
-                VideoUiState.SuccessJoinChannel(it)
-            }.catch {
-                VideoUiState.Error(it.message ?: "Error")
-            }.let {
-                _uiState.emitAll(it)
-            }
+                .map<Int, VideoUiState> {
+                    VideoUiState.SuccessJoinChannel(it)
+                }.catch {
+                    VideoUiState.Error(it.message ?: "Error")
+                }.let {
+                    _uiState.emitAll(it)
+                }
         } ?: _uiState.emit(VideoUiState.Error("Error uid is null"))
 
 

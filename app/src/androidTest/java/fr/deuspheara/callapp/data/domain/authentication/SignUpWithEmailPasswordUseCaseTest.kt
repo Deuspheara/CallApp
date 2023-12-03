@@ -8,8 +8,6 @@ import fr.deuspheara.callapp.core.firebase.cleanBeforeTesting
 import fr.deuspheara.callapp.core.model.CoreModelProvider
 import fr.deuspheara.callapp.core.model.text.Email
 import fr.deuspheara.callapp.core.model.text.Password
-import fr.deuspheara.callapp.core.model.text.PhoneNumber
-import fr.deuspheara.callapp.domain.authentication.SignInWithEmailPasswordUseCase
 import fr.deuspheara.callapp.domain.authentication.SignUpWithEmailPasswordUseCase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking

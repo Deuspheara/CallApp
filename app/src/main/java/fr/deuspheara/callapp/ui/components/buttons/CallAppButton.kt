@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -85,7 +84,7 @@ fun CallAppButton(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .align(Alignment.CenterVertically),
-            color = if(isEnabled) textColor else MaterialTheme.colorScheme.onSurfaceVariant,
+            color = if (isEnabled) textColor else MaterialTheme.colorScheme.onSurfaceVariant,
             text = stringResource(id = text),
             style = textStyle,
             textAlign = TextAlign.Center

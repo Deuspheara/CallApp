@@ -27,17 +27,18 @@ class GetCurrentLocalUserUseCase @Inject constructor(
     private companion object {
         private const val TAG = "GetCurrentLocalUserUseCase"
     }
-    suspend operator fun invoke() : Flow<UserFullModel?> {
-     return  authenticationRepository.getCurrentUser()
-         .flatMapLatest { user ->
-             user?.let {
-                 authenticationRepository.getUserByUid(it.uid)
-             } ?: flowOf(null)
-         }
-         .catch { e ->
-             Log.e(TAG, "Error while getting current user", e)
-             emit(null)
-         }
+
+    suspend operator fun invoke(): Flow<UserFullModel?> {
+        return authenticationRepository.getCurrentUser()
+            .flatMapLatest { user ->
+                user?.let {
+                    authenticationRepository.getUserByUid(it.uid)
+                } ?: flowOf(null)
+            }
+            .catch { e ->
+                Log.e(TAG, "Error while getting current user", e)
+                emit(null)
+            }
     }
 
 

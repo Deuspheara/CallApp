@@ -3,14 +3,12 @@ package fr.deuspheara.callapp.ui.screens.welcome
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.deuspheara.callapp.core.model.user.UserFullModel
 import fr.deuspheara.callapp.data.datasource.user.model.UserPublicModel
 import fr.deuspheara.callapp.domain.authentication.IsUserAuthenticatedUseCase
 import fr.deuspheara.callapp.domain.user.GetCurrentUserInformationUseCase
 import fr.deuspheara.callapp.domain.user.GetPublicUsersUseCase
-import fr.deuspheara.callapp.ui.screens.authentication.reset.ResetPasswordUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -53,17 +51,17 @@ class WelcomeViewModel @Inject constructor(
     val currentUser = _currentUser.asStateFlow()
 
     init {
-       viewModelScope.launch {
-           fetchPublicUsers()
-           fetchCurrentUser()
-       }
+        viewModelScope.launch {
+            fetchPublicUsers()
+            fetchCurrentUser()
+        }
     }
 
     private fun fetchPublicUsers() = viewModelScope.launch {
         _uiState.value = WelcomeUiState.Loading(true)
         //Fake user for skeleton loader
         _publicUsers.value = listOf(UserPublicModel())
-       getPublicUsers()
+        getPublicUsers()
             .map<List<UserPublicModel>, WelcomeUiState> {
                 _publicUsers.value = it
                 WelcomeUiState.Success
@@ -102,8 +100,6 @@ class WelcomeViewModel @Inject constructor(
                 _uiState.emitAll(it)
             }
     }
-
-
 
 
 }

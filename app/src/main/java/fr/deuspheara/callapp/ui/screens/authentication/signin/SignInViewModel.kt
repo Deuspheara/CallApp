@@ -66,10 +66,9 @@ class SignInViewModel @Inject constructor(
             isEmailBadFormatError = !formInput.email.isValid,
             isPasswordEmpty = formInput.password.value.isEmpty()
         )
-        if (inputError.isError()){
+        if (inputError.isError()) {
             _uiState.emit(inputError)
-        }
-        else {
+        } else {
             _uiState.emit(SignInUiState.Loading(true))
             signInWithEmailPassword(
                 formInput.email,

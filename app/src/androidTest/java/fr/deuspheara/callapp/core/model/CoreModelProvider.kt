@@ -17,6 +17,4 @@ object CoreModelProvider {
     const val password = "PasswordTest*a"
 
 
-
-
 }

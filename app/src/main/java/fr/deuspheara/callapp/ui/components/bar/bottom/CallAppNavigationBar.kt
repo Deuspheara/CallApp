@@ -27,13 +27,13 @@ import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 @Composable
 fun CallAppNavigationBar(
     navController: NavController,
-    modifier : Modifier = Modifier
+    modifier: Modifier = Modifier
 ) {
     NavigationBar(
         modifier = modifier,
 
-    ) {
-        CallAppDestination.bottomBarItems.forEach{
+        ) {
+        CallAppDestination.bottomBarItems.forEach {
             NavigationBarItem(
                 selected = navController.currentDestination?.route == it.route,
                 onClick = {

@@ -1,6 +1,5 @@
 package fr.deuspheara.callapp.ui.navigation
 
-import android.telecom.Call
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
@@ -50,7 +49,7 @@ sealed class CallAppDestination(
 
     companion object {
         val bottomBarItems: List<CallAppDestination>
-            get() = listOf(Welcome,VideoChannel)
+            get() = listOf(Welcome, VideoChannel)
 
         private fun getEnterTransition(transition: Transition): EnterTransition {
             return when (transition) {
@@ -143,7 +142,8 @@ sealed class CallAppDestination(
             const val ROUTING_PREFIX = "video"
             const val ARG_KEY_CHANNEL_NAME = "channelName"
 
-            override val route: String = "$ROUTING_PREFIX?$ARG_KEY_CHANNEL_NAME={$ARG_KEY_CHANNEL_NAME}"
+            override val route: String =
+                "$ROUTING_PREFIX?$ARG_KEY_CHANNEL_NAME={$ARG_KEY_CHANNEL_NAME}"
         }
     }
 

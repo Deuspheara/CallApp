@@ -1,7 +1,5 @@
 package fr.deuspheara.callapp.core.model.user
 
-import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteModel
-
 /**
  * _CallApp_
  *

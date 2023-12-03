@@ -84,7 +84,7 @@ interface AuthenticationRemoteDataSource {
      *
      * @return an [Instant] when the user is sign out
      */
-    suspend fun signOut() : Flow<String?>
+    suspend fun signOut(): Flow<String?>
 
     /**
      * Get the current user information
@@ -92,5 +92,5 @@ interface AuthenticationRemoteDataSource {
      * @return a [UserRemoteModel]
      */
 
-    suspend fun getCurrentUser() : Flow<UserRemoteModel?>
+    suspend fun getCurrentUser(): Flow<UserRemoteModel?>
 }

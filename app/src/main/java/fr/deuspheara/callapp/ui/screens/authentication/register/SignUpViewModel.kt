@@ -9,7 +9,6 @@ import fr.deuspheara.callapp.core.model.text.Identifier
 import fr.deuspheara.callapp.core.model.text.Password
 import fr.deuspheara.callapp.core.model.text.PhoneNumber
 import fr.deuspheara.callapp.domain.authentication.SignUpWithEmailPasswordUseCase
-import fr.deuspheara.callapp.ui.screens.authentication.signin.SignInUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -68,10 +67,11 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun onConfirmPasswordChange(confirmPassword: String) = viewModelScope.launch {
-        _formInputState.value = _formInputState.value.copy(confirmPassword = Password(confirmPassword))
+        _formInputState.value =
+            _formInputState.value.copy(confirmPassword = Password(confirmPassword))
     }
 
-    fun onFirstNameChange(firstName: String)= viewModelScope.launch {
+    fun onFirstNameChange(firstName: String) = viewModelScope.launch {
         _formInputState.value = _formInputState.value.copy(firstName = firstName)
     }
 
@@ -131,7 +131,6 @@ class SignUpViewModel @Inject constructor(
 
 
     }
-
 
 
 }

@@ -1,7 +1,6 @@
 package fr.deuspheara.callapp.data.datasource.user.model
 
 import com.google.firebase.firestore.DocumentId
-import fr.deuspheara.callapp.core.model.text.Identifier
 
 /**
  * _CallApp_
@@ -17,12 +16,12 @@ import fr.deuspheara.callapp.core.model.text.Identifier
  */
 data class UserPublicModel(
     @DocumentId
-    val uid : String,
-    val identifier : String,
-    val displayName : String,
-    val profilePictureUrl : String,
-    val bio : String,
-){
+    val uid: String,
+    val identifier: String,
+    val displayName: String,
+    val profilePictureUrl: String,
+    val bio: String,
+) {
     constructor() : this(
         uid = "",
         identifier = "",

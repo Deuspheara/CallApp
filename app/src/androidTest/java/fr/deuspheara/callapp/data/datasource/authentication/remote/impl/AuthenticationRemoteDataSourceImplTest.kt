@@ -1,14 +1,12 @@
 package fr.deuspheara.callapp.data.datasource.authentication.remote.impl
 
 import androidx.test.filters.SmallTest
-import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import fr.deuspheara.callapp.core.firebase.cleanBeforeTesting
 import fr.deuspheara.callapp.core.model.CoreModelProvider
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -16,10 +14,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.lang.AssertionError
-import java.time.Instant
 import javax.inject.Inject
-import kotlin.Exception
 
 /**
  * _CallApp_
@@ -58,7 +53,9 @@ class AuthenticationRemoteDataSourceImplTest {
 
     @Test
     fun signUpWithPassword_success() = runTest(testDispatcher) {
-        val actual = dataSource.signUpWithPassword(CoreModelProvider.email, CoreModelProvider.password).first()
+        val actual =
+            dataSource.signUpWithPassword(CoreModelProvider.email, CoreModelProvider.password)
+                .first()
         val expected = firebaseAuth.currentUser?.uid!!
         Assert.assertEquals(expected, actual)
     }
@@ -115,7 +112,8 @@ class AuthenticationRemoteDataSourceImplTest {
 
     @Test
     fun confirmResetPassword_wrong_code() = runTest(testDispatcher) {
-        val result = dataSource.confirmResetPassword("wrongCode", CoreModelProvider.password).first()
+        val result =
+            dataSource.confirmResetPassword("wrongCode", CoreModelProvider.password).first()
         Assert.assertFalse(result)
     }
 

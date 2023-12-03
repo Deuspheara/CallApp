@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -44,7 +41,9 @@ fun CallAppVerticalButton(
     modifier: Modifier = Modifier,
     @DrawableRes leadingIcon: Int? = R.drawable.ic_call,
     @StringRes text: Int? = R.string.call,
-    iconModifier: Modifier = Modifier.size(24.dp).padding(top = 8.dp),
+    iconModifier: Modifier = Modifier
+        .size(24.dp)
+        .padding(top = 8.dp),
     textModifier: Modifier = Modifier.padding(bottom = 8.dp),
     buttonColor: Color = MaterialTheme.colorScheme.primary,
     textColor: Color = MaterialTheme.colorScheme.onPrimary,
@@ -54,12 +53,14 @@ fun CallAppVerticalButton(
         modifier = modifier
             .fillMaxWidth()
             .padding(top = 16.dp)
-            .clip(SmoothCornerShape(
-                cornerRadiusBL = cornerRadius,
-                cornerRadiusBR = cornerRadius,
-                cornerRadiusTL = cornerRadius,
-                cornerRadiusTR = cornerRadius,
-            ))
+            .clip(
+                SmoothCornerShape(
+                    cornerRadiusBL = cornerRadius,
+                    cornerRadiusBR = cornerRadius,
+                    cornerRadiusTL = cornerRadius,
+                    cornerRadiusTR = cornerRadius,
+                )
+            )
             .background(buttonColor)
             .clickable { onClick() },
         horizontalAlignment = Alignment.CenterHorizontally,

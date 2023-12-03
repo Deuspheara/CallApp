@@ -1,10 +1,6 @@
 package fr.deuspheara.callapp.ui.screens.welcome
 
 import fr.deuspheara.callapp.core.model.common.Consumable
-import fr.deuspheara.callapp.core.model.user.UserFullModel
-import fr.deuspheara.callapp.data.datasource.user.model.UserPublicModel
-import fr.deuspheara.callapp.ui.main.MainUiState
-import fr.deuspheara.callapp.ui.screens.profil.ProfilUiState
 
 /**
  * _CallApp_

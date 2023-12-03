@@ -3,9 +3,6 @@ package fr.deuspheara.callapp.data.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverter
-import fr.deuspheara.callapp.core.model.user.UserFullModel
-import fr.deuspheara.callapp.data.datasource.user.model.UserRemoteModel
 
 /**
  * _CallApp_

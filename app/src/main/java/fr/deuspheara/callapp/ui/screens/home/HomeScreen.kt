@@ -22,9 +22,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import fr.deuspheara.callapp.R
+import fr.deuspheara.callapp.ui.components.bar.top.CallAppTopBar
 import fr.deuspheara.callapp.ui.components.buttons.CallAppButton
 import fr.deuspheara.callapp.ui.components.snackbar.CallAppSnackBarHost
-import fr.deuspheara.callapp.ui.components.bar.top.CallAppTopBar
 import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 import kotlinx.coroutines.CoroutineScope
 
@@ -45,8 +45,8 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     destination: CallAppDestination = CallAppDestination.Home,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
-    navigateToSignInScreen : () -> Unit = {},
-    navigateToSignUpScreen : () -> Unit = {},
+    navigateToSignInScreen: () -> Unit = {},
+    navigateToSignUpScreen: () -> Unit = {},
     coroutineScope: CoroutineScope = rememberCoroutineScope()
 ) {
     Scaffold(
@@ -62,10 +62,10 @@ fun HomeScreen(
     ) { innerPadding ->
 
 
-        Column(modifier = Modifier.padding(innerPadding)){
+        Column(modifier = Modifier.padding(innerPadding)) {
             TextButton(
                 onClick = navigateToSignInScreen
-            ){
+            ) {
                 Text(
                     text = stringResource(R.string.login),
                     style = MaterialTheme.typography.titleMedium,
@@ -84,7 +84,7 @@ fun HomeScreen(
 
 @Preview(showSystemUi = true)
 @Composable
-fun HomeScreenPreview(){
+fun HomeScreenPreview() {
     HomeScreen()
 }
 

@@ -3,7 +3,6 @@ package fr.deuspheara.callapp.domain.user
 import fr.deuspheara.callapp.core.model.user.UserFullModel
 import fr.deuspheara.callapp.data.repository.user.UserRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 /**
@@ -25,7 +24,7 @@ class GetUserDetailsUseCase @Inject constructor(
         private const val TAG = "GetUserDetailsUseCase"
     }
 
-    suspend operator fun invoke(uid: String):Flow<UserFullModel?> {
+    suspend operator fun invoke(uid: String): Flow<UserFullModel?> {
         return userRepository.getUserDetails(uid)
     }
 

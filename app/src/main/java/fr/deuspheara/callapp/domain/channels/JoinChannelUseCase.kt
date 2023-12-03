@@ -2,7 +2,6 @@ package fr.deuspheara.callapp.domain.channels
 
 import android.content.Context
 import fr.deuspheara.callapp.data.repository.channels.ChannelsRepository
-import io.agora.rtc.IRtcEngineEventHandler
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

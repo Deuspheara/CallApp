@@ -64,6 +64,7 @@ data class SmoothCornerShape(
         topStart + topEnd + bottomEnd + bottomStart == 0.0f -> {
             Outline.Rectangle(size.toRect())
         }
+
         smoothnessAsPercentTL + smoothnessAsPercentTR +
                 smoothnessAsPercentBR + smoothnessAsPercentBL == 0 -> {
             Outline.Rounded(
@@ -76,6 +77,7 @@ data class SmoothCornerShape(
                 )
             )
         }
+
         else -> {
             Outline.Generic(
                 Path().apply {

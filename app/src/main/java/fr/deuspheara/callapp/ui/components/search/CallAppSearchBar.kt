@@ -11,7 +11,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -54,7 +53,7 @@ fun CallAppSearchBar(
     @DrawableRes trailingIcon: Int? = null,
     onTrailingIconClick: () -> Unit = {},
     focusedValue: (Boolean) -> Unit = {},
-    ){
+) {
     val focused = remember { mutableStateOf(false) }
 
     TextField(
@@ -74,7 +73,8 @@ fun CallAppSearchBar(
                 width = 1.dp,
                 color = Color.Transparent,
                 shape = SmoothCornerShape(16.dp)
-            ).onFocusChanged {
+            )
+            .onFocusChanged {
                 focused.value = it.isFocused
                 focusedValue(it.isFocused)
             },
@@ -94,7 +94,7 @@ fun CallAppSearchBar(
             return@let {
                 IconButton(
                     onClick = onTrailingIconClick
-                ){
+                ) {
                     Icon(
                         painter = painterResource(id = trailingIcon),
                         contentDescription = stringResource(id = placeholderText),
@@ -129,7 +129,7 @@ fun CallAppSearchBar(
             cornerRadiusTR = 12.dp
         ),
 
-    )
+        )
 }
 
 @Preview(showSystemUi = true)

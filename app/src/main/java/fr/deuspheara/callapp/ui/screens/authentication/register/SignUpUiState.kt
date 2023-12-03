@@ -21,7 +21,7 @@ import fr.deuspheara.callapp.core.model.text.PhoneNumber
 sealed interface SignUpUiState {
     data class FormInputState(
         val email: Email,
-        val identifier : Identifier,
+        val identifier: Identifier,
         val password: Password,
         val firstName: String,
         val lastName: String,
@@ -31,7 +31,7 @@ sealed interface SignUpUiState {
 
     data class FormInputError(
         val isEmailBadFormatError: Boolean,
-        val isIdentifierError : Boolean,
+        val isIdentifierError: Boolean,
         val isPasswordBadFormatError: Boolean,
         val isConfirmPasswordError: Boolean,
         val isFirstNameError: Boolean,
@@ -54,7 +54,7 @@ sealed interface SignUpUiState {
         Consumable()
 
     data class Success(
-        val uid : String?,
+        val uid: String?,
     ) : SignUpUiState, Consumable()
 
     @JvmInline

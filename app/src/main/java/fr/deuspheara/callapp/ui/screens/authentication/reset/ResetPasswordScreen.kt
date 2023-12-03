@@ -34,10 +34,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import fr.deuspheara.callapp.R
 import fr.deuspheara.callapp.core.model.common.consume
 import fr.deuspheara.callapp.core.model.text.Password
+import fr.deuspheara.callapp.ui.components.bar.top.CallAppTopBar
 import fr.deuspheara.callapp.ui.components.buttons.CallAppButton
 import fr.deuspheara.callapp.ui.components.text.CallAppPasswordTextField
 import fr.deuspheara.callapp.ui.components.text.ValidityComponent
-import fr.deuspheara.callapp.ui.components.bar.top.CallAppTopBar
 import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 import fr.deuspheara.callapp.ui.theme.CallAppTheme
 
@@ -148,7 +148,7 @@ fun ResetPasswordContent(
     Scaffold(
         topBar = {
             CallAppTopBar(
-               destination = CallAppDestination.ResetPassword,
+                destination = CallAppDestination.ResetPassword,
                 navigationIcon = {
                     IconButton(
                         onClick = onNavigateBack,
@@ -158,7 +158,7 @@ fun ResetPasswordContent(
                             contentDescription = null
                         )
                     }
-                                 },
+                },
             )
         },
     ) { innerPadding ->
@@ -213,7 +213,9 @@ fun ResetPasswordContent(
             CallAppPasswordTextField(
                 value = currentConfirmPassword.value,
                 onValueChange = onConfirmPasswordChange,
-                modifier = Modifier.padding(top = 8.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .fillMaxWidth(),
                 labelText = R.string.confirm_password,
                 placeholderText = R.string.confirm_password,
                 trailingIconOpen = R.drawable.ic_eye_open,
