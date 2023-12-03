@@ -1,6 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.api.dsl.ManagedVirtualDevice
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -26,6 +27,8 @@ val versionMinor = property("version.minor")?.toString()?.toIntOrNull() ?: 0
 val versionPatch = property("version.patch")?.toString()?.toIntOrNull() ?: 0
 val versionBuild = property("version.build")?.toString()?.toIntOrNull() ?: 1
 val isCoverageRequested = property("build.coverage")?.toString()?.toBooleanStrictOrNull() ?: false
+val key: String = gradleLocalProperties(rootDir).getProperty("AGORA_APP_ID")
+val agoraSelfHostedUrl: String = gradleLocalProperties(rootDir).getProperty("AGORA_SELF_HOSTED_URL")
 
 android {
     namespace = "fr.deuspheara.callapp"
@@ -70,6 +73,8 @@ android {
             signingConfig = signingConfigs.getAt("callapp-debug")
             enableAndroidTestCoverage = isCoverageRequested
             manifestPlaceholders["firebase_crashlytics_collection_enabled"] = false
+            buildConfigField("String", "AGORA_APP_ID", key)
+            buildConfigField("String", "AGORA_SELF_HOSTED_URL", agoraSelfHostedUrl)
         }
         release {
             versionNameSuffix = "+$versionBuild"
@@ -94,6 +99,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig =  true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
@@ -132,6 +138,10 @@ dependencies {
     implementation (libs.bundles.coroutine)
     implementation(libs.androidx.compose.materialWindow)
     implementation(libs.google.android.material)
+    //endregion
+
+    //region Retrofit
+    implementation(libs.bundles.networking)
     //endregion
 
     //region Hilt

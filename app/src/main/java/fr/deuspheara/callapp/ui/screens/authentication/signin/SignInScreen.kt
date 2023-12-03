@@ -2,33 +2,19 @@ package fr.deuspheara.callapp.ui.screens.authentication.signin
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarVisuals
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -51,25 +37,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import fr.deuspheara.callapp.CallAppApplication
 import fr.deuspheara.callapp.R
 import fr.deuspheara.callapp.core.model.common.consume
 import fr.deuspheara.callapp.core.model.text.Email
 import fr.deuspheara.callapp.core.model.text.Password
+import fr.deuspheara.callapp.ui.components.bar.top.CallAppTopBar
 import fr.deuspheara.callapp.ui.components.buttons.CallAppButton
 import fr.deuspheara.callapp.ui.components.buttons.CallAppTextButton
 import fr.deuspheara.callapp.ui.components.snackbar.CallAppSnackBarHost
 import fr.deuspheara.callapp.ui.components.snackbar.ErrorSnackbarVisuals
 import fr.deuspheara.callapp.ui.components.snackbar.SuccessSnackbarVisuals
 import fr.deuspheara.callapp.ui.components.text.CallAppOutlinedTextField
-import fr.deuspheara.callapp.ui.components.text.CallAppOutlinedTextFieldPreview
 import fr.deuspheara.callapp.ui.components.text.CallAppPasswordTextField
 import fr.deuspheara.callapp.ui.components.text.ValidityComponent
-import fr.deuspheara.callapp.ui.components.topbar.CallAppTopBar
 import fr.deuspheara.callapp.ui.navigation.CallAppDestination
-import fr.deuspheara.callapp.ui.screens.home.rememberContentPaddingForScreen
 import fr.deuspheara.callapp.ui.theme.CallAppTheme
-import fr.deuspheara.callapp.ui.theme.customGreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -88,7 +70,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun SignInScreen(
     snackbarHostState: SnackbarHostState,
-    showTopAppBar: Boolean,
     modifier: Modifier = Modifier,
     navigateToForgetPassword: () -> Unit = {},
     viewModel: SignInViewModel = hiltViewModel(),
@@ -145,7 +126,6 @@ fun SignInScreen(
 
     SignInContentScreen(
         modifier = modifier,
-        showTopAppBar = showTopAppBar,
         snackbarHostState = snackbarHostState,
         email = email,
         onEmailValueChange = viewModel::submitEmail,
@@ -170,7 +150,6 @@ fun SignInScreen(
 @Composable
 private fun SignInContentScreen(
     modifier: Modifier = Modifier,
-    showTopAppBar: Boolean,
     snackbarHostState: SnackbarHostState,
     email: Email = Email(""),
     onEmailValueChange: (String) -> Unit = {},
@@ -196,34 +175,28 @@ private fun SignInContentScreen(
     Scaffold(
         snackbarHost = { CallAppSnackBarHost(hostState = snackbarHostState) },
         topBar = {
-            if (showTopAppBar) {
-                CallAppTopBar(
-                    destination = CallAppDestination.SignIn,
-                    navigationIcon = {
-                        IconButton(
-                            onClick = navigateBack,
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_chevron_left),
-                                contentDescription = null
-                            )
-                        }
+            CallAppTopBar(
+                destination = CallAppDestination.SignIn,
+                navigationIcon = {
+                    IconButton(
+                        onClick = navigateBack,
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_chevron_left),
+                            contentDescription = null
+                        )
                     }
-                )
-            }
+                }
+            )
         },
         modifier = modifier
     ) { innerPadding ->
-        val contentPadding = rememberContentPaddingForScreen(
-            additionalTop = if (showTopAppBar) 0.dp else 8.dp,
-            excludeTop = showTopAppBar
-        )
+
         LazyColumn(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .padding(innerPadding),
-            contentPadding = contentPadding,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
@@ -372,7 +345,6 @@ fun SignInScreenPreview() {
     CallAppTheme {
         SignInScreen(
             snackbarHostState = remember { SnackbarHostState() },
-            showTopAppBar = true,
             navigateToForgetPassword = {},
         )
     }

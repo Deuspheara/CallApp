@@ -32,9 +32,17 @@ androidx-appcompat = "1.6.1"
 material = "1.10.0"
 agora = "3.5.0"
 
+retrofit-version = "2.9.0"
+okhttp-version = "5.0.0-alpha.11"
+
 [libraries]
 
 agora = { module = "io.agora.rtc:full-sdk", version.ref = "agora" }
+
+squareup-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit-version" }
+squareup-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit-version" }
+squareup-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp-version" }
+squareup-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okhttp-version" }
 
 coroutine-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutine" }
 coroutine-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutine" }
@@ -100,6 +108,8 @@ compose-test = ["compose-ui-test"]
 hilt = ["hilt-android", "hilt-compiler", "hilt-navigation"]
 firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-auth", "firebase-firestore", "firebase-storage", "google-play-services"]
 room = ["room-runtime", "room-ktx"]
+networking = ["squareup-retrofit", "squareup-converter-gson", "squareup-logging-interceptor"]
+
 [plugins]
 
 android-application = { id = 'com.android.application', version.ref = "android-gradle-plugin" }

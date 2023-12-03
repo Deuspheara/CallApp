@@ -36,7 +36,7 @@ import fr.deuspheara.callapp.ui.components.buttons.CallAppButton
 import fr.deuspheara.callapp.ui.components.profile.RoundedImageProfile
 import fr.deuspheara.callapp.ui.components.snackbar.SuccessSnackbarVisuals
 import fr.deuspheara.callapp.ui.components.text.CallAppOutlinedTextField
-import fr.deuspheara.callapp.ui.components.topbar.CallAppTopBar
+import fr.deuspheara.callapp.ui.components.bar.top.CallAppTopBar
 import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 import fr.deuspheara.callapp.ui.theme.CallAppTheme
 import kotlinx.coroutines.CoroutineScope

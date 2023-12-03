@@ -39,7 +39,6 @@ fun NavGraphBuilder.addAuthNavGraph(
         composable(CallAppDestination.SignIn) {
             SignInScreen(
                 snackbarHostState = snackbarHostState,
-                showTopAppBar = CallAppDestination.SignIn.showTopAppBar,
                 navigateBack = navController::popBackStack,
                 navigateToForgetPassword = {
                     navController.navigate(CallAppDestination.SendResetPassword)

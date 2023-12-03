@@ -47,6 +47,14 @@ object FirebaseModule {
         }
     }
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class ChannelsCollectionReference {
+        companion object {
+            const val COLLECTION_PATH = "channels"
+        }
+    }
+
     @Provides
     fun providesFirebaseAuthentication(): FirebaseAuth {
         return FirebaseAuth.getInstance().apply {
@@ -78,6 +86,14 @@ object FirebaseModule {
         firestore: FirebaseFirestore,
     ): CollectionReference {
         return firestore.collection(UserPublicCollectionReference.COLLECTION_PATH)
+    }
+
+    @Provides
+    @ChannelsCollectionReference
+    fun provideChannelsFirestoreCollectionReference(
+        firestore: FirebaseFirestore,
+    ): CollectionReference {
+        return firestore.collection(ChannelsCollectionReference.COLLECTION_PATH)
     }
 
 

@@ -4,12 +4,18 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import fr.deuspheara.callapp.data.datasource.agora.AgoraDataSource
+import fr.deuspheara.callapp.data.datasource.agora.impl.AgoraDatasourceImpl
 import fr.deuspheara.callapp.data.datasource.authentication.local.AuthenticationLocalDataSource
 import fr.deuspheara.callapp.data.datasource.authentication.local.impl.AuthenticationLocalDataSourceImpl
 import fr.deuspheara.callapp.data.datasource.authentication.remote.AuthenticationRemoteDataSource
 import fr.deuspheara.callapp.data.datasource.authentication.remote.impl.AuthenticationRemoteDataSourceImpl
+import fr.deuspheara.callapp.data.datasource.channels.video.remote.ChannelsDatasource
+import fr.deuspheara.callapp.data.datasource.channels.video.remote.impl.ChannelsDatasourceImpl
 import fr.deuspheara.callapp.data.datasource.user.remote.UserRemoteDataSource
 import fr.deuspheara.callapp.data.datasource.user.remote.impl.UserRemoteDataSourceImpl
+import fr.deuspheara.callapp.data.repository.channels.ChannelsRepository
+import fr.deuspheara.callapp.data.repository.channels.impl.ChannelsRepositoryImpl
 
 /**
  * _CallApp_
@@ -41,4 +47,14 @@ abstract class DataSourceModule {
     abstract fun bindsAuthenticationLocalDataSource(
         impl: AuthenticationLocalDataSourceImpl,
     ): AuthenticationLocalDataSource
+
+    @Binds
+    abstract fun bindsAgoraDataSource(
+        impl: AgoraDatasourceImpl,
+    ): AgoraDataSource
+
+    @Binds
+    abstract fun bindsChannelsDataSource(
+        impl: ChannelsDatasourceImpl,
+    ): ChannelsDatasource
 }

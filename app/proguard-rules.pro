@@ -48,6 +48,8 @@
 -dontwarn javax.tools.Diagnostic$Kind
 -dontwarn javax.lang.model.element.AnnotationValue
 -dontwarn javax.lang.model.util.AbstractAnnotationValueVisitor8
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
 
 -keepattributes Signature
 -keep class com.google.android.gms.** { *; }
@@ -55,3 +57,5 @@
 -keep class fr.deuspheara.callapp.data.datasource.user.model.UserRemoteModel{ *; }
 -keep class fr.deuspheara.callapp.data.datasource.user.model.UserRemoteFirestoreModel{ *; }
 -keep class fr.deuspheara.callapp.data.datasource.user.model.UserPublicModel{ *; }
+-keep class fr.deuspheara.callapp.core.model.channel.VideoChannel{ *; }
+-keep class io.agora.**{*;}

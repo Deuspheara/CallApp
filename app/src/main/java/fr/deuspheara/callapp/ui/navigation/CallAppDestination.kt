@@ -50,7 +50,7 @@ sealed class CallAppDestination(
 
     companion object {
         val bottomBarItems: List<CallAppDestination>
-            get() = listOf(Home)
+            get() = listOf(Welcome,VideoChannel)
 
         private fun getEnterTransition(transition: Transition): EnterTransition {
             return when (transition) {
@@ -91,8 +91,59 @@ sealed class CallAppDestination(
                 route.startsWith(SignUp.route) -> SignUp
                 route.startsWith(SendResetPassword.route) -> SendResetPassword
                 route.startsWith(ResetPassword.route) -> ResetPassword
+                route.startsWith(Auth.route) -> Auth
+                route.startsWith(Main.route) -> Main
+                route.startsWith(Welcome.route) -> Welcome
+                route.startsWith(EditProfile.route) -> EditProfile
+                route.startsWith(Profile.route) -> Profile
+                route.startsWith(Call.route) -> Call
+                route.startsWith(VideoCall.route) -> VideoCall
+                route.startsWith(Chat.route) -> Chat
+                route.startsWith(AddToContact.route) -> AddToContact
+                route.startsWith(VideoChannel.route) -> VideoChannel
                 else -> null
             }
+        }
+    }
+
+    data object VideoChannel : CallAppDestination(
+        title = R.string.video_channel,
+        showTopAppBar = true,
+        navigationIcon = R.drawable.ic_video,
+        transitionConfig = TransitionConfig(
+            enter = Transition.Fade,
+            popExit = Transition.Fade
+        )
+    ) {
+        override val route: String
+            get() = "video_channel"
+    }
+
+    class Video(
+        val channelName: String?
+    ) : CallAppRoutable {
+        override val route: String =
+            "${ROUTING_PREFIX}${if (channelName != null) "?${ARG_KEY_CHANNEL_NAME}=${channelName}" else ""}"
+
+        companion object : CallAppDestination(
+            title = R.string.video,
+            showTopAppBar = true,
+            navigationIcon = R.drawable.ic_video,
+            transitionConfig = TransitionConfig(
+                enter = Transition.SlideHorizontal,
+                popExit = Transition.SlideHorizontal
+            ),
+            arguments = listOf(
+                navArgument(Video.ARG_KEY_CHANNEL_NAME) {
+                    this.type = NavType.StringType
+                    this.nullable = true
+                }
+            )
+        ) {
+            const val ROUTING_PREFIX = "video"
+            const val ARG_KEY_CHANNEL_NAME = "channelName"
+
+            override val route: String = "$ROUTING_PREFIX?$ARG_KEY_CHANNEL_NAME={$ARG_KEY_CHANNEL_NAME}"
         }
     }
 
@@ -198,6 +249,11 @@ sealed class CallAppDestination(
 
     data object Welcome : CallAppDestination(
         title = R.string.home,
+        navigationIcon = R.drawable.ic_home,
+        transitionConfig = TransitionConfig(
+            enter = Transition.Fade,
+            popExit = Transition.Fade
+        )
     ) {
         override val route: String
             get() = "welcome"

@@ -1,4 +1,4 @@
-package fr.deuspheara.callapp.ui.components.topbar
+package fr.deuspheara.callapp.ui.components.bar.top
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.CenterAlignedTopAppBar

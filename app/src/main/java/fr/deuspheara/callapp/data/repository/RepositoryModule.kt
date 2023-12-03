@@ -6,6 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import fr.deuspheara.callapp.data.repository.authentication.AuthenticationRepository
 import fr.deuspheara.callapp.data.repository.authentication.impl.AuthenticationRepositoryImpl
+import fr.deuspheara.callapp.data.repository.channels.ChannelsRepository
+import fr.deuspheara.callapp.data.repository.channels.impl.ChannelsRepositoryImpl
 import fr.deuspheara.callapp.data.repository.user.UserRepository
 import fr.deuspheara.callapp.data.repository.user.impl.UserRepositoryImpl
 
@@ -34,5 +36,10 @@ abstract class RepositoryModule {
     abstract fun bindsUserRepository(
         impl: UserRepositoryImpl,
     ): UserRepository
+
+    @Binds
+    abstract fun bindsChannelsRepository(
+        impl: ChannelsRepositoryImpl,
+    ): ChannelsRepository
 
 }

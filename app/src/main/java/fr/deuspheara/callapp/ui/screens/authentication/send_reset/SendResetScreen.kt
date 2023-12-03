@@ -34,7 +34,7 @@ import fr.deuspheara.callapp.core.model.text.Email
 import fr.deuspheara.callapp.ui.components.buttons.CallAppButton
 import fr.deuspheara.callapp.ui.components.modal.ActionModalBottomSheet
 import fr.deuspheara.callapp.ui.components.text.CallAppOutlinedTextField
-import fr.deuspheara.callapp.ui.components.topbar.CallAppTopBar
+import fr.deuspheara.callapp.ui.components.bar.top.CallAppTopBar
 import fr.deuspheara.callapp.ui.navigation.CallAppDestination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
